@@ -1,0 +1,15 @@
+from backend.database import Base
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from datetime import datetime
+from sqlalchemy import String,Float, TIMESTAMP, func, ForeignKey, CheckConstraint, Integer
+from typing import Optional, List, TYPE_CHECKING
+
+class Item(Base):
+    __tablename__ = "items"
+    chart_id: Mapped[int] = mapped_column(Integer,primary_key=True)
+    item_code: Mapped[str] = mapped_column(ForeignKey("items.item_code"),String(10),index=True)
+    start_price: Mapped[int] = mapped_column(Integer,nullable=False)
+    end_price: Mapped[int] = mapped_column(Integer,nullable=False)
+    max_price: Mapped[int] = mapped_column(Integer,nullable=False)
+    min_price: Mapped[int] = mapped_column(Integer,nullable=False)
+    day: Mapped[int] = mapped_column(Integer,nullable=False)
