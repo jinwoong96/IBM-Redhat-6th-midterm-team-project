@@ -4,8 +4,7 @@ from datetime import datetime
 from sqlalchemy import String, TIMESTAMP, func, Integer, ForeignKey,Float
 from typing import Optional, List, TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from .song import Song
+
 
     class Item(Base):
         __tablename__ = "items"
