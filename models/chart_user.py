@@ -10,8 +10,9 @@ class Chart_user(Base):
     chart_user_id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.user_id",ondelete="CASCADE"),Integer)
     item_code: Mapped[str] = mapped_column(ForeignKey("items.item_code"),index=True)
-    start_price: Mapped[int] = mapped_column(Integer)
-    end_price: Mapped[int] = mapped_column(Integer)
-    max_price: Mapped[int] = mapped_column(Integer)
-    min_price: Mapped[int] = mapped_column(Integer)
+    start_price: Mapped[int] = mapped_column(Integer,CheckConstraint("start_price >= 0"))
+    end_price: Mapped[int] = mapped_column(Integer,CheckConstraint("end_price >= 0"))
+    max_price: Mapped[int] = mapped_column(Integer,CheckConstraint("max_price >= 0"))
+    min_price: Mapped[int] = mapped_column(Integer,CheckConstraint("min_price >= 0"))
     day:  Mapped[int] = mapped_column(Integer)
+    거래_체결: 

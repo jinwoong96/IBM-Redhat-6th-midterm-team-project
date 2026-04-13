@@ -6,3 +6,8 @@ from typing import Optional, List, TYPE_CHECKING
 
 class Effects(Base):
     __tablename__ = "effects"
+    영향아이디:
+    뉴스아이디:
+    영향카테고리:
+    등락하한:
+    등락상한: 

@@ -8,8 +8,8 @@ class Item(Base):
     __tablename__ = "items"
     chart_id: Mapped[int] = mapped_column(Integer,primary_key=True)
     item_code: Mapped[str] = mapped_column(ForeignKey("items.item_code"),String(10),index=True)
-    start_price: Mapped[int] = mapped_column(Integer,nullable=False)
-    end_price: Mapped[int] = mapped_column(Integer,nullable=False)
-    max_price: Mapped[int] = mapped_column(Integer,nullable=False)
-    min_price: Mapped[int] = mapped_column(Integer,nullable=False)
+    start_price: Mapped[int] = mapped_column(Integer,CheckConstraint("start_price >= 0"),nullable=False)
+    end_price: Mapped[int] = mapped_column(Integer,CheckConstraint("end_price >= 0"),nullable=False)
+    max_price: Mapped[int] = mapped_column(Integer,CheckConstraint("max_price >= 0"),nullable=False)
+    min_price: Mapped[int] = mapped_column(Integer,CheckConstraint("min_price >= 0"),nullable=False)
     day: Mapped[int] = mapped_column(Integer,nullable=False)
