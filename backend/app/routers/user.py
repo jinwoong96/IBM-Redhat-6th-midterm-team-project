@@ -46,3 +46,10 @@ async def delete_user(user_id:int,current_user= Depends(get_current_user),
                    db: AsyncSession = Depends(get_db)):
     # UserService.delete_user 로 바로리턴
     pass
+
+@router.get("/check",)
+async def dup_check(user_id:int,db: AsyncSession = Depends(get_db)):
+    # UserService.dup_check 로 user_id 넘김
+    # 반환된 메세지를 저장해 그대로 출력
+    # user_id 쿼리파라미터임
+    pass

@@ -5,5 +5,5 @@ from datetime import datetime
 
 
 
-class Wishlist(Base):
-    __tablename__ = "wishlists"
+class Ranking(Base):
+    __tablename__ = "ranking"
