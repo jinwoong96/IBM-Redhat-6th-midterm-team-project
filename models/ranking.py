@@ -7,8 +7,11 @@ from typing import Optional, List, TYPE_CHECKING
 class Ranking(Base):
     __tablename__ = "rankings"
     ranking_id: Mapped[int] = mapped_column(primary_key=True,autoincrement=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.user_id",ondelete="CASCADE"))
-    max_accounts: Mapped[int] = mapped_column(Integer,nullable=False)
+    max_accounts: Mapped[int] = mapped_column(Integer,CheckConstraint("max_accounts >= 0"),nullable=False)
     max_plus: Mapped[float] = mapped_column(Float,nullable=False)
-    day:  Mapped[int] = mapped_column(Integer,nullable=False)
+    day:  Mapped[int] = mapped_column(Integer,CheckConstraint("day >= 0"),nullable=False)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.user_id",ondelete="CASCADE"))
+    
+    
+    
     

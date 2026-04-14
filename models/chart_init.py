@@ -4,10 +4,10 @@ from datetime import datetime
 from sqlalchemy import String,Float, TIMESTAMP, func, ForeignKey, CheckConstraint, Integer
 from typing import Optional, List, TYPE_CHECKING
 
-class Item(Base):
-    __tablename__ = "items"
+class ChartInit(Base):
+    __tablename__ = "chart_init"
     chart_id: Mapped[int] = mapped_column(Integer,primary_key=True)
-    item_code: Mapped[str] = mapped_column(ForeignKey("items.item_code"),String(10),index=True)
+    item_code: Mapped[str] = mapped_column(ForeignKey("items.item_code"),String(10),index=True,nullable=False)
     start_price: Mapped[int] = mapped_column(Integer,CheckConstraint("start_price >= 0"),nullable=False)
     end_price: Mapped[int] = mapped_column(Integer,CheckConstraint("end_price >= 0"),nullable=False)
     max_price: Mapped[int] = mapped_column(Integer,CheckConstraint("max_price >= 0"),nullable=False)
