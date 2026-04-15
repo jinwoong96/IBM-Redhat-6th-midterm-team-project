@@ -3,12 +3,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import get_db
 from app.services.trade import TradeService
 from app.core.auth import get_current_user
-from app.db.scheme.trade import TradeUpdate
+from app.db.scheme.trade import TradeCreate
 from app.services.balance import BalanceService
 router = APIRouter(prefix="/trade", tags=["trade"])
 
 @router.post("/",)
-async def new_trade(trade:TradeUpdate,current_user=Depends(get_current_user),
+async def new_trade(trade:TradeCreate,current_user=Depends(get_current_user),
              db:AsyncSession=Depends(get_db)):
     # TradeService.new_trade 를 실행
     # BalanceService.update_my_balance 를 실행

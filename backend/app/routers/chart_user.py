@@ -10,8 +10,8 @@ from app.db.scheme.chart_user import ChartuserGet,ChartuserUpdate
 router = APIRouter(prefix="/chartuser", tags=["chartuser"])
 
 
-@router.get("/{up_date}",)
-async def get_chartuser(up_date:int,chart:ChartuserGet,current_user=Depends(get_current_user),
+@router.get("/",)
+async def get_chartuser(chart:ChartuserGet,current_user=Depends(get_current_user),
              db:AsyncSession=Depends(get_db)):
     # ChartuserService.get_chartuser 실행 후 Chartuser 리스트 반환
     pass

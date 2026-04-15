@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.db.models.trade import Trade
-from app.db.scheme.trade import TradeUpdate
+from app.db.scheme.trade import TradeCreate
 
 class TradeCrud:
 
@@ -12,7 +12,7 @@ class TradeCrud:
         pass
 
     @staticmethod
-    async def new_trade(user_id:str,trade:TradeUpdate,db:AsyncSession):
+    async def new_trade(user_id:str,trade:TradeCreate,db:AsyncSession):
         # 입력한 정보로 새 trade 생성
         # db에 add
         # 그 유저 그대로 리턴
