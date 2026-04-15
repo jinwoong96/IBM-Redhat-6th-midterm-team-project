@@ -9,6 +9,5 @@ class ChartuserGet(BaseModel):
 
 
 class ChartuserUpdate(BaseModel):
-    # 모든 차트유저 데이터를 일차 변경시 업뎃
-    # 종목코드와 가격들
+    # item_code,start_price, end_price, max_price, min_price, day, flu_range, flu_range_percent
     pass
