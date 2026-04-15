@@ -13,4 +13,12 @@ class ChartUserUpdate(BaseModel):
     min_price :int
 
 class ChartUserResponse(ChartUserBase):
-    # relationship필요할듯?
+    start_price:int
+    end_price:int
+    max_price:int
+    min_price :int
+    day:int
+    user_id:int
+    item_code:str
+
+    model_config = ConfigDict(from_attributes=True)
