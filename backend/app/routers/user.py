@@ -30,7 +30,7 @@ async def all_users(db: AsyncSession = Depends(get_db)):
     pass
 
 @router.get("/{user_id}",)
-async def get_user(user_id:int,
+async def get_user(user_id:str,
                    current_user= Depends(get_current_user),
                    db: AsyncSession = Depends(get_db)):
     # UserService.get_user_2(user_id,current_user.user_id,db) 유저 가져옴

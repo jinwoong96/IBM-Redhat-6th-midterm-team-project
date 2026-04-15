@@ -55,13 +55,13 @@ class UserService:
         pass
 
     @staticmethod
-    async def delete_user(user_id:int,current_user_id:int,db:AsyncSession):
+    async def delete_user(user_id:str,current_user_id:str,db:AsyncSession):
         # current_user_id 가 있는지 확인 (예외처리)(로그인확인)
         # UserCrud.delete_by_id(user_id,db)로 해당 아이디 삭제
         pass
 
     @staticmethod
-    async def dup_check(user_id:int,db:AsyncSession):
+    async def dup_check(user_id:str,db:AsyncSession):
         # UserCrud.get_by_id 로 가져오기
         # 만족하는 행이 없으면 사용가능
         # 있으면 중복 을 반환

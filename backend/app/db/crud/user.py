@@ -15,12 +15,12 @@ class UserCrud:
 
 
     @staticmethod
-    async def get_by_id(user_id:int,db:AsyncSession):
+    async def get_by_id(user_id:str,db:AsyncSession):
         # 아이디에 해당하는 튜플 빼고 리턴
         pass
 
     @staticmethod
-    async def update_refresh_token_by_id(user_id:int,
+    async def update_refresh_token_by_id(user_id:str,
         refresh_token:str,
         db:AsyncSession):
     # 해당 유저의 리프레시토큰을 업데이트 (flush)
