@@ -14,7 +14,7 @@ class WishlistService:
         pass
 
     @staticmethod
-    async def user_wishlist(user_id:int,current_user_id:str,db:AsyncSession):
+    async def user_wishlist(user_id:str,current_user_id:str,db:AsyncSession):
         # current_user_id 가 user테이블에 있는지 확인
         # WishlistCrud.get_by_id 로 아이디에 해당되는 위시리스트 전부 리스트로 반환
         pass
