@@ -11,7 +11,7 @@ from app.db.scheme.balance import BalanceUpdate
 class BalanceService:
 
     @staticmethod
-    async def update_my_balance(user_id:int,db:AsyncSession):
+    async def update_my_balance(user_id:str,db:AsyncSession):
         # user_id 가 있는지 확인 (예외처리)
         # BalanceCrud.get_last_trade 를  user_id 넣고 실행
         # BalanceCrud.update_my_balance 를 위 행을 넣고 실행
@@ -19,7 +19,7 @@ class BalanceService:
 
 
     @staticmethod
-    async def my_balance(user_id:int,db:AsyncSession):
+    async def my_balance(user_id:str,db:AsyncSession):
         # user_id 가 있는지 확인 (예외처리)
         # BalanceCrud.get_by_id 를 실행
         # 그대로 리스트 반환

@@ -7,7 +7,7 @@ from app.db.scheme.balance import BalanceUpdate
 class BalanceCrud:
 
     @staticmethod
-    async def get_last_trade(user_id:int,db:AsyncSession):
+    async def get_last_trade(user_id:str,db:AsyncSession):
         # user_id 에 맞는 행 중 가장 최신에 생긴 행을 추출
         # 그 행을 리턴
         pass
@@ -24,7 +24,7 @@ class BalanceCrud:
         pass
 
     @staticmethod
-    async def get_by_id(user_id:int,db:AsyncSession):
+    async def get_by_id(user_id:str,db:AsyncSession):
         # user_id 에 맞는 모든 행을 리스트로 출력
         # 반환
         pass

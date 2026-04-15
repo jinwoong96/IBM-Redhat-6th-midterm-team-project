@@ -15,7 +15,7 @@ async def add_wishlist(item_code:str,current_user=Depends(get_current_user),
 
 
 @router.get("/{user_id}",)
-async def user_wishlist(user_id:int,current_user=Depends(get_current_user),
+async def user_wishlist(user_id:str,current_user=Depends(get_current_user),
              db:AsyncSession=Depends(get_db)):
     # WishlistService.user_wishlist(user_id,current_user_id,db) 실행
     pass

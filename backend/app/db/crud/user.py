@@ -32,14 +32,14 @@ class UserCrud:
         pass
 
     @staticmethod
-    async def update_by_id(user_id:int,userupdate:UserUpdate,db:AsyncSession):
+    async def update_by_id(user_id:str,userupdate:UserUpdate,db:AsyncSession):
         # user_id 에 맞는 튜플 뽑기( 로그인된 유저 )
         # 그 튜플에 입력한 userupdate 데이터를 삽입
         # flush
         # 업데이트된 유저 정보 반환
         pass
     @staticmethod
-    async def delete_by_id(user_id:int,db:AsyncSession):
+    async def delete_by_id(user_id:str,db:AsyncSession):
         # user_id 에 해당되는 튜플 뽑음
         # db.delete , flush
         # 삭제를 성공하면 삭제 했다는 메세지 리턴

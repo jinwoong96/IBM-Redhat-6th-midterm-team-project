@@ -9,13 +9,13 @@ from app.db.scheme.trade import TradeUpdate
 class TradeService:
 
     @staticmethod
-    async def my_trade_list(user_id:int,db:AsyncSession):
+    async def my_trade_list(user_id:str,db:AsyncSession):
         # user_id 가 있는지 확인(에러 처리)
         # TradeCrud.get_my_tradelist 로 내 체결내역 리스트 반환
         pass
 
     @staticmethod
-    async def new_trade(user_id:int,trade:TradeUpdate,db:AsyncSession):
+    async def new_trade(user_id:str,trade:TradeUpdate,db:AsyncSession):
         # user_id 가 있는지 확인(에러 처리)
         # TradeCrud.new_trade 로 새 체결내역 생성 후 db에 add
         # 커밋 리프레시

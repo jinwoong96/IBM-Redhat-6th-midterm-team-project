@@ -29,7 +29,7 @@ class UserService:
         pass
 
     @staticmethod
-    async def get_user(user_id:int,db:AsyncSession):
+    async def get_user(user_id:str,db:AsyncSession):
         # UserCrud.get_by_id 로 해당 유저 조회(예외처리)
         # 그 유저 그대로 반환
         pass
@@ -40,13 +40,13 @@ class UserService:
         pass
 
     @staticmethod
-    async def get_user_2(user_id:int,current_user_id:int,db:AsyncSession):
+    async def get_user_2(user_id:str,current_user_id:str,db:AsyncSession):
         # current_user_id 가 있는지 확인(예외처리)
         # UserCrud.get_by_id 로 가져오기(예외처리)
         # 그유저그대로 리턴
         pass
     @staticmethod
-    async def update_user(user_id:int,userupdate:UserUpdate,db:AsyncSession):
+    async def update_user(user_id:str,userupdate:UserUpdate,db:AsyncSession):
         # user_id 가 있는지 확인 (예외처리)
         # 입력한 비밀번호 해쉬화 get_password_hash
         # UserCrud.update_by_id 로 로그인된 지금 유저 업데이트 후 그정보리턴

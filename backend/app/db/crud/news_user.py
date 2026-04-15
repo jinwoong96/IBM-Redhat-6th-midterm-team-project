@@ -6,12 +6,12 @@ from app.db.scheme.news_user import NewsuserAdd
 class NewsuserCrud:
 
     @staticmethod
-    async def get_by_id(user_id:int,db:AsyncSession):
+    async def get_by_id(user_id:str,db:AsyncSession):
         # user_id 에 맞는 모든 행을 리스트로 반환
         pass
 
     @staticmethod
-    async def new_newsuser(user_id:int,news:NewsuserAdd,db:AsyncSession):
+    async def new_newsuser(user_id:str,news:NewsuserAdd,db:AsyncSession):
         # 입력 데이터에 맞는 새 뉴스를 생성 및 db.add
         # 새 뉴스 반환
         pass

@@ -10,7 +10,7 @@ from app.core.jwt_handle import get_password_hash, verify_password, create_acces
 class ProgressService:
 
     @staticmethod
-    async def next(user_id:int,db:AsyncSession):
+    async def next(user_id:str,db:AsyncSession):
         # user_id가 있는지 확인 (예외 처리)
         # ProgressCrud.get_by_id_balance 를실행
         # 리턴된 종목코드 리스트, user_id를 가지고 아래 

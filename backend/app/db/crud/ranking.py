@@ -7,7 +7,7 @@ from app.db.scheme.ranking import RankingUpdate
 class RankingCrud:
 
     @staticmethod
-    async def update_ranking(rank:RankingUpdate,user_id:int,
+    async def update_ranking(rank:RankingUpdate,user_id:str,
                    db: AsyncSession):
         # 1. user_id로 행 조회
         # 2. 있다면 지금 입력되는 최대 잔고 보다 원래 입력되있는 최대잔고보다 크면 업데이트
