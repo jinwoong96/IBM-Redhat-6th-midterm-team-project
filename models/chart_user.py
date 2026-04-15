@@ -3,8 +3,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from sqlalchemy import String,Float, TIMESTAMP, func, ForeignKey, CheckConstraint, Integer
 from typing import Optional, List, TYPE_CHECKING
-
-class Chart_user(Base):
+from user import User
+from item import Item
+class ChartUser(Base):
     __tablename__ = "chart_users"
 
     chart_user_id: Mapped[int] = mapped_column(primary_key=True)
@@ -12,6 +13,11 @@ class Chart_user(Base):
     end_price: Mapped[int] = mapped_column(Integer,CheckConstraint("end_price >= 0"),nullable=False)
     max_price: Mapped[int] = mapped_column(Integer,CheckConstraint("max_price >= 0"),nullable=False)
     min_price: Mapped[int] = mapped_column(Integer,CheckConstraint("min_price >= 0"),nullable=False)
+    flu_range:  Mapped[int] = mapped_column(Integer)
+    flu_range_percent:  Mapped[float] = mapped_column(Float)
     day:  Mapped[int] = mapped_column(Integer,nullable=False)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.user_id",ondelete="CASCADE"),Integer,nullable=False)
-    item_code: Mapped[str] = mapped_column(ForeignKey("items.item_code"),index=True,nullable=False)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.user_id",ondelete="CASCADE"),String,nullable=False)
+    item_code: Mapped[str] = mapped_column(ForeignKey("items.item_code"),String(10),index=True,nullable=False)
+
+    user:Mapped["User"]=relationship(back_populates="chartuser")
+    item:Mapped["Item"]=relationship(back_populates="chartuser")
