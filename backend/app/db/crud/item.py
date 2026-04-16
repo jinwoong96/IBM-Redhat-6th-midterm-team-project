@@ -9,8 +9,3 @@ class ItemCrud:
     async def get_all_item(db:AsyncSession):
         # 모든 종목을 꺼내서 반환
         pass
-
-    @staticmethod
-    async def get_top_10_item(db:AsyncSession):
-        # 10 종목 꺼내서 반환
-        pass

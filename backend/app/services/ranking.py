@@ -10,16 +10,10 @@ from app.core.jwt_handle import get_password_hash, verify_password, create_acces
 class RankingService:
 
     @staticmethod
-    async def my_ranking(rank:RankingUpdate,user_id:str,
+    async def my_ranking(login_id:str,
                    db: AsyncSession):
-        # user_id 가 있는지 확인 (예외 처리)
-        # RankingCrud.update_ranking 실행
-        # 새로운 랭킹 예외 처리 후 반환
         pass
 
     @staticmethod
-    async def top_10_rank(user_id:str,db: AsyncSession):
-        # user_id 가 있는지만 확인
-        # RankingCrud.get_top10_rank 를 실행
-        # 그대로 10개 리턴
+    async def top_10_rank(login_id:str,db: AsyncSession):
         pass

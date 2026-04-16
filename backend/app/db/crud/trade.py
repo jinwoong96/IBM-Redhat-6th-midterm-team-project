@@ -6,14 +6,9 @@ from app.db.scheme.trade import TradeCreate
 class TradeCrud:
 
     @staticmethod
-    async def get_my_tradelist(user_id:str,db:AsyncSession):
-        # user_id가 맞는 모든 행을 리스트로 뽑음
-        # 반환
+    async def get_by_login_id(login_id:str,limit:int,offset:int,db:AsyncSession):
         pass
 
     @staticmethod
-    async def new_trade(user_id:str,trade:TradeCreate,db:AsyncSession):
-        # 입력한 정보로 새 trade 생성
-        # db에 add
-        # 그 유저 그대로 리턴
+    async def create(login_id:str,trade:TradeCreate,db:AsyncSession):
         pass

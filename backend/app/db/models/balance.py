@@ -6,3 +6,4 @@ from datetime import datetime
 
 class Balance(Base):
     __tablename__ = "balances"
+    pass

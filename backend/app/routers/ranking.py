@@ -16,7 +16,7 @@ async def top_10_rank(current_user= Depends(get_current_user),
     pass
 
 @router.get("/me",)
-async def get_my_ranking(current_user= Depends(get_current_user),
+async def my_ranking(current_user= Depends(get_current_user),
                    db: AsyncSession = Depends(get_db)):
-    # RankingService.get_my_ranking 을 실행
+    # RankingService.my_ranking 을 실행
     pass

@@ -5,33 +5,6 @@ from app.db.scheme.balance import BalanceUpdate
 
 
 class BalanceCrud:
-
     @staticmethod
-    async def get_last_trade(user_id:str,db:AsyncSession):
-        # user_id 에 맞는 행 중 가장 최신에 생긴 행을 추출
-        # 그 행을 리턴
-        pass
-
-
-    @staticmethod
-    async def update_my_balance(balance:BalanceUpdate,db:AsyncSession):
-
-        # 입력된 정보를 바탕으로 정보 업데이트
-        # 만약 구매 타입이 판매이면 db.delete  
-        # 만약 이미 있는 종목이고 구매 타입이 구입이면 그 행을 꺼내 값을 대입
-        # 만약 없는 종목이고 구매 타입이 구입이면 새 balance를 만들어 db.add
-        # 반환 : {trade 객체 , 업데이트된 balance 보유 수량}
-        pass
-
-    @staticmethod
-    async def get_by_id(user_id:str,db:AsyncSession):
-        # user_id 에 맞는 모든 행을 리스트로 출력
-        # 반환
-        pass
-
-    @staticmethod
-    async def update_my_money():
-        # 수량과 매입단가를 곱해 현재 자산 업데이트
-        # 평가금액을 적용해 유저 테이블에 평가금액 업데이트
-        # {"msg":"체결 성공"}
+    async def get_by_id(login_id:str,db:AsyncSession):
         pass

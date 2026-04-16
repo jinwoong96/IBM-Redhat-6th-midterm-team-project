@@ -4,10 +4,13 @@ from pydantic import BaseModel,Field
 
 
 
-class UserRequest(BaseModel):
-# 사용자 생성 / 로그인 시 필요한 정보
+class UserCreate(BaseModel):
+# 사용자 생성 시 필요한 정보
     pass
 
+class UserLogin(BaseModel):
+# 로그인 시 필요한 정보
+    pass
 
 
 class UserUpdate(BaseModel):
