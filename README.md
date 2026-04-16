@@ -1,16 +1,7 @@
 0. 코드 볼때 router에서 시작하는 게 편함
 1. 매개변수 db 관련은 항상 맨뒤로  
-2. 로그인을 확인하는 current_user 에 user_id 를 다른 파일에 함수로 받을 때 
-매개변수 선언을 user_id로 하는게 고정. 단 user_id를 따로 받아야할때는 current_user_id 로 받음
-3. 모든 예외처리는 service에서 함
-4. 어려우면 user 흐름부터 보기 ( 다른건 점점 불친절함)
-5. 자기 맡은 부분 안쓰는 함수 or 클래스 있으면 지우기
-
-
-
-점검중
-1. 오해의 소지가 있을만한 부분 검토중 (ex. 체결 추가 스키마 이름: Update -> Create)
-    CRUD (추가, 읽기, 업데이트, 삭제) 역할에 맞게 수정할거에요
-2. GET 요청에서는 input 스키마로 받지 않고, url에 포함() 또는 쿼리 파라미터로 받는걸로 수정할거에요
-
-복잡한 API 검토는 그 다음에 진행할께요
+2. 로그인을 확인하는 current_user 에 login_id 를 다른 파일에 함수로 받을 때 
+3. 모든 예외처리는 service에서 함, commit/refresh도 service에서 함
+4. service 로직을 API 명세서 + API 명세서 상세설명과 맞게 해야함 -> 필요한 crud 더 있으면 추가로 정의
+5. crud 함수 이름은 create, get, update, delete로 시작(기존 함수 이름 규칙 맞춰서 정하기)
+6. scheme은 라우터, API 명세서 보고 필요한거 작성
