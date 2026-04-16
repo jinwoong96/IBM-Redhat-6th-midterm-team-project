@@ -9,16 +9,14 @@ from app.core.auth import get_current_user
 router = APIRouter(prefix="/ranking", tags=["ranking"])
 
 
-@router.post("/",)
-async def my_ranking(rank:RankingUpdate,current_user= Depends(get_current_user),
-                   db: AsyncSession = Depends(get_db)):
-    # RankingService.my_ranking 을 실행
-    pass
-
-
-
-@router.get("/",)
+@router.get("",)
 async def top_10_rank(current_user= Depends(get_current_user),
                    db: AsyncSession = Depends(get_db)):
     # RankingService.top_10_rank 실행
+    pass
+
+@router.get("/me",)
+async def get_my_ranking(current_user= Depends(get_current_user),
+                   db: AsyncSession = Depends(get_db)):
+    # RankingService.get_my_ranking 을 실행
     pass

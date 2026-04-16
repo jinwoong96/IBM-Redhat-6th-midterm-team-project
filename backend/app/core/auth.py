@@ -11,7 +11,7 @@ from fastapi.security import OAuth2PasswordBearer
 
 async def get_current_user(request:Request,token:str,db: AsyncSession = Depends(get_db)):
     # 쿠키에서 access_token 을 가져옴 (예외처리)
-    # 토큰 decode 해서 user_id를뺌
-    # 그 user_id 를 UserCrud.get_by_id 로 해당 튜플 조회(예외처리)
+    # 토큰 decode 해서 login_id를뺌
+    # 그 login_id 를 UserCrud.get_by_id 로 해당 튜플 조회(예외처리)
     # 해당 유저 그대로 반환
     pass

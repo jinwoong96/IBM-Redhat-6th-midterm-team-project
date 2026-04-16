@@ -7,7 +7,7 @@ from app.core.auth import get_current_user
 
 router = APIRouter(prefix="/progress", tags=["progress"])
 
-@router.put("/",)
+@router.put("/next-turn",)
 async def next(current_user= Depends(get_current_user),
                    db: AsyncSession = Depends(get_db)):
     # ProgressService.next 를 실행
