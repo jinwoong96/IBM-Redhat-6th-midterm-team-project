@@ -1,5 +1,5 @@
 import React from 'react';
-import IntroNav from '../components/nav/IntroNav';
+import IntroNav from '../components/intro/IntroNav';
 const IntroPage = () => {
     return (
         <div className="min-h-screen bg-[#efefef] flex items-center justify-center px-4">

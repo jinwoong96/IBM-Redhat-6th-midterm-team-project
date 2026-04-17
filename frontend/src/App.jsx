@@ -1,22 +1,25 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Outlet } from 'react-router-dom'
+import Layout from './components/layout/Layout';
 import IntroPage from './pages/IntroPage';
-// import RankingPage from './pages/RankingPage';
-// import Home from './pages/Home';
-// import LoginPage from './pages/LoginPage';
-// import SignupPage from './pages/SignupPage';
-// import InfoPage from './pages/InfoPage';
-// import Provider from './context/Provider';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+import TradingPage from './pages/TradingPage';
+import RankingPage from './pages/RankingPage';
+import MyInfoPage from './pages/MyInfoPage';
+import Provider from './context/Provider';
 const App = () => {
 
   return (
     <Routes>
       <Route path="/" element={<IntroPage/>}/>
-      {/* <Route path='/a' element={<Home/>}/> */}
-      {/* <Route path="/b" element={<RankingPage/>}/> */}
-      {/* <Route path='/c' element={<LoginPage/>}/> */}
-      {/* <Route path='/d' element={<SignupPage/>}/> */}
-      {/* <Route path="/e" element={<InfoPage/>}/> */}
+      <Route path='/login' element={<LoginPage/>}/>
+      <Route path='/signup' element={<SignupPage/>}/>
+      <Route element={<Layout/>}>
+        <Route path='/trading' element={<TradingPage/>}/>
+        <Route path="/ranking" element={<RankingPage/>}/>
+        <Route path="/myinfo" element={<MyInfoPage/>}/>
+      </Route>
     </Routes>
   );
 };
