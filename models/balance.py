@@ -8,7 +8,7 @@ from .item import Item
 
 class Balance(Base):
     __tablename__ = "balance"
-    login_id: Mapped[str] = mapped_column(String(50),ForeignKey("users.login_id"),primary_key=True)
+    login_id: Mapped[str] = mapped_column(String(50),ForeignKey("users.login_id", ondelete="CASCADE"),primary_key=True)
     item_code:Mapped[str] = mapped_column(String(10),ForeignKey("items.item_code"),primary_key=True)
     quantity:Mapped[int] = mapped_column(Integer,CheckConstraint("quantity >= 0"),nullable=False) #0
     purchase_price:Mapped[int] = mapped_column(Integer,CheckConstraint("purchase_price >= 0"),nullable=False) #0

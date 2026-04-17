@@ -17,8 +17,8 @@ class User(Base):
     login_id: Mapped[str] = mapped_column(String(50),primary_key=True)
     user_nickname: Mapped[str] = mapped_column(String(50),nullable=False, unique=True)
     user_password: Mapped[str] = mapped_column(String(255),nullable=False)
-    money: Mapped[int] = mapped_column(Integer,CheckConstraint("money >= 0"),default=50000000)
-    valuation: Mapped[int] = mapped_column(Integer,CheckConstraint("valuation >= 0"),default=0)
+    money: Mapped[int] = mapped_column(Integer,CheckConstraint("money >= 0"),server_default="50000000")
+    valuation: Mapped[int] = mapped_column(Integer,CheckConstraint("valuation >= 0"),server_default="0")
     created_at: Mapped[datetime]= mapped_column(TIMESTAMP, server_default=func.now())
     refresh_token: Mapped[Optional[str]]=mapped_column(String(255), nullable=True)
 

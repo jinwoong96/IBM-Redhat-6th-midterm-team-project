@@ -15,7 +15,7 @@ class NewsUser(Base):
     )
     news_user_id: Mapped[int] = mapped_column(primary_key=True)
     day: Mapped[int] = mapped_column(Integer, CheckConstraint("day >= 0"),nullable=False)
-    login_id: Mapped[str] = mapped_column(String(50),ForeignKey("users.login_id"),nullable=False)
+    login_id: Mapped[str] = mapped_column(String(50),ForeignKey("users.login_id", ondelete="CASCADE"),nullable=False)
     news_id: Mapped[int] = mapped_column(Integer,ForeignKey("news.news_id"),nullable=False)
     
     user:Mapped["User"]=relationship(back_populates="newsuser")
