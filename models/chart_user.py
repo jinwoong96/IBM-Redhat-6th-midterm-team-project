@@ -1,13 +1,18 @@
-from backend.database import Base
+from database import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
-from sqlalchemy import String,Float, TIMESTAMP, func, ForeignKey, CheckConstraint, Integer
+from sqlalchemy import String,Float, TIMESTAMP, func, ForeignKey, CheckConstraint, Integer,UniqueConstraint, Index
 from typing import Optional, List, TYPE_CHECKING
-from user import User
-from item import Item
+from .user import User
+from .item import Item
 class ChartUser(Base):
     __tablename__ = "chart_users"
 
+    __table_args__ = (
+        UniqueConstraint('login_id', 'item_code', 'day', name='uix_chart_users_login_id_item_code_day'),
+    
+        Index('idx_chart_users_login_item_day', 'login_id', 'item_code', 'day'),
+       )
     chart_user_id: Mapped[int] = mapped_column(primary_key=True)
     start_price: Mapped[int] = mapped_column(Integer,CheckConstraint("start_price >= 0"),nullable=False)
     end_price: Mapped[int] = mapped_column(Integer,CheckConstraint("end_price >= 0"),nullable=False)
@@ -16,8 +21,8 @@ class ChartUser(Base):
     flu_range:  Mapped[int] = mapped_column(Integer)
     flu_range_percent:  Mapped[float] = mapped_column(Float)
     day:  Mapped[int] = mapped_column(Integer,nullable=False)
-    user_id: Mapped[str] = mapped_column(ForeignKey("users.user_id",ondelete="CASCADE"),String,nullable=False)
-    item_code: Mapped[str] = mapped_column(ForeignKey("items.item_code"),String(10),index=True,nullable=False)
+    login_id: Mapped[str] = mapped_column(String(50),ForeignKey("users.login_id",ondelete="CASCADE"),nullable=False)
+    item_code: Mapped[str] = mapped_column(String(10),ForeignKey("items.item_code"),index=True,nullable=False)
 
     user:Mapped["User"]=relationship(back_populates="chartuser")
     item:Mapped["Item"]=relationship(back_populates="chartuser")
