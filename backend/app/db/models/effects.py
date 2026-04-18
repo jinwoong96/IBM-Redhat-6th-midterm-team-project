@@ -1,7 +1,7 @@
 from app.db.database import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
-from sqlalchemy import String,Float, TIMESTAMP, func, ForeignKey, CheckConstraint, Integer
+from sqlalchemy import String,Float, TIMESTAMP, func, ForeignKey, CheckConstraint, Integer, UniqueConstraint
 from typing import Optional, List, TYPE_CHECKING
 
 
@@ -12,6 +12,7 @@ class Effects(Base):
 
     __table_args__ = (
         CheckConstraint("flu_min <= flu_max", name="chk_effects_flu_range"),
+        UniqueConstraint("news_id", "category_name", name="uq_effects_news_id_category_name")
     )
 
     effect_id: Mapped[int] = mapped_column(Integer,primary_key=True,autoincrement=True)

@@ -10,7 +10,10 @@ if TYPE_CHECKING:
 class News(Base):
     __tablename__ = "news"
 
-    
+    __table_args__ = (
+        UniqueConstraint('news_title', 'news_comments', name='uq_news_title_news_comments'),
+    )
+
     news_id: Mapped[int] = mapped_column(primary_key=True)
     news_title: Mapped[str] = mapped_column(String(50),nullable=False)
     news_comments: Mapped[str] = mapped_column(String(50))
