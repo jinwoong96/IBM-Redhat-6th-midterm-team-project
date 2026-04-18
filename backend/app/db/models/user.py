@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from .chart_user import ChartUser
     from .trade import Trade
     from .news_user import NewsUser
-    from .wishlist import WishList
+    from .wishlist import Wishlist
     from .balance import Balance
 
 class User(Base):
@@ -31,6 +31,6 @@ class User(Base):
     chart_users:Mapped[list["ChartUser"]] = relationship(back_populates="user", cascade="all, delete-orphan")
     trades:Mapped[list["Trade"]] = relationship(back_populates="user",cascade="all, delete-orphan")
     news_users:Mapped[list["NewsUser"]] = relationship(back_populates="user",cascade="all, delete-orphan")
-    wishlists:Mapped[list["WishList"]] = relationship(back_populates="user",cascade="all, delete-orphan")
+    wishlists:Mapped[list["Wishlist"]] = relationship(back_populates="user",cascade="all, delete-orphan")
     balances:Mapped[list["Balance"]] = relationship(back_populates="user",cascade="all, delete-orphan")
     
