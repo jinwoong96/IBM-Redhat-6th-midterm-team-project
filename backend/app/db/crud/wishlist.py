@@ -1,42 +1,32 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-<<<<<<< HEAD
-from app.db.models.wishlist import WishList
-=======
-from app.db.models.wishlist import Wishlist
->>>>>>> origin/main
-
+from app.db.models.wishlist import Wishlist  
 
 class WishlistCrud:
 
     @staticmethod
-    async def create(login_id:str, item_code:str,db:AsyncSession):
-<<<<<<< HEAD
-        db_wish=WishList(login_id=login_id, item_code=item_code)
+    async def create(login_id: str, item_code: str, db: AsyncSession):
+        db_wish = Wishlist(login_id=login_id, item_code=item_code)
         db.add(db_wish)
-        await db.flush()
+        await db.flush() 
         return db_wish
+
     @staticmethod
-    async def get_by_login_id(login_id:str,db:AsyncSession):
-        result=await db.execute(select(WishList).filter(WishList.login_id == login_id))
+    async def get_all_by_login_id(login_id: str, db: AsyncSession):
+      
+        result = await db.execute(select(Wishlist).filter(Wishlist.login_id == login_id))
+        return result.scalars().all()
+
+    @staticmethod
+    async def get_by_user_and_item(login_id: str, item_code: str, db: AsyncSession):
+        
+        result = await db.execute(
+            select(Wishlist).filter(Wishlist.login_id == login_id, Wishlist.item_code == item_code)
+        )
         return result.scalar_one_or_none()
 
     @staticmethod
-    async def delete_by_id_itemcode(login_id:str,item_code:str,db:AsyncSession):
-        result=await db.get(login_id, item_code)
-        if result:
-            await db.delete(result)
-            await db.flush()
-            return result
-        return None
-=======
-        pass
-
-    @staticmethod
-    async def get_by_login_id(login_id:str,db:AsyncSession):
-        pass
-
-    @staticmethod
-    async def delete_by_id_itemcode(login_id:str,item_code:str,db:AsyncSession):
-        pass
->>>>>>> origin/main
+    async def delete(db_wish: Wishlist, db: AsyncSession):
+       
+        await db.delete(db_wish)
+        await db.flush()
