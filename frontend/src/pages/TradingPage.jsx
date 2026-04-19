@@ -2,6 +2,10 @@ import React from 'react';
 import StockList from '../components/traiding/stock/StockList';
 import ChartArea from '../components/traiding/stockchart/ChartArea';
 import NewsArea from '../components/news/NewsArea';
+import AccountSummary from '../components/traiding/account/AccountSummary';
+import BalanceSummary from '../components/traiding/account/BalanceSummary';
+import TradePanel from '../components/traiding/trade/TradePanel';
+import HistoryArea from '../components/traiding/HistoryArea';
 
 const TradingPage = () => {
     return (
@@ -11,7 +15,12 @@ const TradingPage = () => {
                 <ChartArea />
                 <NewsArea />
             </section>
-            <section className="col-span-2">거래</section>
+            <section className="col-span-2">
+                <AccountSummary />
+                <BalanceSummary />
+                <TradePanel />
+                <HistoryArea />
+            </section>
         </div>
     );
 };

@@ -1,10 +1,10 @@
 import React from 'react';
 
-const IconMenuButton = ({icon}) => {
+const IconMenuButton = ({content, onClick}) => {
     return (
-        <div>
-            
-        </div>
+        <button onClick={()=>{onClick()}}>
+            {content}
+        </button>
     );
 };
 
