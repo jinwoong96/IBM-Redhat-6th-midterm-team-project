@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 from database import Base
+=======
+from app.db.database import Base
+>>>>>>> origin/main
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from sqlalchemy import String,Float, TIMESTAMP, func, ForeignKey, CheckConstraint, Integer
@@ -25,5 +29,10 @@ class Trade(Base):
     login_id: Mapped[str] = mapped_column(String(50),ForeignKey("users.login_id",ondelete="CASCADE"),index=True)
     item_code: Mapped[str] = mapped_column(String(10),ForeignKey("items.item_code"),index=True)  
    
+<<<<<<< HEAD
     user:Mapped["User"]=relationship(back_populates="trade")
     item:Mapped["Item"]=relationship(back_populates="trade")
+=======
+    user:Mapped["User"]=relationship(back_populates="trades")
+    item:Mapped["Item"]=relationship(back_populates="trades")
+>>>>>>> origin/main

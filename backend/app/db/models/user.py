@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 from database import Base
+=======
+from app.db.database import Base
+>>>>>>> origin/main
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from sqlalchemy import String, TIMESTAMP, func, ForeignKey, CheckConstraint, Integer
@@ -9,7 +13,11 @@ if TYPE_CHECKING:
     from .chart_user import ChartUser
     from .trade import Trade
     from .news_user import NewsUser
+<<<<<<< HEAD
     from .wishlist import WishList
+=======
+    from .wishlist import Wishlist
+>>>>>>> origin/main
     from .balance import Balance
 
 class User(Base):
@@ -28,9 +36,17 @@ class User(Base):
         cascade="all, delete-orphan", 
         uselist=False 
     )
+<<<<<<< HEAD
     chartuser:Mapped[list["ChartUser"]] = relationship(back_populates="user", cascade="all, delete-orphan")
     trade:Mapped[list["Trade"]] = relationship(back_populates="user",cascade="all, delete-orphan")
     newsuser:Mapped[list["NewsUser"]] = relationship(back_populates="user",cascade="all, delete-orphan")
     wishlist:Mapped[list["WishList"]] = relationship(back_populates="user",cascade="all, delete-orphan")
     balance:Mapped[list["Balance"]] = relationship(back_populates="user",cascade="all, delete-orphan")
+=======
+    chart_users:Mapped[list["ChartUser"]] = relationship(back_populates="user", cascade="all, delete-orphan")
+    trades:Mapped[list["Trade"]] = relationship(back_populates="user",cascade="all, delete-orphan")
+    news_users:Mapped[list["NewsUser"]] = relationship(back_populates="user",cascade="all, delete-orphan")
+    wishlists:Mapped[list["Wishlist"]] = relationship(back_populates="user",cascade="all, delete-orphan")
+    balances:Mapped[list["Balance"]] = relationship(back_populates="user",cascade="all, delete-orphan")
+>>>>>>> origin/main
     

@@ -1,12 +1,17 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+<<<<<<< HEAD
 from app.db.models.wishlist import WishList
+=======
+from app.db.models.wishlist import Wishlist
+>>>>>>> origin/main
 
 
 class WishlistCrud:
 
     @staticmethod
     async def create(login_id:str, item_code:str,db:AsyncSession):
+<<<<<<< HEAD
         db_wish=WishList(login_id=login_id, item_code=item_code)
         db.add(db_wish)
         await db.flush()
@@ -24,3 +29,14 @@ class WishlistCrud:
             await db.flush()
             return result
         return None
+=======
+        pass
+
+    @staticmethod
+    async def get_by_login_id(login_id:str,db:AsyncSession):
+        pass
+
+    @staticmethod
+    async def delete_by_id_itemcode(login_id:str,item_code:str,db:AsyncSession):
+        pass
+>>>>>>> origin/main

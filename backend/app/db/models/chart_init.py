@@ -1,11 +1,19 @@
+<<<<<<< HEAD
 from database import Base
+=======
+from app.db.database import Base
+>>>>>>> origin/main
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from sqlalchemy import String,Float, TIMESTAMP, func, ForeignKey, CheckConstraint, Integer,UniqueConstraint
 from typing import Optional, List, TYPE_CHECKING
 from .item import Item
 class ChartInit(Base):
+<<<<<<< HEAD
     __tablename__ = "chart_init"
+=======
+    __tablename__ = "chart_inits"
+>>>>>>> origin/main
 
     __table_args__ = (
         UniqueConstraint('item_code', 'day', name='uix_chart_init_item_code_day'),
@@ -20,4 +28,8 @@ class ChartInit(Base):
     flu_range_percent:  Mapped[float] = mapped_column(Float)
     day: Mapped[int] = mapped_column(Integer,nullable=False)
     
+<<<<<<< HEAD
     item: Mapped["Item"]=relationship(back_populates="balance")
+=======
+    item: Mapped["Item"]=relationship(back_populates="chart_inits")
+>>>>>>> origin/main

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 from database import Base
+=======
+from app.db.database import Base
+>>>>>>> origin/main
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from sqlalchemy import String,Float, TIMESTAMP, func, ForeignKey, CheckConstraint, Integer
@@ -7,7 +11,11 @@ from .user import User
 from .item import Item
 
 class Balance(Base):
+<<<<<<< HEAD
     __tablename__ = "balance"
+=======
+    __tablename__ = "balances"
+>>>>>>> origin/main
     login_id: Mapped[str] = mapped_column(String(50),ForeignKey("users.login_id", ondelete="CASCADE"),primary_key=True)
     item_code:Mapped[str] = mapped_column(String(10),ForeignKey("items.item_code"),primary_key=True)
     quantity:Mapped[int] = mapped_column(Integer,CheckConstraint("quantity >= 0"),nullable=False) #0
@@ -16,5 +24,10 @@ class Balance(Base):
     val_profit_and_loss:Mapped[int] = mapped_column(Integer,nullable=False)
     rate_of_return:Mapped[float] = mapped_column(Float,CheckConstraint("rate_of_return >= -100"),nullable=False) #-100
     
+<<<<<<< HEAD
     user:Mapped["User"]=relationship(back_populates="balance")
     item:Mapped["Item"]=relationship(back_populates="balance")
+=======
+    user:Mapped["User"]=relationship(back_populates="balances")
+    item:Mapped["Item"]=relationship(back_populates="balances")
+>>>>>>> origin/main
