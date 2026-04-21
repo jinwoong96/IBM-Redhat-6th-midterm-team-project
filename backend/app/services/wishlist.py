@@ -6,21 +6,20 @@ class WishlistService:
 
     @staticmethod
     async def add_wishlist(login_id: str, item_code: str, db: AsyncSession):
-        # 1. 이미 추가된 관심 종목인지 확인
+        #  이미 추가된 관심 종목인지 확인
         existing_wish = await WishlistCrud.get_by_user_and_item(login_id, item_code, db)
         if existing_wish:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST, 
                 detail="이미 관심 종목에 추가되어 있습니다."
             )
-            
+           
         try:
-            # 2. 관심 종목 생성 및 커밋
+            #  관심 종목 생성 및 커밋
             new_wish = await WishlistCrud.create(login_id, item_code, db)
             await db.commit()
             await db.refresh(new_wish)
-            return new_wish
-            
+            return new_wish         
         except Exception as e:
             # 에러 발생 시 롤백 (DB 꼬임 방지)
             await db.rollback()
@@ -33,7 +32,6 @@ class WishlistService:
     
     @staticmethod
     async def delete_wishlist(login_id: str, item_code: str, db: AsyncSession):
-        # 1. 지우려는 관심 종목이 존재하는지 확인
         existing_wish = await WishlistCrud.get_by_user_and_item(login_id, item_code, db)
         if not existing_wish:
             raise HTTPException(
@@ -42,7 +40,6 @@ class WishlistService:
             )
 
         try:
-            # 2. 삭제 및 커밋
             await WishlistCrud.delete(existing_wish, db)
             await db.commit()
             return existing_wish # 라우터에서 Response Model로 반환하기 위해 리턴
