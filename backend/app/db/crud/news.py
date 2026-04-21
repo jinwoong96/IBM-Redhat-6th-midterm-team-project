@@ -6,7 +6,7 @@ import random
 class NewsCrud:
     @staticmethod
     async def get_news_id(news_id:int,db:AsyncSession):
-        result=await db.execute(select(News).filter_by(news_id=news_id))
+        result=await db.execute(select(News).filter(news_id=news_id))
         return result.scalar_one_or_none()
     
     @staticmethod #관리자용
