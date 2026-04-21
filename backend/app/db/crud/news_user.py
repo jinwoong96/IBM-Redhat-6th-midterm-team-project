@@ -9,7 +9,7 @@ class NewsuserCrud:
 
     @staticmethod
     async def get_by_login_id(login_id:str,db:AsyncSession):
-        query=select(NewsUser).filter_by(login_id=login_id)
+        query=select(NewsUser).filter(login_id=login_id)
         result=await db.execute(query)
         return result.scalars().all()
     
