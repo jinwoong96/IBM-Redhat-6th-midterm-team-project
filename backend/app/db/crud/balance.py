@@ -7,4 +7,7 @@ from app.db.scheme.balance import BalanceUpdate
 class BalanceCrud:
     @staticmethod
     async def get_by_id(login_id:str,db:AsyncSession):
-        pass
+        result = await db.execute(
+            select(Balance).filter(Balance.login_id == login_id)
+        )
+        return result.scalars().all()

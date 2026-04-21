@@ -11,4 +11,4 @@ from app.db.scheme.balance import BalanceUpdate
 class BalanceService:
     @staticmethod
     async def my_balance(login_id:str,db:AsyncSession):
-        pass
+        return await BalanceCrud.get_by_id(login_id,db)

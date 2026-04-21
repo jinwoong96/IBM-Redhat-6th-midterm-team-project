@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-from database import Base
-=======
 from app.db.database import Base
->>>>>>> origin/main
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from sqlalchemy import String,Float, TIMESTAMP, func, ForeignKey, CheckConstraint, Integer,UniqueConstraint, Index
@@ -16,10 +12,7 @@ class ChartUser(Base):
         UniqueConstraint('login_id', 'item_code', 'day', name='uix_chart_users_login_id_item_code_day'),
     
         Index('idx_chart_users_login_item_day', 'login_id', 'item_code', 'day'),
-<<<<<<< HEAD
-=======
         Index('idx_users_day', 'login_id', 'day')
->>>>>>> origin/main
        )
     chart_user_id: Mapped[int] = mapped_column(primary_key=True)
     start_price: Mapped[int] = mapped_column(Integer,CheckConstraint("start_price >= 0"),nullable=False)
@@ -32,10 +25,5 @@ class ChartUser(Base):
     login_id: Mapped[str] = mapped_column(String(50),ForeignKey("users.login_id",ondelete="CASCADE"),nullable=False)
     item_code: Mapped[str] = mapped_column(String(10),ForeignKey("items.item_code"),index=True,nullable=False)
 
-<<<<<<< HEAD
-    user:Mapped["User"]=relationship(back_populates="chartuser")
-    item:Mapped["Item"]=relationship(back_populates="chartuser")
-=======
     user:Mapped["User"]=relationship(back_populates="chart_users")
     item:Mapped["Item"]=relationship(back_populates="chart_users")
->>>>>>> origin/main

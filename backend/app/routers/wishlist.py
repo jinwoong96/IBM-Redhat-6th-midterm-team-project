@@ -8,7 +8,7 @@ from app.db.scheme.wishlist import WishlistResponse
 
 router = APIRouter(prefix="/wishlist", tags=["wishlist"])
 
-@router.post("/{item_code}", response_model=WishlistResponse)
+@router.post("/items/{item_code}", response_model=WishlistResponse)
 async def add_wishlist(
     item_code: Annotated[str, Path(...)],
     current_user = Depends(get_current_user),
@@ -27,7 +27,7 @@ async def user_wishlist(
     return await WishlistService.user_wishlist(login_id, db)
 
 
-@router.delete("/{item_code}", response_model=WishlistResponse)
+@router.delete("/items/{item_code}", response_model=WishlistResponse)
 async def delete_wishlist(
     item_code: Annotated[str, Path(...)],
     current_user = Depends(get_current_user),
