@@ -24,23 +24,39 @@ class NewsuserService:
 
     @staticmethod
     async def add_newsuser(login_id:str,db:AsyncSession): #새로운 날짜의 뉴스를 랜덤배정 후 기록
+        all_news=await NewsCrud.get_all_news(db) 
         seen_news=await NewsuserCrud.get_by_login_id(login_id,db) #사용자가 지금까지 본 뉴스 아이디 리스트
         seen_ids = {s.news_id for s in seen_news} #가져온 뉴스리스트에서 다시for문 돌려서 뉴스 아이디만 뽑아서
+        last_day = max([s.day for s in seen_news], default=0)
+        next_day = last_day + 1
         unseen_news = [n for n in all_news if n.news_id not in seen_ids] #안본 뉴스 중 하나를 고른다
         
-
         if not unseen_news:
             raise HTTPException(status_code=404,detail='새로운 뉴스가 없습니다')#만약 뉴스가 더없다면..
         
         select_random_news=random.choice(unseen_news)#랜덤으로 뉴스를 뽑는다
 
-        await NewsuserCrud.create(#새로 배정된 뉴스를 db에저장 근데 이거 다음날 뉴스라서 저장할때 +1이 맞지않나?
+        await NewsuserCrud.create(#새로 배정된 뉴스를 db에저장 근데 이거 다음날 뉴스라서 저장할때 +1이 맞지않나?(해결)
             login_id=login_id,
             news_id=select_random_news.news_id,
-            day=1,
+            day=next_day,
             db=db
         )
+
+        effects= await EffectsCrud.get_by_news_id(select_random_news.news_id, db) #랜덤으로 배정된 뉴스 아이디에 따른 영향카테고리 가져옴
+
+        category_effect=[] #뉴스당 카테고리가 여러개이므로 가져와서 담을 빈 배열만들어주고
+        for i in effects:#영향 카테고리 에서 반복문돌려서 카테고리마다 지정된 등락폭안에서 랜덤 설정
+            effect_flu=random.randint(int(i.flu_min),int(i.flu_max))
+
+            category_effect.append({ #빈 배열 안에 넣어줌
+                'category_name':i.category_name,
+                'flu_value':effect_flu
+            })
         await db.commit()
 
-        return select_random_news
+        return {
+            'news':select_random_news,
+            'effects':category_effect
+        }
 
