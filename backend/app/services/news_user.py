@@ -25,9 +25,9 @@ class NewsuserService:
     @staticmethod
     async def add_newsuser(login_id:str,db:AsyncSession): #새로운 날짜의 뉴스를 랜덤배정 후 기록
         seen_news=await NewsuserCrud.get_by_login_id(login_id,db) #사용자가 지금까지 본 뉴스 아이디 리스트
-
-        all_news=await NewsCrud.get_all_news(db)#모든뉴스를 가져와서
-        unseen_news=[n for n in all_news if n.news_id not in seen_news.news_id]#안본 뉴스중 하나를 고른다
+        seen_ids = {s.news_id for s in seen_news} #가져온 뉴스리스트에서 다시for문 돌려서 뉴스 아이디만 뽑아서
+        unseen_news = [n for n in all_news if n.news_id not in seen_ids] #안본 뉴스 중 하나를 고른다
+        
 
         if not unseen_news:
             raise HTTPException(status_code=404,detail='새로운 뉴스가 없습니다')#만약 뉴스가 더없다면..
