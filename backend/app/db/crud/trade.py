@@ -25,5 +25,5 @@ class TradeCrud:
             quantity=trade_data.quantity
         )
         db.add(db_trade)
-        await db.flush() 
+        await db.flush() # ID 등 확보를 위해 flush
         return db_trade

@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-from database import Base
-=======
 from app.db.database import Base
->>>>>>> origin/main
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from sqlalchemy import String,Float, TIMESTAMP, func, ForeignKey, CheckConstraint, Integer,UniqueConstraint
@@ -14,21 +10,13 @@ if TYPE_CHECKING:
 class News(Base):
     __tablename__ = "news"
 
-<<<<<<< HEAD
-    
-=======
     __table_args__ = (
         UniqueConstraint('news_title', 'news_comments', name='uq_news_title_news_comments'),
     )
 
->>>>>>> origin/main
     news_id: Mapped[int] = mapped_column(primary_key=True)
     news_title: Mapped[str] = mapped_column(String(50),nullable=False)
     news_comments: Mapped[str] = mapped_column(String(50))
     
-<<<<<<< HEAD
-    newsuser: Mapped[list["NewsUser"]] = relationship(back_populates="news", cascade="all, delete-orphan")
-=======
     news_users: Mapped[list["NewsUser"]] = relationship(back_populates="news", cascade="all, delete-orphan")
->>>>>>> origin/main
     effects: Mapped[list["Effects"]] = relationship(back_populates="news", cascade="all, delete-orphan")

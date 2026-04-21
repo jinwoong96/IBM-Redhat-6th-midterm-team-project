@@ -1,10 +1,6 @@
 from fastapi import Request,Response,HTTPException,Depends
 from app.core.settings import settings
-<<<<<<< HEAD
-from app.core.jwt_handle import verify_token
-=======
 # from app.core.jwt_handle import verify_token
->>>>>>> origin/main
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import get_db
 from app.db.crud.user import UserCrud
