@@ -45,3 +45,13 @@ class ChartuserCrud:
         )
         result = await db.execute(query)
         return result.mappings().all()
+    
+    @staticmethod #아이템코드로 아이템이름뽑아오는 거
+    async def get_name_by_code(item_code: str, db: AsyncSession):
+    
+        item_data= select(Item.item_code, Item.item_name).filter(Item.item_code == item_code)
+    
+        result = await db.execute(item_data)
+        return result.mappings().first()
+             
+         

@@ -53,10 +53,14 @@ class NewsuserService:
                 'category_name':i.category_name,
                 'flu_value':effect_flu
             })
-        await db.commit()
+        
+        
 
         return {
-            'news':select_random_news,
-            'effects':category_effect
+            "news_id": select_random_news.news_id,
+            "news_title": select_random_news.news_title,
+            "news_comments": select_random_news.news_comments,
+            "effects": category_effect
         }
-
+        
+        await db.commit()

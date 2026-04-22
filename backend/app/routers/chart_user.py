@@ -22,7 +22,12 @@ async def get_chartuser(item_code:Annotated[str,Path(...)], limit:Annotated[int,
         limit=limit, 
         db=db
     )
-    return history
+    item_name=await ChartuserService.get_item_name(item_code, db)
+
+    return {
+        "item_name": item_name["item_name"],
+        "history": history
+    }
 
 @router.post("/init",)
 async def add_chartuser(current_user=Depends(get_current_user),

@@ -8,7 +8,7 @@ class ChartInitBase(BaseModel):
     min_price: int = Field(..., ge=0)
     flu_range: int
     flu_range_percent: float
-    day: int = Field(..., ge=0)
+    day: int = Field(...)
 
 class ChartInitRead(ChartInitBase):#맨처음 만들때에는 차트아이디가 아직없으므로 베이스에서는 뺀다.
     chart_id: int

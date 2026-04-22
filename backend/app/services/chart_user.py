@@ -14,9 +14,7 @@ class ChartuserService:
     async def get_chartuser(login_id:str, item_code:str, limit:int, db:AsyncSession):#특정종목 히스토리 조회
         history = await ChartuserCrud.get_by_id_code(login_id, item_code, limit, db)
 
-        if not history:
-            raise HTTPException(status_code=404, detail='차트 데이터가 존재하지 않습니다')
-        
+               
         return history
 
 
@@ -24,7 +22,7 @@ class ChartuserService:
     async def init_chartuser(login_id:str,db:AsyncSession): #1일차때 원본db 사용자용으로 가져오는 부분
         init_data=await ChartInitCrud.get_first_data(db)
         if not init_data:
-            raise HTTPException(status_code=500,detail='관리자에게 문의하세요')
+            raise HTTPException(status_code=500,detail='초기 데이터 불러오기 오류')
         
         try:
             for i in init_data:
@@ -42,6 +40,7 @@ class ChartuserService:
 
             await db.commit()
         except Exception as e:
+            print(e)
             await db.rollback()
             raise HTTPException(status_code=500,detail='초기화 실패 오류발생')
         
@@ -49,17 +48,18 @@ class ChartuserService:
 
     @staticmethod
     async def get_itemlist(login_id:str, db:AsyncSession):#현재 진행일차의 모든 종목 목록 조회
-        items=await ChartuserCrud.get_item_list_crud(db, login_id)
+        items=await ChartuserCrud.get_item_list_crud(login_id,db)
         
-        if items is None:
-            raise HTTPException(status_code=404, detail='현재 데이터가 없습니다')
-        
+                
         return items
         #조인 쿼리문 crud로 옮김
-        
-        
-        
-        
-        
-        
+    
+     
+    
+    @staticmethod#코드로 아이템이름뽑아오는 거
+    async def get_item_name(item_code: str, db: AsyncSession):
+  
+        item = await ChartuserCrud.get_name_by_code(item_code, db)
+
+        return item      
         
