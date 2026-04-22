@@ -1,7 +1,9 @@
 import React from 'react';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { fetchTrade } from './../../../Slice/tradeSlice';
 const TradePanel = () => {
-    // state 관리(가격, 수량, 종목명 등)
+    
 
     return (
         <div>

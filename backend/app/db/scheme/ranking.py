@@ -1,7 +1,23 @@
-from pydantic import BaseModel,Field
+from pydantic import BaseModel
 
+# 업데이트 및 내 정보
+class RankingResponse(BaseModel):
+    login_id: str
+    user_nickname: str
+    max_accounts: int
+    max_plus: float
+    day: int
+    rank: int
 
+    class Config:
+        from_attributes = True
 
-class RankingUpdate(BaseModel):
-    # 최대 잔고, 최대 수익률, 날짜
-    pass
+# TOP 10 
+class Top10Response(BaseModel):
+    rank: int
+    login_id: str
+    user_nickname: str
+    max_accounts: int
+
+    class Config:
+        from_attributes = True

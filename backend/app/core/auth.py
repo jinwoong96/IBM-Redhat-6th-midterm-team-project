@@ -14,4 +14,4 @@ async def get_current_user(request:Request,token:str,db: AsyncSession = Depends(
     # 토큰 decode 해서 login_id를뺌
     # 그 login_id 를 UserCrud.get_by_id 로 해당 튜플 조회(예외처리)
     # 해당 유저 그대로 반환
-    pass
+    return "user1"

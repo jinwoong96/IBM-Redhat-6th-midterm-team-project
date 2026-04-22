@@ -7,7 +7,6 @@ import SignupPage from './pages/SignupPage';
 import TradingPage from './pages/TradingPage';
 import RankingPage from './pages/RankingPage';
 import MyInfoPage from './pages/MyInfoPage';
-import Provider from './context/Provider';
 const App = () => {
 
   return (
