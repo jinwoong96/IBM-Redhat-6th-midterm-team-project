@@ -49,23 +49,17 @@ class ChartuserService:
 
     @staticmethod
     async def get_itemlist(login_id:str, db:AsyncSession):#현재 진행일차의 모든 종목 목록 조회
-        day_data=select(func.max(ChartUser.day)).filter(ChartUser.login_id==login_id)#인증된 사용자의 가장 최신날짜 선택
-        day_result=await db.execute(day_data)
-        current_day= day_result.scalar()
-
-        if current_day is None:
-            raise HTTPException(status_code=404,detail='현재 데이터가 없습니다')
+        items=await ChartuserCrud.get_item_list_crud(db, login_id)
         
-        query=(
-            select(
-                Item.item_code,      # 종목테이블이랑 조인
-                Item.item_name,      
-                Item.category_name,  
-                ChartUser.flu_range_percent,
-                ChartUser.end_price
-            )
-            .join(Item,ChartUser.item_code==Item.item_code).filter(ChartUser.login_id==login_id,ChartUser.day==current_day)
-        )
-
-        result = await db.execute(query)
-        return result.mappings().all()
+        if items is None:
+            raise HTTPException(status_code=404, detail='현재 데이터가 없습니다')
+        
+        return items
+        #조인 쿼리문 crud로 옮김
+        
+        
+        
+        
+        
+        
+        
