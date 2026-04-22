@@ -18,24 +18,24 @@ def verify_password(plain_pw:str, hashed_pw:str):
     return pw_crypt.verify(trunc_pw, hashed_pw)
 
 
-def create_token(user_id:int,expires_delta:timedelta,**kwargs):
+def create_token(login_id:str, expires_seconds:int, **kwargs):
     # 기본 토큰 생성 함수 jwt.encode
-    expire=datetime.now(timezone.utc)+timedelta(seconds=expires_delta)
+    expire=datetime.now(timezone.utc)+timedelta(seconds=expires_seconds)
+    
     to_encode=kwargs.copy()
-    to_encode.update({'expire':expire, 'user_id':user_id})
-    encoded_jwt=jwt.encode(to_encode, settings.secret_key, settings.jwt_algorithm)
-    return encoded_jwt
+    to_encode.update({'exp':expire, 'login_id':login_id})
 
+    return jwt.encode(to_encode, settings.secret_key, settings.jwt_algorithm)
+    
 
-def create_access_token(user_id:int):
+def create_access_token(login_id:str):
     # 액세스 토큰
-    return create_token(user_id=user_id, expires_delta=settings.access_token_expire_seconds)
+    return create_token(login_id=login_id, expires_seconds=settings.access_token_expire_seconds)
 
 
-def create_refresh_token(user_id:int):
+def create_refresh_token(login_id:str):
     # 리프레시 토큰
-    return create_token(user_id=user_id, jti=int(uuid.uuid4()),expires_delta=settings.refresh_token_expire_seconds)
-
+    return create_token(login_id=login_id, jti=str(uuid.uuid4()),expires_seconds=settings.refresh_token_expire_seconds)
 
 # 토큰 디코딩-> payload dict 반환 (검증: 변조 여부 확인)
 def decode_token(token:str):
@@ -44,4 +44,4 @@ def decode_token(token:str):
 # 토큰 디코딩-> uid값 불러오기
 def verify_token(token:str):
     payload=decode_token(token)
-    return payload.get('user_id')
+    return payload.get('login_id')

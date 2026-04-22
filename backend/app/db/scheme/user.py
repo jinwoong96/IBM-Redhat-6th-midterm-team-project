@@ -10,8 +10,12 @@ class UserCreate(BaseModel):
 
 class UserLogin(BaseModel):
 # 로그인 시 필요한 정보
-    user_nickname:str=Field(..., max_length=50)
+    login_id:str=Field(...)
     user_password:Annotated[str,Field(..., min_length=8, max_length=255)]
+
+class TokenResponse(BaseModel):
+    access_token:str
+    token_type:str='bearer'
 
 class UserUpdate(BaseModel):
 # 유저 정보 업데이트시 사용
