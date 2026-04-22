@@ -12,3 +12,12 @@ class WishlistResponse(BaseModel):
     item_code: str
 
     model_config = ConfigDict(from_attributes=True)
+    
+class WishlistItemResponse(BaseModel):
+    item_code: str
+    item_name: str
+    category_name: str
+    flu_range_percent: float
+    end_price: float
+
+    model_config = ConfigDict(from_attributes=True)

@@ -4,7 +4,7 @@ from typing import Annotated, List
 from app.db.database import get_db
 from app.services.wishlist import WishlistService
 from app.core.auth import get_current_user
-from app.db.scheme.wishlist import WishlistResponse  
+from app.db.scheme.wishlist import WishlistResponse,WishlistItemResponse
 
 router = APIRouter(prefix="/wishlist", tags=["wishlist"])
 
@@ -18,7 +18,7 @@ async def add_wishlist(
     return await WishlistService.add_wishlist(login_id, item_code, db)
 
 
-@router.get("", response_model=List[WishlistResponse])
+@router.get("", response_model=List[WishlistItemResponse])
 async def user_wishlist(
     current_user = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)

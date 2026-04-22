@@ -27,17 +27,20 @@ class TradeService:
                 select(Balance).filter_by(login_id=login_id, item_code=trade_data.item_code)
             )
             balance = result.scalars().first()
+            # 이번 거래의 총액 ; 가격 * 수량 => 계산 편의를 위해 영수증 총액 미리 끊어놓음
             total_trade_price = trade_data.price * trade_data.quantity
 
             if trade_data.buy_type == "buy":
                 if user.money < total_trade_price:
                     raise HTTPException(status_code=400, detail="현금 잔액이 부족합니다.")   
                 user.money -= total_trade_price 
+                # 기존 보유 종목이면, 기존 수량에 새로 산 수량을 더하고, 기존 '총 매입원금'에 새로 쓴 돈을 더함
                 if balance:
                     balance.quantity += trade_data.quantity
                     balance.purchase_price += total_trade_price
                 else:
                     # 신규 매수 종목이면 Balance 레코드 생성
+                    # 평가금액과 수익률 관련 초기값은 모두 0으로 
                     balance = Balance(
                         login_id=login_id,
                         item_code=trade_data.item_code,
@@ -51,6 +54,7 @@ class TradeService:
                     raise HTTPException(status_code=400, detail="보유 수량이 부족하여 매도할 수 없습니다.")                
                 user.money += total_trade_price #  유저 현금 증가
                 # 기존 평단가에 맞춰 매도한 만큼 원금(purchase_price) 비율 차감
+                # (총원금 / 수량)으로 1주당 평균 단가 -> 매도 수량만큼 곱하여 '차감할 원금'계산
                 avg_price = balance.purchase_price / balance.quantity
                 cost_deduction = int(avg_price * trade_data.quantity)
                 balance.quantity -= trade_data.quantity

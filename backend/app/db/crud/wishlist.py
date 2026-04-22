@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.db.models.wishlist import Wishlist  
-
+from app.db.models import Item,ChartUser
 class WishlistCrud:
 
     @staticmethod
@@ -13,10 +13,21 @@ class WishlistCrud:
 
     @staticmethod
     async def get_all_by_login_id(login_id: str, db: AsyncSession):
-      
-        result = await db.execute(select(Wishlist).filter(Wishlist.login_id == login_id))
-        return result.scalars().all()
-
+        stmt = (
+            select(
+                Wishlist.item_code,
+                Item.item_name,
+                Item.category_name,
+                ChartUser.flu_range_percent,
+                ChartUser.end_price
+            )
+            .join(Item, Wishlist.item_code == Item.item_code)
+            .join(ChartUser, Wishlist.item_code == ChartUser.item_code) 
+            .where(Wishlist.login_id == login_id)
+        )
+        result = await db.execute(stmt)
+        return result.mappings().all()
+            
     @staticmethod
     async def get_by_user_and_item(login_id: str, item_code: str, db: AsyncSession):
         
