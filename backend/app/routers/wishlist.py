@@ -14,7 +14,7 @@ async def add_wishlist(
     current_user = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    login_id = current_user.login_id
+    login_id = current_user
     return await WishlistService.add_wishlist(login_id, item_code, db)
 
 
@@ -23,7 +23,7 @@ async def user_wishlist(
     current_user = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    login_id = current_user.login_id
+    login_id = current_user
     return await WishlistService.user_wishlist(login_id, db)
 
 
@@ -33,5 +33,5 @@ async def delete_wishlist(
     current_user = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    login_id = current_user.login_id
+    login_id = current_user
     return await WishlistService.delete_wishlist(login_id, item_code, db)

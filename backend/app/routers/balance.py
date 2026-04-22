@@ -11,7 +11,7 @@ router = APIRouter(prefix="/balance", tags=["balance"])
 @router.get("",response_model=List[BalanceUpdate])
 async def my_balance(current_user= Depends(get_current_user),
                    db: AsyncSession = Depends(get_db)):
-    login_id = current_user.login_id
+    login_id = current_user
     return await BalanceService.my_balance(login_id,db)
     
   

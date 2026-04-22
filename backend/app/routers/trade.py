@@ -15,7 +15,7 @@ async def new_trade(
     db: AsyncSession = Depends(get_db)
 ):
     
-    login_id = current_user.login_id
+    login_id = current_user
     return await TradeService.new_trade(login_id, trade, db)
 
 
@@ -26,5 +26,5 @@ async def my_trade_list(
     current_user = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    login_id = current_user.login_id
+    login_id = current_user
     return await TradeService.my_trade_list(login_id, limit, offset, db)

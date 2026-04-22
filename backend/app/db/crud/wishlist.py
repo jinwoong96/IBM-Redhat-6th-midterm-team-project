@@ -22,7 +22,7 @@ class WishlistCrud:
                 ChartUser.end_price
             )
             .join(Item, Wishlist.item_code == Item.item_code)
-            .join(ChartUser, Wishlist.item_code == ChartUser.item_code) 
+            .join(ChartUser, (Wishlist.item_code == ChartUser.item_code) & (Wishlist.login_id == ChartUser.login_id))
             .where(Wishlist.login_id == login_id)
         )
         result = await db.execute(stmt)
