@@ -15,7 +15,7 @@ async def my_newsuser(limit:Annotated[int,Query(ge=1)]=15, current_user= Depends
                    db: AsyncSession = Depends(get_db)):
     
     history = await NewsuserService.my_newsuser(
-        login_id=current_user.login_id, 
+        login_id=current_user, 
         limit=limit, 
         db=db
     )
@@ -27,7 +27,7 @@ async def add_newsuser(current_user= Depends(get_current_user),
                    db: AsyncSession = Depends(get_db)):
     
     new_randim_news=await NewsuserService.add_newsuser(
-        login_id=current_user.login_id,
+        login_id=current_user,
         db=db
     )
     return new_randim_news

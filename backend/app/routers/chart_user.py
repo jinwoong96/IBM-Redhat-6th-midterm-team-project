@@ -17,7 +17,7 @@ async def get_chartuser(item_code:Annotated[str,Path(...)], limit:Annotated[int,
              db:AsyncSession=Depends(get_db)):
     # ChartuserService.get_chartuser 실행 후 Chartuser 리스트 반환
     history = await ChartuserService.get_chartuser(
-        login_id=current_user.login_id, 
+        login_id=current_user, 
         item_code=item_code, 
         limit=limit, 
         db=db
@@ -29,7 +29,7 @@ async def add_chartuser(current_user=Depends(get_current_user),
              db:AsyncSession=Depends(get_db)):
     # ChartuserService.init_chartuser 실행 후 메세지 리턴
     result = await ChartuserService.init_chartuser(
-        login_id=current_user.login_id, 
+        login_id=current_user, 
         db=db
     )
     return result
@@ -38,7 +38,7 @@ async def get_itemlist(current_user=Depends(get_current_user),
              db:AsyncSession=Depends(get_db)):
     # ChartuserService.get_itemlist 실행 후 메세지 리턴
     item_list = await ChartuserService.get_itemlist(
-        login_id=current_user.login_id, 
+        login_id=current_user, 
         db=db
     )
     return item_list
