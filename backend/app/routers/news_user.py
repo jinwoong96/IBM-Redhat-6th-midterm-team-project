@@ -30,4 +30,4 @@ async def add_newsuser(current_user= Depends(get_current_user),
         login_id=current_user,
         db=db
     )
-    return new_random_news
+    return new_random_news   #차트유저 더미데이터가 없으면 에러가남 

@@ -19,7 +19,21 @@ class NewsuserService:
             return []
         
         history.sort(key=lambda x:x.day, reverse=True)
-        return history[:limit]
+        
+        history_list=[]
+
+        for i in history[:limit]:
+            news_data={
+                'day':i.day,
+                'news_id':i.news_id,
+                'news_title':i.news.news_title,
+                'news_comments':i.news.news_comments
+            }
+            history_list.append(news_data)
+        
+        
+        
+        return history_list
 
 
 
