@@ -4,14 +4,16 @@ import rankingReducer from '../Slice/rankingSlice'
 import balanceReducer from '../Slice/balanceSlice'
 import wishlistReducer from '../Slice/wishlistSlice'
 import chartuserReducer from '../Slice/chartuserSlice'
+import newsuserReducer from '../Slice/newsuserSlice'
+import tradeReducer from '../Slice/tradeSlice'
 export const store = configureStore({
     reducer : {
         user : userReducer,
         rank : rankingReducer,
         wishlist : wishlistReducer,
-        // trade : tradeReducer,
+        trade : tradeReducer,
         // progress : progressReducer,
-        // newsuser : newsuserReducer,
+        newsuser : newsuserReducer,
         chartuser : chartuserReducer,
         balance : balanceReducer
     }
