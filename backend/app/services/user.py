@@ -86,7 +86,7 @@ class UserService:
     @staticmethod
     async def update_user(login_id:str, userupdate:UserUpdate, db:AsyncSession):
         if userupdate.new_password:
-            userupdate.user_password = get_password_hash(userupdate.new_password)
+            userupdate.new_password = get_password_hash(userupdate.new_password)
 
         db_user=await UserCrud.update_by_id(login_id, userupdate, db)
 
