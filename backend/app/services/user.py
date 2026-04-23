@@ -4,7 +4,8 @@ from app.db.scheme.user import UserCreate, UserLogin, UserUpdate
 from app.db.crud.user import UserCrud
 from fastapi import HTTPException
 from app.core.jwt_handle import get_password_hash, verify_password, create_access_token, create_refresh_token
-
+from app.core.settings import settings
+from fastapi import Response
 
 
 class UserService:
@@ -14,65 +15,78 @@ class UserService:
         if await UserCrud.get_by_login_id(user.login_id, db):
             raise HTTPException(status_code=400,  detail="이미 사용중인 아이디")
         
+        user.user_password = get_password_hash(user.user_password)
+        
         try:
             db_user=await UserCrud.create(user, db)
             await db.commit()
             await db.refresh(db_user)
             return db_user
         
-        except Exception:
-            raise HTTPException(status_code=401, detail="잘못된 아이디 또는 비번")
+        except Exception as e:
+            await db.rollback()
+            raise HTTPException(status_code=500, detail=f"서버 오류: {str(e)}")
 
 
     @staticmethod
-    async def login(user:UserLogin, db:AsyncSession):
-        print("1. start login")
-
+    async def login(user:UserLogin, response:Response, db:AsyncSession):
         db_user=await UserCrud.get_by_login_id(user.login_id, db)
-        print("2. db_user:", db_user)
 
-        print("3. password verify start")
         if not db_user or not verify_password(user.user_password, db_user.user_password):
-            print("4. password failed")
             raise HTTPException(status_code=401, detail="잘못된 아이디 또는 비번")
 
-        print("5. password ok")
-
         login_id=db_user.login_id
-
-        print("6. create access token")
         access_token=create_access_token(login_id)
-        print("7. access token ok")
-
-        print("8. create refresh token")
         refresh_token=create_refresh_token(login_id)
-        print("9. refresh token ok")
 
-        print("10. update refresh token")
-        await UserCrud.update_refresh_token_by_id(login_id, refresh_token, db)
-        
-        print("11. commit")
-        await db.commit()
+        try:
+            await UserCrud.update_refresh_token_by_id(login_id, refresh_token, db)
+            await db.commit()
+            await db.refresh(db_user)
 
-        print("12. refresh")
-        await db.refresh(db_user)
+            response.set_cookie(
+            key="access_token",
+            value=access_token,
+            max_age=int(settings.access_token_expire_seconds),
+            secure=True,
+            httponly=True,
+            samesite="Lax",
+            )
 
-        print("13. done")
+            response.set_cookie(
+            key="refresh_token",
+            value=refresh_token,
+            max_age=int(settings.refresh_token_expire_seconds),
+            secure=True,
+            httponly=True,
+            samesite="Lax",
+            )
+            
+        except Exception as e:
+            await db.rollback()
+            raise HTTPException(status_code=500, detail=f"토큰 저장 실패: {str(e)}")
 
-        return {'access_token':access_token, 'token_type':'bearer'}
+        return {'access_token':access_token, 'token_type':'bearer', 
+                "user": {
+                "login_id": db_user.login_id,
+                "user_nickname": db_user.user_nickname,
+                "user_password": db_user.user_password,
+                "money": db_user.money,
+                "valuation": db_user.valuation,
+                "created_at": db_user.created_at
+                }}
 
     @staticmethod
     async def get_user(login_id:str, db:AsyncSession):
-        db_user = await UserCrud.get_by_id(login_id, db)
+        db_user = await UserCrud.get_by_login_id(login_id, db)
         if not db_user:
             raise HTTPException(status_code=404, detail="사용자를 찾을 수 없음")
         return db_user
 
     @staticmethod
     async def update_user(login_id:str, userupdate:UserUpdate, db:AsyncSession):
-        if userupdate.user_password:
-            hash_pw=get_password_hash(userupdate.user_password)
-            userupdate.user_password = hash_pw
+        if userupdate.new_password:
+            userupdate.user_password = get_password_hash(userupdate.new_password)
 
         db_user=await UserCrud.update_by_id(login_id, userupdate, db)
 

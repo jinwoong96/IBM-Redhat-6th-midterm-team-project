@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Annotated, Optional
+from datetime import datetime
 
 
 class UserCreate(BaseModel):
@@ -7,6 +8,16 @@ class UserCreate(BaseModel):
     login_id:str=Field(...)
     user_nickname:str=Field(..., max_length=50)
     user_password:Annotated[str,Field(..., min_length=8, max_length=255)]
+
+class UserInfo(BaseModel):
+    login_id: str
+    user_nickname: str
+    money: int
+    valuation: int
+    created_at: datetime
+
+    class Config:
+        from_attributes=True
 
 class UserLogin(BaseModel):
 # 로그인 시 필요한 정보
@@ -16,6 +27,7 @@ class UserLogin(BaseModel):
 class TokenResponse(BaseModel):
     access_token:str
     token_type:str='bearer'
+    user: UserInfo
 
 class UserUpdate(BaseModel):
 # 유저 정보 업데이트시 사용
