@@ -14,15 +14,16 @@ const TradingPage = () => {
             <section className="col-span-12 lg:col-span-2 overflow-hidden rounded-2xl border border-gray-200 bg-white">
                 <StockListArea />
             </section>
-            <section className="col-span-8">
+            <section className="col-span-12 lg:col-span-8 min-w-0 space-y-4 flex flex-col">
                 <ChartArea />
                 <NewsArea />
+                <HistoryArea />
             </section>
-            <section className="col-span-2">
+            <section className="col-span-12 lg:col-span-2 min-w-0 space-y-4">
                 <AccountSummary />
                 <BalanceSummary />
                 <TradePanel />
-                <HistoryArea />
+                {/* <HistoryArea /> */}
             </section>
         </div>
     );

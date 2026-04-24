@@ -1,9 +1,68 @@
 import React from 'react';
 
 const BalanceList = () => {
+    //////////////////// 잔고 목록 데이터 불러오기
+    const balances = [
+        {
+            item_name: "삼성전자",
+            quantity: 10,
+            purchase_price: 70000,
+            val_price: 720000,
+            val_profit_and_loss: 20000,
+            rate_of_return: 2.86,
+        },
+    ];
+    //////////////////////////////////////////////
+
     return (
-        <div>
-            잔고 테이블
+        <div className="h-full overflow-auto">
+            <table className="w-full text-sm">
+                <thead className="sticky top-0 bg-gray-50 text-gray-600">
+                <tr className="border-b border-gray-100">
+                    <th className="px-2 py-2 text-center border-r border-gray-100">종목명</th>
+                    <th className="px-2 py-2 text-center border-r border-gray-100">수량</th>
+                    <th className="px-2 py-2 text-center border-r border-gray-100">매입단가</th>
+                    <th className="px-2 py-2 text-center border-r border-gray-100">평가금액</th>
+                    <th className="px-2 py-2 text-center border-r border-gray-100">평가손익</th>
+                    <th className="px-2 py-2 text-center border-r border-gray-100">수익률</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    {balances.map((item, index) => (
+                        <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
+                            <td className="px-2 py-2 border-r border-gray-100">{item.item_name}</td>
+                            <td className="px-2 py-2 text-right border-r border-gray-100">{item.quantity}</td>
+                            <td className="px-2 py-2 text-right border-r border-gray-100">{item.purchase_price.toLocaleString()}</td>
+                            <td className="px-2 py-2 text-right border-r border-gray-100">{item.val_price.toLocaleString()}</td>
+                            <td
+                                className={`px-2 py-2 text-right font-medium border-r border-gray-100 ${
+                                    item.val_profit_and_loss > 0
+                                    ? "text-red-500"
+                                    : item.val_profit_and_loss < 0
+                                    ? "text-blue-500"
+                                    : "text-gray-500"
+                                }`}
+                                >
+                                {item.val_profit_and_loss > 0 ? "+" : ""}
+                                {item.val_profit_and_loss.toLocaleString()}
+                            </td>
+                            <td
+                                className={`px-2 py-2 text-right font-medium ${
+                                    item.rate_of_return > 0
+                                    ? "text-red-500"
+                                    : item.rate_of_return < 0
+                                    ? "text-blue-500"
+                                    : "text-gray-500"
+                                }`}
+                                >
+                                {item.rate_of_return > 0 ? "+" : ""}
+                                {item.rate_of_return.toFixed(2)}%
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };

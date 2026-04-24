@@ -1,17 +1,9 @@
 import React from 'react';
+import { CHART_CONFIG } from '@/config';
 
-// const ChartItem = () => {
-//     return (
-//         <div>
-//             시작가격, 종료가격, 최고가, 최저가 이용해 1일 차트 출력
-//             색깔도 구분
-//         </div>
-//     );
-// };
+const Candle = ({ item, showLabel, priceToY }) => {
+  const chart_height = CHART_CONFIG.CHART_HEIGHT;
 
-// export default ChartItem;
-
-const Candle = ({ item, showLabel, chart_height, priceToY }) => {
   const isUp = item.close >= item.open;
 
   const wickTop = priceToY(item.high);
@@ -21,8 +13,8 @@ const Candle = ({ item, showLabel, chart_height, priceToY }) => {
   const bodyBottom = priceToY(Math.min(item.open, item.close));
   const bodyHeight = Math.max(bodyBottom - bodyTop, 4);
 
-  const candleColor = isUp ? "bg-blue-600" : "bg-red-500";
-  const wickColor = isUp ? "bg-blue-700" : "bg-red-600";
+  const candleColor = isUp ? "bg-red-500" : "bg-blue-600";
+  const wickColor = isUp ? "bg-red-600" : "bg-blue-700";
 
   return (
     <div className="group relative flex flex-col items-center">
@@ -38,7 +30,7 @@ const Candle = ({ item, showLabel, chart_height, priceToY }) => {
       <div className="relative w-full" style={{ height: `${chart_height}px` }}>
         {/* 심지 */}
         <div
-          className={`absolute left-1/2 w-[1px] -translate-x-1/2 ${wickColor}`}
+          className={`absolute left-1/2 w-px -translate-x-1/2 ${wickColor}`}
           style={{
             top: `${wickTop}px`,
             height: `${Math.max(wickBottom - wickTop, 2)}px`,

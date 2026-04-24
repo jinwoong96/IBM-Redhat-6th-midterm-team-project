@@ -45,8 +45,7 @@ const StockItem = ({item}) => {
                     item.change>0 ? "text-red-500" : "text-blue-500"
                 }`}
                 >
-                {/* 변동비율은 부호에 따라서 +이면 + 붙여주고, 뒤에 % 붙여주고 소수점 2자리까지 자릿수고정해서 string으로 띄워줌(util 함수 따로 짜서) */}
-                {item.change}
+                {`${item.change>0?"+":""}${item.change.toFixed(2)}%`}
                 </span>
                 <span className="rounded-md bg-gray-100 px-2 py-1 text-xs text-gray-500">
                 {item.category}
