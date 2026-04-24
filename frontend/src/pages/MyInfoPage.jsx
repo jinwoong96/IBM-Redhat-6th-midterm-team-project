@@ -118,22 +118,22 @@ const MyInfoPage = () => {
             {/* 거래 통계 */}
             <section className="rounded-2xl border border-gray-100 bg-white p-7 shadow-sm">
                 <h3 className="flex items-center gap-2 text-xl font-semibold text-gray-800">
-                <Activity size={22} className="text-purple-500" />
-                거래 통계
+                    <Activity size={22} className="text-purple-500" />
+                    거래 통계
                 </h3>
 
                 <div className="mt-7 space-y-4">
-                <div className="flex items-center justify-between rounded-xl bg-blue-50 px-4 py-4">
-                    <span className="text-sm font-medium text-gray-600">총 거래 횟수</span>
-                    <span className="text-xl font-semibold text-blue-500">0회</span>
-                </div>
+                    <div className="flex items-center justify-between rounded-xl bg-blue-50 px-4 py-4">
+                        <span className="text-sm font-medium text-gray-600">총 거래 횟수</span>
+                        <span className="text-xl font-semibold text-blue-500">0회</span>
+                    </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                    <StatCard label="매수" value="0회" color="text-emerald-500" bg="bg-emerald-50" />
-                    <StatCard label="매도" value="0회" color="text-red-500" bg="bg-red-50" />
-                    <StatCard label="현금보유량" value="0개" color="text-purple-500" bg="bg-purple-50" />
-                    <StatCard label="평가금액" value="0원" color="text-orange-500" bg="bg-orange-50" />
-                </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <StatCard label="매수" value="0회" color="text-emerald-500" bg="bg-emerald-50" />
+                        <StatCard label="매도" value="0회" color="text-red-500" bg="bg-red-50" />
+                        <StatCard label="현금보유량" value="0개" color="text-purple-500" bg="bg-purple-50" />
+                        <StatCard label="평가금액" value="0원" color="text-orange-500" bg="bg-orange-50" />
+                    </div>
                 </div>
             </section>
             </div>
