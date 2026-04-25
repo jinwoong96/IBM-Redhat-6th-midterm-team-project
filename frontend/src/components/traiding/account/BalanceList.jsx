@@ -9,7 +9,7 @@ const BalanceList = () => {
     useEffect(() => {
         dispatch(fetchMyBalance());
     }, [dispatch]);
-    const balanceList = Array.isArray(mybalance) ? mybalance : [];
+    const balances = Array.isArray(mybalance) ? mybalance : [];
 
     return (
         <div className="h-full overflow-auto">

@@ -1,5 +1,5 @@
 import { ChevronDown } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector,useDispatch } from 'react-redux';
 import { addTradeAsync } from './../../../Slice/tradeSlice';
 import { fetchMyBalance } from '../../../Slice/balanceSlice';
@@ -50,7 +50,7 @@ const TradePanel = () => {
                 <div className="relative">
                 <input
                     type="number"
-                    value={countInput}
+                    value={quantity}
                     onChange={(e)=>{e.target.value>=0?setQuantity(e.target.value):0}}
                     className="w-full rounded-xl border border-blue-400 px-4 py-3 pr-10 outline-none focus:ring-2 focus:ring-blue-200"
                 />

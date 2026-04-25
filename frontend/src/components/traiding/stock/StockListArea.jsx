@@ -3,7 +3,7 @@ import FilterButtonArea from './FilterButtonArea';
 import StockList from './StockList';
 
 ///////////////////////////////////////
-import React, { useEffect } from 'react'; 
+import React, { useEffect, useState } from 'react'; 
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchChart_code, fetchChartUser, toggleWish, syncWishlist } from '../../../Slice/chartuserSlice'; 
 import { addWishlistAsync, delWishlistAsync,fetchWishlistAsync } from '../../../Slice/wishlistSlice';
