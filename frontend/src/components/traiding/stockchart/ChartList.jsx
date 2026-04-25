@@ -23,7 +23,7 @@ const ChartList = ({candleData, max_count, priceToY}) => {
 
                 return (
                 <Candle
-                    key={item.label}
+                    key={item.day}
                     item={item}
                     showLabel={showLabel}
                     priceToY={priceToY}

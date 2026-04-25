@@ -4,13 +4,13 @@ import { CHART_CONFIG } from '@/config';
 const Candle = ({ item, showLabel, priceToY }) => {
   const chart_height = CHART_CONFIG.CHART_HEIGHT;
 
-  const isUp = item.close >= item.open;
+  const isUp = item.end_price >= item.start_price;
 
-  const wickTop = priceToY(item.high);
-  const wickBottom = priceToY(item.low);
+  const wickTop = priceToY(item.max_price);
+  const wickBottom = priceToY(item.min_price);
 
-  const bodyTop = priceToY(Math.max(item.open, item.close));
-  const bodyBottom = priceToY(Math.min(item.open, item.close));
+  const bodyTop = priceToY(Math.max(item.start_price, item.end_price));
+  const bodyBottom = priceToY(Math.min(item.start_price, item.end_price));
   const bodyHeight = Math.max(bodyBottom - bodyTop, 4);
 
   const candleColor = isUp ? "bg-red-500" : "bg-blue-600";
@@ -21,10 +21,11 @@ const Candle = ({ item, showLabel, priceToY }) => {
       {/* 툴팁 */}
       <div className="pointer-events-none absolute -top-4 z-30 hidden w-max rounded-md border border-gray-200 bg-white px-3 py-2 text-xs text-gray-700 shadow-lg group-hover:block">
         <div className="mb-1 font-semibold text-gray-800">{item.label}</div>
-        <div>시가: {item.open.toLocaleString()}</div>
-        <div>종가: {item.close.toLocaleString()}</div>
-        <div>고가: {item.high.toLocaleString()}</div>
-        <div>저가: {item.low.toLocaleString()}</div>
+        <div>{item.day}일차</div>
+        <div>시가: {item.start_price.toLocaleString()}</div>
+        <div>종가: {item.end_price.toLocaleString()}</div>
+        <div>고가: {item.max_price.toLocaleString()}</div>
+        <div>저가: {item.min_price.toLocaleString()}</div>
       </div>
 
       <div className="relative w-full" style={{ height: `${chart_height}px` }}>
@@ -49,7 +50,7 @@ const Candle = ({ item, showLabel, priceToY }) => {
 
       {/* 🔥 3칸마다 라벨 */}
       <div className="mt-1 h-4 text-[10px] text-gray-600">
-        {showLabel ? item.label : ""}
+        {showLabel ? item.day : ""}
       </div>
     </div>
   );

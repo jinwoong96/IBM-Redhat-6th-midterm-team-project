@@ -14,7 +14,7 @@ router = APIRouter(prefix="/chartuser", tags=["chartuser"])
 @router.get("/items/{item_code}")
 async def get_chartuser(
     item_code: Annotated[str, Path(...)], 
-    limit: Annotated[int, Query(ge=1)] = 20,
+    limit: Annotated[int, Query(ge=1)] = 30,
     current_user = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):

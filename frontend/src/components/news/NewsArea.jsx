@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import NewsCard from './NewsCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchNewsUser } from '../../Slice/newsuserSlice';
 
 const NewsArea = () => {
     const dispatch = useDispatch();
@@ -11,7 +13,7 @@ const NewsArea = () => {
     
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const currentNews = newsList[currentIndex];
+    const currentNews = newsList?newsList[currentIndex]:[];
 
     const prevNews = () => {
         setCurrentIndex((prev) =>
@@ -38,7 +40,11 @@ const NewsArea = () => {
                 </button>
 
                 {/* 뉴스 카드 */}
-                <NewsCard currentNews={currentNews} currentIndex={currentIndex} length={newsList.length}/>
+                {currentNews?
+                    <NewsCard currentNews={currentNews} currentIndex={currentIndex} length={newsList.length}/>
+                    :<div>뉴스 정보가 없습니다.</div>
+                }
+                
 
                 {/* 오른쪽 화살표 */}
                 <button

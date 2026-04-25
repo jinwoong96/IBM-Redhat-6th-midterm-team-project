@@ -1,7 +1,7 @@
 import { Star } from 'lucide-react';
 import React from 'react';
 
-const StockItem = ({item}) => {
+const StockItem = ({item, onClick, handleWishClick}) => {
 
     const onWishClick = (e, item_code, isWish) => {
         // 관심종목 추가/삭제 클릭했을 때
@@ -9,14 +9,10 @@ const StockItem = ({item}) => {
         alert("관심종목 추가 또는 삭제");
     }
 
-    const onItemClick = () => {
-        alert("종목 클릭하면 해당 종목 차트를 불러와서 띄워줌. 클릭한 종목 active=true로 바꾸고 나머지는 false")
-    }
-
     return (
         <div
             key={item.item_code}
-            onClick={()=>onItemClick()}
+            onClick={onClick}
             className={`flex w-full items-start justify-between px-4 py-4 text-left transition hover:bg-gray-50 ${
                 item.active ? "bg-blue-50" : "bg-white"
             }`}
@@ -24,11 +20,11 @@ const StockItem = ({item}) => {
             <div>
                 <div className="flex items-center gap-1">
                 <span className="font-semibold">{item.item_name}</span>
-                <button onClick={(e)=>(onWishClick(e, item.item_code, item.isWish))}>
+                <button onClick={(e)=>(handleWishClick(e, item))}>
                     <Star
                         size={14}
                         className={
-                            item.isWish
+                            item.is_wish
                             ? "fill-yellow-400 text-yellow-400"
                             : "text-gray-300"
                         }
@@ -36,19 +32,19 @@ const StockItem = ({item}) => {
                 </button>
                 </div>
                 <div className="text-xs text-gray-400">{item.item_code}</div>
-                <div className="mt-1 font-semibold">{"₩"+item.price.toLocaleString()}</div>
+                <div className="mt-1 font-semibold">{"₩"+item.end_price.toLocaleString()}</div>
             </div>
 
             <div className="flex flex-col items-end gap-2">
                 <span
                 className={`text-sm font-medium ${
-                    item.change>0 ? "text-red-500" : "text-blue-500"
+                    item.flu_range_percent>0 ? "text-red-500" : "text-blue-500"
                 }`}
                 >
-                {`${item.change>0?"+":""}${item.change.toFixed(2)}%`}
+                {`${item.flu_range_percent>0?"+":""}${item.flu_range_percent.toFixed(2)}%`}
                 </span>
                 <span className="rounded-md bg-gray-100 px-2 py-1 text-xs text-gray-500">
-                {item.category}
+                {item.category_name}
                 </span>
             </div>
         </div>
