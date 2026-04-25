@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import StockItem from './StockItem';
-
+import WishItem from './WishItem';
 const StockList = () => {
     
     // store에서 itemList 가져옴

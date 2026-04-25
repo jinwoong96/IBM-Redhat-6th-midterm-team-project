@@ -1,6 +1,6 @@
 import React from 'react';
 
-const FormTextInput = ({type, label, icon, placeholder}) => {
+const FormTextInput = ({type, label, icon, placeholder, value, onChange}) => {
     return (
         <div>
             <label className="mb-2 block text-xs font-medium text-gray-500">
@@ -12,6 +12,8 @@ const FormTextInput = ({type, label, icon, placeholder}) => {
                 type={type}
                 placeholder={placeholder}
                 className="w-full bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
+                value={value}
+                onChange={onChange}
               />
             </div>
         </div>

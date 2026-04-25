@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import RankingHeader from '../components/ranking/RankingHeader';
+import React from 'react';
 import RankingTable from '../components/ranking/RankingTable';
-
+import RankingHeader from '../components/ranking/RankingHeader';
 const RankingPage = () => {
 
     return (    

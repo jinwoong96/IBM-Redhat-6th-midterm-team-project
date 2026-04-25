@@ -1,21 +1,43 @@
 import { ChevronDown } from 'lucide-react';
-import React, { useState } from 'react';
+import React from 'react';
+import { useSelector,useDispatch } from 'react-redux';
+import { addTradeAsync } from './../../../Slice/tradeSlice';
+import { fetchMyBalance } from '../../../Slice/balanceSlice';
+import { fetchUser } from '../../../Slice/userSlice';
 
 // 오른쪽 매수/매도 패널
 const TradePanel = () => {
-    ///////////////// state 관리 현재 선택된 종목의 가격 가져옴
-    ///////////////// 현금, 보유수량 정보도 추가로 있어야 매수, 매도 클릭했을 때 검증 들어갈 수 있음
-    const price = 45000;
-    /////////////////////////////////////////////////
-    const [countInput, setCountInput] = useState(0);
+    const chartDataObj = useSelector((state) => state.chartuser.chartuserlist_code);
+    const chartData = chartDataObj?.list || [];
+    const dispatch = useDispatch();
 
-    const onClickBuy = () => {
-        alert("매수 클릭했을 때 실행");
-    }
 
-    const onClickSell = () => {
-        alert("매도 클릭했을 때 실행");
-    }
+    // 오름차순후 젤 마지막 값을 꺼내서 반환
+    const latestData = [...chartData].sort((a, b) => a.day - b.day)[chartData.length - 1];
+
+
+    const [quantity, setQuantity] = useState(0);
+
+    const itemCode = latestData?.item_code || "종목 미선택";
+    const unitPrice = latestData?.end_price || 0; 
+    // const totalPrice = unitPrice * quantity;
+
+    const handleTrade = async(type) => {
+
+        const tradeData = {
+            item_code: itemCode,
+            buy_type: type,
+            price: unitPrice,
+            quantity: quantity,
+            trade_day: latestData.day >= 1 ? latestData.day : 1
+            // 테스트를위해 일단 1넣음
+        };
+
+        await dispatch(addTradeAsync(tradeData));
+        await dispatch(fetchMyBalance());
+        await dispatch(fetchUser());
+        setQuantity(0); // 입력창 초기화
+    };
 
     return (
         <div>
@@ -29,7 +51,7 @@ const TradePanel = () => {
                 <input
                     type="number"
                     value={countInput}
-                    onChange={(e)=>{e.target.value>=0?setCountInput(e.target.value):0}}
+                    onChange={(e)=>{e.target.value>=0?setQuantity(e.target.value):0}}
                     className="w-full rounded-xl border border-blue-400 px-4 py-3 pr-10 outline-none focus:ring-2 focus:ring-blue-200"
                 />
                 </div>
@@ -37,26 +59,26 @@ const TradePanel = () => {
                 <div className="mt-4 space-y-2 text-sm text-gray-500">
                 <div className="flex justify-between">
                     <span>수량</span>
-                    <span>{countInput>0?countInput:"-"}</span>
+                    <span>{quantity>0?quantity:"-"}</span>
                 </div>
                 <div className="flex justify-between">
                     <span>1주 가격</span>
-                    <span>{price?price.toLocaleString():"-"}</span>
+                    <span>{unitPrice?unitPrice.toLocaleString():"-"}</span>
                 </div>
                 <div className="flex justify-between">
                     <span>총 금액</span>
-                    <span>{countInput>0?(price*countInput).toLocaleString():"-"}</span>
+                    <span>{quantity>0?(unitPrice*quantity).toLocaleString():"-"}</span>
                 </div>
                 </div>
 
                 <div className="mt-5 grid grid-cols-2 gap-3">
                 <button 
-                    onClick={onClickBuy}
+                    onClick={()=>handleTrade("buy")}
                     className="rounded-xl bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700">
                     매수
                 </button>
                 <button 
-                    onClick={onClickSell}
+                    onClick={()=>handleTrade("sell")}
                     className="rounded-xl bg-rose-500 py-3 font-semibold text-white hover:bg-rose-600">
                     매도
                 </button>

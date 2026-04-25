@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { CHART_CONFIG } from '@/config';
 import ChartList from './ChartList';
 import Candle from './Candle';
@@ -8,26 +9,15 @@ const MAX_COUNT = CHART_CONFIG.CHART_MAX_COUNT;   // 화면에 보여줄 최대 
 
 
 const ChartArea = () => {
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // 현재 선택된 종목 이름(item_name), 종목 코드(item_code), 차트 데이터 리스트(candleData) 불러옴
-  const candleData = [
-    { label: "-3/1", open: 50000, close: 50500, high: 52000, low: 49800 },
-    { label: "-3/2", open: 50500, close: 53000, high: 57200, low: 50200 },
-    { label: "-3/3", open: 52000, close: 45000, high: 52000, low: 44800 },
-    { label: "-2/1", open: 52000, close: 55500, high: 55500, low: 52000 },
-    { label: "-2/2", open: 52000, close: 52500, high: 52500, low: 52000 },
-    { label: "-2/3", open: 53000, close: 54800, high: 54800, low: 53000 },
-    { label: "-1/1", open: 52000, close: 56500, high: 58500, low: 52000 },
-    { label: "-1/2", open: 55000, close: 49000, high: 55200, low: 49000 },
-    { label: "-1/3", open: 52000, close: 54500, high: 54500, low: 52000 },
-    { label: "1/1", open: 52000, close: 45000, high: 52000, low: 44800 },
-  ];
-  const item_name = "GS";
-  const item_code = "078930";
-///////////////////////////////////////////////////////////////////////////////////////////
+  const chartDataObj = useSelector((state) => state.chartuser.chartuserlist_code);
   
+  const candleData = chartDataObj?.list || []; //리스트만 빼겠다
+  const item_name = chartDataObj?.item_name || "종목명"; // 종목 이름을 빼겠다. 이름없으면 기본값 
+  const item_code = candleData[0]?.item_code || ""; // 그냥 다 item 코드 같으니 0번째에서 item_code뺌
 
-  
+  if (candleData.length === 0) {
+      return <div>종목을 클릭하여 차트를 불러오세요.</div>;
+  }
 
   const getNiceStep = (rawStep) => {
     const exponent = Math.floor(Math.log10(rawStep));
@@ -65,8 +55,8 @@ const ChartArea = () => {
   };
 
   // 이것들은 현재 차트 데이터 목록 이용해서 계산
-  const min_price = Math.min(...candleData.map(item => item.low));
-  const max_price = Math.max(...candleData.map(item => item.high));
+  const min_price = Math.min(...candleData.map(item => item.min_price));
+  const max_price = Math.max(...candleData.map(item => item.max_price));
   const priceTicks = getYAxisTicks(min_price, max_price);
   const chart_high = priceTicks[0];
   const chart_low = priceTicks[priceTicks.length-1];

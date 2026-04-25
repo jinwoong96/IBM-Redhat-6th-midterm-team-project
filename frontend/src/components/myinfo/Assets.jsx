@@ -1,15 +1,38 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUser } from '../../Slice/userSlice';
+import { fetchMyBalance } from '../../Slice/balanceSlice';
 
 const Assets = () => {
-    //////////////////// 현금, 평가금액 불러옴
-    const cash = 30000000;
-    const stock = 15000000;
-    //////////////////////////////////////////
+    const dispatch = useDispatch();
 
-    const total = cash + stock;
+    const { login_id, money } = useSelector((state) => state.user);
+    const my_balance =  [  // 임시 테스트 데이터
+            {
+                login_id: "qwe",
+                item_code: "005930",
+                quantity: 5,
+                purchase_price: 300000,
+                val_price: 400000,
+                val_profit_and_loss: 100000,
+                rate_of_return: 33
+            }
+        ]
 
-    const cashPercent = total === 0 ? 0 : (cash / total) * 100;
-    const stockPercent = total === 0 ? 0 : (stock / total) * 100;
+    useEffect(() => {
+        dispatch(fetchUser());
+        dispatch(fetchMyBalance());
+    }, [dispatch]);
+
+    const filteredBalance = Array.isArray(my_balance) ? my_balance:[];
+    const totalStockValue = filteredBalance.reduce((acc, cur) => {
+        return acc + (cur.val_price || 0);
+    }, 0);
+
+    const totalAssets = (money || 0) + totalStockValue;
+
+    const cashPercent = totalAssets === 0 ? 0 : (money / totalAssets) * 100;
+    const stockPercent = totalAssets === 0 ? 0 : (totalStockValue / totalAssets) * 100;
 
     return (
         <div>
@@ -29,7 +52,7 @@ const Assets = () => {
                 >
                 {/* 가운데 구멍 */}
                 <div className="absolute inset-6 flex items-center justify-center rounded-full bg-white text-sm font-medium shadow">
-                    ₩{total.toLocaleString()}
+                    ₩{totalAssets.toLocaleString()}
                 </div>
                 </div>
             </div>

@@ -1,7 +1,12 @@
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import React from 'react';
+import { CONSTANTS_CONFIG } from "@/config";
 
 const RankingRow = ({user}) => {
+
+    const seed_money = CONSTANTS_CONFIG.SEED_MONEY;
+    const profit = user.max_accounts - seed_money;
+    const profit_rate = profit / seed_money * 100;
 
     const rankIcon = (rank) => {
         if (rank === 1) return "🏆";
@@ -18,21 +23,21 @@ const RankingRow = ({user}) => {
                 {rankIcon(user.rank)}
             </td>
             <td className="px-6 py-4 font-medium text-gray-800">
-                {user.nickname}
+                {user.user_nickname}
             </td>
             <td className="px-6 py-4 text-right font-medium text-gray-700">
-                ₩{user.totalAsset.toLocaleString()}
+                ₩{user.max_accounts.toLocaleString()}
             </td>
             <td className="px-6 py-4 text-right font-semibold text-emerald-500">
-                {user.profit>=0?"+":""}₩{user.profit.toLocaleString()}
+                {profit>=0?"+":""}₩{profit.toLocaleString()}
             </td>
             <td className="flex px-6 py-4 text-right font-semibold text-emerald-500">
-                {user.rate>=0?(
+                {profit_rate>=0?(
                     <TrendingUp size={18} className="text-emerald-500" />
                     ) :
                     <TrendingDown size={18} className="text-emerald-500" />
                     } 
-                <span>{user.rate>=0?"+":null}{user.rate.toFixed(2)}%</span>
+                <span>{profit_rate>=0?"+":null}{profit_rate.toFixed(2)}%</span>
             </td>
         </tr>
     );

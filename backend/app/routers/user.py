@@ -1,31 +1,50 @@
 from fastapi import APIRouter, Depends, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import get_db
-from app.db.scheme.user import UserCreate, UserLogin, UserUpdate
+from app.db.scheme.user import UserCreate, UserLogin, UserUpdate, TokenResponse, UserInfo
 from app.services.user import UserService
 from app.core.auth import get_current_user
 router = APIRouter(prefix="/users", tags=["users"])
 
-@router.post("",)
-async def create_user(user: UserCreate, db: AsyncSession = Depends(get_db)):
+# 회원가입
+@router.post("", response_model=UserCreate)
+async def create_user(user:UserCreate, db:AsyncSession=Depends(get_db)):
 # 사용자 생성 
 # UserService.signup
-    pass
+    return await UserService.signup(user, db)
 
-@router.post("/token",)
-async def login(user: UserLogin, db: AsyncSession = Depends(get_db)):
+# 로그인
+@router.post("/token", response_model=TokenResponse)
+async def login(user:UserLogin, response:Response, db: AsyncSession= Depends(get_db)):
 # UserService.login 을 정보 다주고 시작
-    pass
+    result = await UserService.login(user, response, db)
+    
+    response.set_cookie(
+        key='access_token',
+        value=result['access_token'],
+        httponly=True,
+        samesite='lax'
+    )
+    return result
 
-@router.get("/me",)
+# 로그인된 사용자 정보 조회
+@router.get("/me", response_model=UserInfo)
 async def me(current_user=Depends(get_current_user),
-             db:AsyncSession=Depends(get_db)):
+             db:AsyncSession=Depends(get_db)): ## 이중 세션이라는데 db를 지워도 될지?
     # current_user 로 로그인이 되있으면 그 유저 튜플을 그대로 반환(User)
     # current_user.user_id로 UserService.get_user 에 넣어 유저 반환
-    pass
+    return await UserService.get_user(current_user, db)
 
-@router.put("",)
-async def update_user(userupdate:UserUpdate,current_user= Depends(get_current_user),
-                      db: AsyncSession = Depends(get_db)):
+# 로그인된 사용자 정보 수정
+@router.put("", response_model=UserUpdate)
+async def update_user(userupdate:UserUpdate, current_user=Depends(get_current_user),
+                      db: AsyncSession=Depends(get_db)):
     # UserService.update_user 로 업데이트 된 유저 바로 리턴
-    pass
+    return await UserService.update_user(current_user, userupdate, db)
+
+
+@router.post("/logout", response_model=bool)
+async def logout(response:Response):
+    response.delete_cookie(key="access_token")
+    response.delete_cookie(key="refresh_token")
+    return True

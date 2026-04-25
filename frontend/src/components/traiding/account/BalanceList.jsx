@@ -1,18 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMyBalance } from './../../../Slice/balanceSlice';
 
 const BalanceList = () => {
-    //////////////////// 잔고 목록 데이터 불러오기
-    const balances = [
-        {
-            item_name: "삼성전자",
-            quantity: 10,
-            purchase_price: 70000,
-            val_price: 720000,
-            val_profit_and_loss: 20000,
-            rate_of_return: 2.86,
-        },
-    ];
-    //////////////////////////////////////////////
+    const dispatch = useDispatch();
+    const mybalance = useSelector((state) => state.balance.my_balance);
+
+    useEffect(() => {
+        dispatch(fetchMyBalance());
+    }, [dispatch]);
+    const balanceList = Array.isArray(mybalance) ? mybalance : [];
 
     return (
         <div className="h-full overflow-auto">
