@@ -11,52 +11,28 @@ const TradeHistoryList = () => {
     }, [dispatch]);
 
     return (
-        <div style={{ padding: '20px' }}>
+        <div>
             <h3>최근 거래 내역</h3>
-            <ul style={{ listStyle: 'none', padding: 0 }}>
-                {tradeList.map((trade, index) => (
-                    <li 
-                        key={trade.trade_id || index} 
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            padding: '15px',
-                            borderBottom: '1px solid #eee',
-                            marginBottom: '10px',
-                            borderRadius: '8px',
-                            backgroundColor: '#fff',
-                            boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
-                        }}
-                    >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                            <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
-                                {trade.item_code}
-                            </span>
-                            <span style={{ 
-                                color: trade.buy_type === '매수' || trade.buy_type === 'BUY' ? '#e74c3c' : '#3498db',
-                                fontWeight: 'bold'
-                            }}>
-                                {trade.buy_type}
-                            </span>
-                        </div>
-
-                        <div style={{ display: 'flex', justifyContent: 'space-between', color: '#555', fontSize: '0.9rem' }}>
-                            <div>
-                                <span>가격: <strong>{trade.price?.toLocaleString()}원</strong></span>
-                                <span style={{ margin: '0 10px' }}>|</span>
-                                <span>수량: <strong>{trade.quantity}주</strong></span>
-                            </div>
-                            <div style={{ color: '#999' }}>
-                                {new Date(trade.trade_day).toLocaleDateString()}
-                            </div>
-                        </div>
-
-                        <div style={{ marginTop: '5px', fontSize: '0.8rem', color: '#bbb' }}>
-                            사용자: {trade.login_id}
-                        </div>
-                    </li>
-                ))}
-            </ul>
+            <hr />
+            {tradeList.map((trade, index) => (
+                <div key={trade.trade_id || index}>
+                    <div>
+                        {/* item_code가 안 뜨면 item_name이라도 뜨는지 확인 */}
+                        <strong>[ {trade.item_name || trade.item_code || "이름없음"} ]</strong> 
+                        <span> | 구분: {trade.buy_type === 'buy' ? '매수' : '매도'}</span>
+                    </div>
+                    <div>
+                        <span>가격: {trade.price?.toLocaleString()}원 </span>
+                        <span>수량: {trade.quantity}주</span>
+                    </div>
+                    <div>
+                        <small>거래 시점: {trade.trade_day}일차 </small>
+                        {/* login_id가 안 뜨면 '아이디 없음' 표시 */}
+                        <small> | ID: {trade.login_id || "아이디 없음"}</small>
+                    </div>
+                    <hr />
+                </div>
+            ))}
         </div>
     );
 };

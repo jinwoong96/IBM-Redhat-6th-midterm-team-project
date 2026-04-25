@@ -1,38 +1,35 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-const ChartItem = () => { // 종목리스트에서 종목 누르면 dispatch로 item 코드를 넘겨줘야됨
-    const chartData = useSelector((state) => state.chartuser.chartuserlist_code);
+const ChartItem = () => {
+    const chartDataObj = useSelector((state) => state.chartuser.chartuserlist_code);
 
+    const chartData = chartDataObj?.list || []; //리스트만 빼겠다
+    const itemName = chartDataObj?.item_name || "종목명"; // 종목 이름을 빼겠다. 이름없으면 기본값 
+    const itemCode = chartData[0]?.item_code || ""; // 그냥 다 item 코드 같으니 0번째에서 item_code뺌
 
-    const currentItemCode = chartData[chartData.length - 1]?.item_code;
+    if (chartData.length === 0) {
+        return <div>종목을 클릭하여 차트를 불러오세요.</div>;
+    }
 
     return (
-        <div style={{ padding: '15px', border: '1px solid #ccc' }}>
-            <h3>{currentItemCode} 상세 차트 (최근 20일)</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div>
+            <h3>{itemName} ({itemCode}) 상세 차트 (최근 20일)</h3>
+            
+            <div>
                 {chartData.map((day, index) => {
-       
                     const isUp = day.end_price >= day.start_price;
-                    const color = isUp ? '#f03e3e' : '#1971c2'; 
+                    const statusColor = isUp ? 'red' : 'blue';
 
                     return (
-                        <div key={day.chart_user_id || index} style={{
-                            display: 'grid',
-                            gridTemplateColumns: '80px 1fr 1fr 1fr 1fr',
-                            padding: '8px',
-                            border: `1px solid ${color}`,
-                            backgroundColor: isUp ? '#fff5f5' : '#f0f4f8',
-                            borderRadius: '4px',
-                            fontSize: '0.85rem'
-                        }}>
-                            <span style={{ fontWeight: 'bold' }}>Day {day.day}</span>
-                            <span>시: {day.start_price.toLocaleString()}</span>
-                            <span style={{ color: color, fontWeight: 'bold' }}>
-                                종: {day.end_price.toLocaleString()}
+                        <div key={day.chart_user_id || index} style={{ borderBottom: '1px solid #eee' }}>
+                            <span>[Day {day.day}] </span>
+                            <span>시가: {day.start_price.toLocaleString()} | </span>
+                            <span style={{ color: statusColor, fontWeight: 'bold' }}>
+                                종가: {day.end_price.toLocaleString()} 
                             </span>
-                            <span>고: {day.max_price.toLocaleString()}</span>
-                            <span>저: {day.min_price.toLocaleString()}</span>
+                            <span> | 고가: {day.max_price.toLocaleString()}</span>
+                            <span> | 저가: {day.min_price.toLocaleString()}</span>
                         </div>
                     );
                 })}
@@ -40,3 +37,5 @@ const ChartItem = () => { // 종목리스트에서 종목 누르면 dispatch로 
         </div>
     );
 };
+
+export default ChartItem;

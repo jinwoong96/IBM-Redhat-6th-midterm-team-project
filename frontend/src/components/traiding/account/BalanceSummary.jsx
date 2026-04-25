@@ -19,8 +19,8 @@ const BalanceSummary = () => {
     return (
         <div>
             <div>보유 현금, 주식 평가액</div>
-            보유 현금 : {user.money}
-            주식 평가액 : {totalPrice}
+            보유 현금 : {user.money?.toLocaleString()}원
+            주식 평가액 : {totalPrice?.toLocaleString()}원
         </div>
     );
 };

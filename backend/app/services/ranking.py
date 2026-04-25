@@ -16,7 +16,7 @@ class RankingService:
             login_id=login_id,
             db=db
         )
-
+        total_count = await RankingCrud.get_all_count(db=db)
         if not ranking:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -39,7 +39,8 @@ class RankingService:
             rank=higher_count + 1
         )
 
-        return response
+        return {"my_ranking" : response,
+                "total_user":total_count}
 
     @staticmethod
     async def get_top10_rank(db: AsyncSession):

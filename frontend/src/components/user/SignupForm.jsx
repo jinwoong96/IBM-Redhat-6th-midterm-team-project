@@ -6,10 +6,11 @@ import FormTextInput from '../common/form/FormTextInput';
 import FormButton from '../common/form/FormButton';
 import AuthFooter from '../common/form/AuthFooter';
 import api from '../../api/api';
-
+import { fetchChart_init } from '../../Slice/chartuserSlice';
+import { useDispatch } from 'react-redux';
 const SignupForm = () => {
     const navigate = useNavigate();
-    
+    const dispatch =useDispatch();
     const [formData, setFormData] = useState({
         user_id: '',
         user_nickname: '',
@@ -37,7 +38,6 @@ const SignupForm = () => {
             };
 
             const res = await api.post("/users", payload);
-
             if (res.data) {
                 setIsSuccess(true);
             }

@@ -8,6 +8,7 @@ import api from '../../api/api';
 import { useDispatch } from 'react-redux';
 import { fetchUser, login } from '../../Slice/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { fetchChart_init } from '../../Slice/chartuserSlice';
 
 const LoginForm = () => {
     const navigator = useNavigate();
@@ -31,7 +32,7 @@ const LoginForm = () => {
             const { access_token, user } = res.data;
 
             dispatch(login({ ...user }));
-
+            dispatch(fetchChart_init());
             alert("로그인 성공!, 트레이드 시작");
             navigator('/trading')
 

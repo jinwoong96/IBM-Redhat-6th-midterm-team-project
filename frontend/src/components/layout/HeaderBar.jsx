@@ -4,18 +4,22 @@ import DayBadge from '../common/DayBadge';
 import MenuButton from '../common/MenuButton';
 import { useNavigate } from 'react-router-dom';
 import IconMenuButton from '../common/IconMenuButton';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../Slice/userSlice';
 
 const HeaderBar = () => {
     // 날짜랑 set함수는 컨텍스트나 저장소에서 받아오고 이거 지우기
     const [day, setDay] = useState(1);
 
-    const navigator = useNavigate();
+    const dispatch = useDispatch();
+
+    const navigate = useNavigate();
 
     const onTradingClick = () => {
         alert("/components/layout/HeaderBar.jsx 코드 짜기\n게임 페이지 코드 다 되면 setDay랑 주석 지우기");
         setDay(1);
 
-        navigator('/trading');
+        navigate('/trading');
     }
 
     const onNextDayClick = () => {
@@ -24,12 +28,15 @@ const HeaderBar = () => {
 
     const onRankingClick = () => {
         setDay(null);
-        navigator('/ranking');
+        navigate('/ranking');
     }
 
-    const onLogoutClick = () => {
-        setDay(null);
-        alert("/components/layout/HeaderBar.jsx 코드 짜기")
+    const onLogoutClick = async() => {
+        //setDay(null);
+        await dispatch(logout());
+        
+        alert("로그아웃 되었습니다.");
+        navigate('/login');
     }
 
     return (
@@ -45,7 +52,7 @@ const HeaderBar = () => {
                     :<MenuButton content={"트레이딩"} onClick={()=>onTradingClick()}/>}
                     
                     <MenuButton content={"랭킹"} onClick={()=>onRankingClick()} />
-                    <IconMenuButton content={<User size={16}/>} onClick={()=>navigator('/myinfo')}/>
+                    <IconMenuButton content={<User size={16}/>} onClick={()=>navigate('/myinfo')}/>
                     <MenuButton content={"로그아웃"} onClick={()=>onLogoutClick()} />
                 </div>
             </header>

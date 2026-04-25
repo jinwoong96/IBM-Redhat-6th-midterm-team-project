@@ -25,6 +25,12 @@ class RankingCrud:
         )
         return result.scalars().all()
     
+    @staticmethod
+    async def get_all_count(db: AsyncSession):
+        result = await db.execute(select(Ranking))
+        all_re = result.scalars().all()
+        return len(all_re)
+
     # @staticmethod
     # async def update(db: AsyncSession, ranking: Ranking):
     #     await db.commit()
