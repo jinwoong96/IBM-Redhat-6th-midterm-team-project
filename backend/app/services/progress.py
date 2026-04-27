@@ -8,7 +8,43 @@ from fastapi import HTTPException, status
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+INIT_ASSET = 50000000
+
 class ProgressService:
+
+    @staticmethod
+    async def get_settlement(login_id: str, db: AsyncSession):
+        # 1. 유저
+        user = await UserCrud.get_user_by_login_id(login_id, db)
+        if not user:
+            raise HTTPException(status_code=404, detail="유저를 찾을 수 없습니다")
+
+        # 2. 날짜 
+        next_day = await ChartuserCrud.get_last_day_by_user(login_id, db)
+        if next_day is None:
+            raise HTTPException(status_code=400, detail="차트를 찾을 수 없습니다")
+
+        # 3. 데이터 조회
+        balance_data = await BalanceCrud.get_by_id(login_id, db)
+            
+        user_cash = user.money
+        total_valuation = user.valuation
+        total_asset = user.money + user.valuation
+        total_profit_val = total_asset - INIT_ASSET
+        total_profit_rate = total_profit_val/INIT_ASSET*100
+
+        response = {
+            "today_asset": total_asset,
+            "cash": user_cash,
+            "valuation": total_valuation,
+            "profit": total_profit_val,
+            "profit_rate": total_profit_rate,
+            "jongmok": balance_data,
+            "day" : next_day-1
+        }
+
+        return response
+
     @staticmethod
     async def turn(login_id: str, db: AsyncSession):
         # 1. 유저
@@ -64,9 +100,8 @@ class ProgressService:
         total_asset = float((user.money) + total_valuation)
         
         # 6. 랭킹/수익 계산
-        init_asset = 50000000.0
-        total_profit_val = total_asset - init_asset
-        total_profit_rate = (total_profit_val / init_asset * 100) if init_asset != 0 else 0
+        total_profit_val = total_asset - INIT_ASSET
+        total_profit_rate = (total_profit_val / INIT_ASSET * 100) if INIT_ASSET != 0 else 0
         
         # 7. 랭킹 DB 반영 (인자 순서 db, login_id 순서 확인!)
         my_ranking = await RankingCrud.get_by_login_id(login_id, db)
@@ -97,4 +132,5 @@ class ProgressService:
             "day" : next_day
         }
 
-        return response
+        return True
+        # return response

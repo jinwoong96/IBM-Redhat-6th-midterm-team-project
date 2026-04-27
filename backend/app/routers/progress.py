@@ -7,9 +7,14 @@ from app.services.news_user import NewsuserService
 
 router = APIRouter(prefix="/progress", tags=["progress"])
 
+@router.get("/next_data")
+async def settlement(current_user=Depends(get_current_user),
+                     db: AsyncSession = Depends(get_db)):
+    res=await ProgressService.get_settlement(login_id=current_user, db=db)
+    return res
 
 @router.put("/next_turn")
-async def turn(current_user=Depends(get_current_user),
+async def next(current_user=Depends(get_current_user),
                      db: AsyncSession = Depends(get_db)):
     res=await ProgressService.turn(login_id=current_user, db=db)
     await NewsuserService.add_newsuser(
