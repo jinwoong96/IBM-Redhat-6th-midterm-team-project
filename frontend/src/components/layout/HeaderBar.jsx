@@ -9,21 +9,19 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchProgress } from '../../Slice/progressSlice';
 
 const HeaderBar = () => {
-    const data = useSelector((state)=>state.progress.next_data)
+    const data = useSelector((state) => state.progress.next_data);
+    const hasDay = data?.day !== undefined && data?.day !== null && !isNaN(Number(data?.day))
+    ? Number(data.day): 1; 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    //day = data.day + 1;
-    const [day, setDay] = useState(1)
-    
     const onTradingClick = () => {
         alert("/components/layout/HeaderBar.jsx 코드 짜기\n게임 페이지 코드 다 되면 setDay랑 주석 지우기");
 
         navigate('/trading');
     }
 
-    const onNextDayClick = () => {
-        dispatch(fetchProgress());
+    const onNextDayClick = async() => {
+        await dispatch(fetchProgress());
     }
 
     const onRankingClick = () => {
@@ -36,17 +34,16 @@ const HeaderBar = () => {
         alert("로그아웃 되었습니다.");
         navigate('/login');
     }
-    console.log(data);
     return (
         <div>
             <header className="flex items-center justify-between border-b border-gray-200 bg-white px-6 py-3">
                 <div className="flex items-center gap-4">
                     <h1 className="text-xl font-bold">모의 주식 투자</h1>
-                    {day?<DayBadge content={`day ${day}`} />:<></>}
+                    {(hasDay)?<DayBadge content={`day ${(hasDay)}`} />:<></>}
                 </div>
 
                 <div className="flex items-center gap-3">
-                    {day?<MenuButton content={"날짜 넘기기"} onClick={()=>onNextDayClick()} />
+                    {(hasDay)?<MenuButton content={"날짜 넘기기"} onClick={()=>onNextDayClick()} />
                     :<MenuButton content={"트레이딩"} onClick={()=>onTradingClick()}/>}
                     
                     <MenuButton content={"랭킹"} onClick={()=>onRankingClick()} />
