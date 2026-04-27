@@ -21,6 +21,17 @@ async def my_newsuser(limit:Annotated[int,Query(ge=1)]=15, current_user= Depends
     )
     return history
 
+@router.get("/latest",response_model=NewsUserRead)#인증된 사용자의 가장 최근 뉴스
+async def my_todays_news(current_user=Depends(get_current_user),
+                   db: AsyncSession = Depends(get_db)):
+    
+    news = await NewsuserService.my_newsuser(
+        login_id=current_user,
+        limit=1,
+        db=db
+    )
+    return news
+
 
 @router.post("/generate",response_model=NewsRead)#사용자에게 뉴스배정 및 기록
 async def add_newsuser(current_user= Depends(get_current_user),

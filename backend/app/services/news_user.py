@@ -13,7 +13,7 @@ class NewsuserService:
 
     @staticmethod #사용자의 과거뉴스기록 조회
     async def my_newsuser(login_id:str,limit:int, db:AsyncSession): #해당유저의 전체기록조회
-        history=await NewsuserCrud.get_by_login_id(login_id,db)
+        history=await NewsuserCrud.get_by_login_id(login_id,limit,db)
 
         if not history: #예외 : 기록이 없을때 (1일차)
             return []
@@ -22,7 +22,7 @@ class NewsuserService:
         
         history_list=[]
 
-        for i in history[:limit]:
+        for i in history:
             news_data={
                 'day':i.day,
                 'news_id':i.news_id,
@@ -31,17 +31,13 @@ class NewsuserService:
             }
             history_list.append(news_data)
         
-        
-        
-        return history_list
-
-
+        return history_list if limit!=1 else history_list[0]
 
 
     @staticmethod
     async def add_newsuser(login_id:str,db:AsyncSession): #새로운 날짜의 뉴스를 랜덤배정 후 기록
         all_news=await NewsCrud.get_all_news(db) 
-        seen_news=await NewsuserCrud.get_by_login_id(login_id,db) #사용자가 지금까지 본 뉴스 아이디 리스트
+        seen_news=await NewsuserCrud.get_by_login_id(login_id,30,db) #사용자가 지금까지 본 뉴스 아이디 리스트
         seen_ids = {s.news_id for s in seen_news} #가져온 뉴스리스트에서 다시for문 돌려서 뉴스 아이디만 뽑아서
         last_day = max([s.day for s in seen_news], default=0)
         next_day = last_day + 1
