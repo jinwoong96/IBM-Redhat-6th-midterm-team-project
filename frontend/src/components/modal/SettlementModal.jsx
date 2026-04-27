@@ -3,28 +3,39 @@ import{ useSelector, useDispatch } from 'react-redux';
 import { fetchProgress } from '../../Slice/progressSlice';
 
 
-const SettlementModal = ({ isOpen, onClose, day = 1 }) => {
+const SettlementModal = ({ success,isOpen, onClose, day = 1 }) => {
   const dispatch = useDispatch();
   const data =useSelector((state)=>state.progress.next_data)
 
-  useEffect(()=>{
-    dispatch(fetchProgress());
-  },[dispatch])
+  useEffect(() => {
+      if (success === true) {
+          dispatch(fetchProgress()); 
+      }
+  }, [success, dispatch]); 
   if (!isOpen) return null;
 
+  const balances = [
+    {
+      itemName: "기아",
+      quantity: 12,
+      purchasePrice: 1888800,
+      valPrice: 1888800,
+      profit: 0,
+      rate: 0,
+    },
+  ];
 
   const formatWon = (value) => `₩${value.toLocaleString()}`;
-  console.log(data);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
       <div className="w-full max-w-4xl rounded-3xl bg-white shadow-2xl overflow-hidden">
         {/* 상단 제목 영역 */}
-        <div className="bg-linear-to-r from-blue-500 to-purple-600 px-8 py-7 text-white">
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 px-8 py-7 text-white">
           <div className="flex items-start justify-between">
             <div>
               <p className="text-sm text-white/80">정산 완료</p>
               <h2 className="mt-1 text-3xl font-bold">
-                {data.day}일차 트레이딩 결과
+                {day}일차 트레이딩 결과
               </h2>
             </div>
 
@@ -40,17 +51,17 @@ const SettlementModal = ({ isOpen, onClose, day = 1 }) => {
           <div className="mt-7 grid grid-cols-3 gap-4">
             <div className="rounded-2xl bg-white/15 p-4">
               <p className="text-sm text-white/75">총 자산</p>
-              <p className="mt-2 text-2xl font-bold">₩{data.today_asset.toLocaleString()}</p>
+              <p className="mt-2 text-2xl font-bold">₩50,000,000</p>
             </div>
 
             <div className="rounded-2xl bg-white/15 p-4">
               <p className="text-sm text-white/75">현금</p>
-              <p className="mt-2 text-2xl font-bold">₩{data.cash.toLocaleString()}</p>
+              <p className="mt-2 text-2xl font-bold">₩48,111,200</p>
             </div>
 
             <div className="rounded-2xl bg-white/15 p-4">
               <p className="text-sm text-white/75">평가금액</p>
-              <p className="mt-2 text-2xl font-bold">₩{data.valuation.toLocaleString()}</p>
+              <p className="mt-2 text-2xl font-bold">₩1,888,800</p>
             </div>
           </div>
         </div>
@@ -73,17 +84,17 @@ const SettlementModal = ({ isOpen, onClose, day = 1 }) => {
               </thead>
 
               <tbody>
-                {data.jongmok.map((item, index) => (
+                {balances.map((item, index) => (
                   <tr key={index} className="border-t border-gray-100">
                     <td className="px-4 py-4 font-medium text-gray-900">
-                      {item.item_name}
+                      {item.itemName}
                     </td>
                     <td className="px-4 py-4 text-right">{item.quantity}</td>
                     <td className="px-4 py-4 text-right">
-                      {(item.purchase_price/item.quantity).toLocaleString()}
+                      {formatWon(item.purchasePrice)}
                     </td>
                     <td className="px-4 py-4 text-right">
-                      {(item.valuation).toLocaleString()}
+                      {formatWon(item.valPrice)}
                     </td>
                     <td
                       className={`px-4 py-4 text-right font-semibold ${
@@ -94,7 +105,7 @@ const SettlementModal = ({ isOpen, onClose, day = 1 }) => {
                           : "text-gray-500"
                       }`}
                     >
-                      {item.profit.toLocaleString()}
+                      {formatWon(item.profit)}
                     </td>
                     <td
                       className={`px-4 py-4 text-right font-semibold ${

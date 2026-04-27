@@ -6,13 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import IconMenuButton from '../common/IconMenuButton';
 import { logout } from '../../Slice/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchProgress } from '../../Slice/progressSlice';
+import { fetchNextTurn, fetchProgress, resetNextTurn } from '../../Slice/progressSlice';
 import SettlementModal from '../modal/SettlementModal';
 
 const HeaderBar = () => {
     const [isSettlementOpen, setIsSettlementOpen] = useState(false);
-
     const data = useSelector((state) => state.progress.next_data);
+    const success = useSelector((state)=>state.progress.next_turn);
     const hasDay = data?.day !== undefined && data?.day !== null && !isNaN(Number(data?.day))
     ? Number(data.day): 1; 
     const dispatch = useDispatch();
@@ -22,10 +22,15 @@ const HeaderBar = () => {
 
         navigate('/trading');
     }
+    const handleSettlementClose = () => { 
+        setIsSettlementOpen(false);
+        dispatch(resetNextTurn());
+    };
 
-    const onNextDayClick = async() => {
+    const onNextDayClick = () => {
+        dispatch(fetchNextTurn());
         setIsSettlementOpen(true);
-        await dispatch(fetchProgress());
+        
     }
 
     const onRankingClick = () => {
@@ -58,8 +63,9 @@ const HeaderBar = () => {
             </header>
             <SettlementModal
                 isOpen={isSettlementOpen}
-                onClose={() => setIsSettlementOpen(false)}
                 day={hasDay}
+                success = {success}
+                onClose={handleSettlementClose}
             />
         </div>
     );
