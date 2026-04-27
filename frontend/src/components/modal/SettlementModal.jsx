@@ -24,7 +24,7 @@ const SettlementModal = ({ isOpen, onClose, day = 1 }) => {
   ];
 
   const formatWon = (value) => `₩${value.toLocaleString()}`;
-
+  console.log(data);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
       <div className="w-full max-w-4xl rounded-3xl bg-white shadow-2xl overflow-hidden">
