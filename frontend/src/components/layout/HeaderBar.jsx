@@ -8,25 +8,32 @@ import { logout } from '../../Slice/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchNextTurn, fetchProgress, resetNextTurn } from '../../Slice/progressSlice';
 import SettlementModal from '../modal/SettlementModal';
+import NewsModal from '../modal/NewsModal';
 
 const HeaderBar = () => {
     const [isSettlementOpen, setIsSettlementOpen] = useState(false);
+    const [isNewsOpen, setIsNewsOpen] = useState(false);
+
     const data = useSelector((state) => state.progress.next_data);
     const success = useSelector((state)=>state.progress.next_turn);
     const hasDay = data?.day !== undefined && data?.day !== null && !isNaN(Number(data?.day))
     ? Number(data.day): 1; 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const onTradingClick = () => {
-        alert("/components/layout/HeaderBar.jsx 코드 짜기\n게임 페이지 코드 다 되면 setDay랑 주석 지우기");
 
-        navigate('/trading');
+    const handleNewsClose = () => {
+        setIsNewsOpen(false);
     }
+
     const handleSettlementClose = async() => { 
         await dispatch(resetNextTurn());
         setIsSettlementOpen(false);
         
     };
+
+    const onTradingClick = () => {
+        navigate('/trading');
+    }
 
     const onNextDayClick = async() => {
        await dispatch(fetchNextTurn());
@@ -67,6 +74,10 @@ const HeaderBar = () => {
                 day={hasDay}
                 success = {success}
                 onClose={handleSettlementClose}
+            />
+            <NewsModal 
+                isOpen={isNewsOpen}
+                onClose={handleNewsClose}
             />
         </div>
     );
