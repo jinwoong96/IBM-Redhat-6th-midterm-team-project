@@ -9,13 +9,13 @@ export const fetchProgress = createAsyncThunk("progress/fetchProgress",async()=>
 
 export const fetchNextTurn = createAsyncThunk("progress/fetchNextTurn",async()=>
 {
-    const res = await api.post("/progress/next_turn");
+    const res = await api.put("/progress/next_turn");
     return res.data;
 })
 const progressSlice = createSlice({
     name : "progress",
     initialState:{
-        next_data: [],
+        next_data: null,
         next_turn : false
     },
     reducers:{

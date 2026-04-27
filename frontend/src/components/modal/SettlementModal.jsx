@@ -5,7 +5,7 @@ import { fetchProgress } from '../../Slice/progressSlice';
 
 const SettlementModal = ({ success,isOpen, onClose, day = 1 }) => {
   const dispatch = useDispatch();
-  const data =useSelector((state)=>state.progress.next_data)
+  const data =useSelector((state)=>state.progress.next_data);
 
   useEffect(() => {
       if (success === true) {
@@ -13,6 +13,10 @@ const SettlementModal = ({ success,isOpen, onClose, day = 1 }) => {
       }
   }, [success, dispatch]); 
   if (!isOpen) return null;
+
+  if (!data) {
+    return <div>정산 데이터 불러오는 중...</div>;
+  }
 
   const formatWon = (value) => `₩${value.toLocaleString()}`;
   return (
@@ -83,29 +87,35 @@ const SettlementModal = ({ success,isOpen, onClose, day = 1 }) => {
                      {(item.purchase_price/item.quantity).toLocaleString()}
                     </td>
                     <td className="px-4 py-4 text-right">
-                      {(item.valuation).toLocaleString()}
+                      {(item.val_price).toLocaleString()}
                     </td>
                     <td
                       className={`px-4 py-4 text-right font-semibold ${
-                        item.profit > 0
+                        item.val_profit_and_loss
+ > 0
                           ? "text-red-500"
-                          : item.profit < 0
+                          : item.val_profit_and_loss
+ < 0
                           ? "text-blue-500"
                           : "text-gray-500"
                       }`}
                     >
-                      {item.profit.toLocaleString()}
+                      {item.val_profit_and_loss
+.toLocaleString()}
                     </td>
                     <td
                       className={`px-4 py-4 text-right font-semibold ${
-                        item.rate > 0
+                        item.rate_of_return
+ > 0
                           ? "text-red-500"
-                          : item.rate < 0
+                          : item.rate_of_return
+ < 0
                           ? "text-blue-500"
                           : "text-gray-500"
                       }`}
                     >
-                      {item.rate.toFixed(2)}%
+                      {item.rate_of_return
+.toFixed(2)}%
                     </td>
                   </tr>
                 ))}

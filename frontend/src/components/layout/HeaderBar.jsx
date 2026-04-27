@@ -22,13 +22,14 @@ const HeaderBar = () => {
 
         navigate('/trading');
     }
-    const handleSettlementClose = () => { 
+    const handleSettlementClose = async() => { 
+        await dispatch(resetNextTurn());
         setIsSettlementOpen(false);
-        dispatch(resetNextTurn());
+        
     };
 
-    const onNextDayClick = () => {
-        dispatch(fetchNextTurn());
+    const onNextDayClick = async() => {
+       await dispatch(fetchNextTurn());
         setIsSettlementOpen(true);
         
     }
