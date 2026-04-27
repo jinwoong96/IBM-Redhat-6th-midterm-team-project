@@ -53,3 +53,13 @@ class ChartuserCrud:
     
         result = await db.execute(item_data)
         return result.mappings().first()
+    
+    @staticmethod
+    async def get_last_day_by_user(login_id: str, db: AsyncSession):
+        result = await db.execute(
+            select(ChartUser.day)
+            .filter(ChartUser.login_id == login_id)
+            .order_by(ChartUser.day.desc())
+            .limit(1)
+        )
+        return result.scalar()

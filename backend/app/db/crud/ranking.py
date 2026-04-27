@@ -37,3 +37,8 @@ class RankingCrud:
     #     await db.refresh(ranking)
     #     return ranking
 #업데이트 고민중
+
+    @staticmethod
+    async def create(login_id: str, max_accounts:int, max_plus:float, day:int, db:AsyncSession):
+        new_ranking = Ranking(login_id=login_id, max_accounts=max_accounts, max_plus=max_plus, day=day)
+        db.add(new_ranking)

@@ -46,3 +46,8 @@ class UserCrud:
             await db.flush()
             return db_user
         return None
+    
+    @staticmethod
+    async def get_user_by_login_id(login_id: str, db: AsyncSession):
+        result = await db.execute(select(User).filter(User.login_id == login_id))
+        return result.scalars().first()

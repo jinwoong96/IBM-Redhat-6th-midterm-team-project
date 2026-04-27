@@ -66,7 +66,7 @@ const MyInfo = () => {
                     <div className="flex items-center gap-3">
                         <h2 className="text-2xl font-semibold text-gray-800">{user_nickname}</h2>
                         <button
-                            onClick={()=>edit_my_info()} 
+                            onClick={()=>setIsEdit(true)} 
                             className="text-xs font-medium text-blue-500 hover:underline hover:cursor-pointer">
                             내 정보 수정
                         </button>

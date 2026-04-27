@@ -1,44 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User } from "lucide-react";
 import DayBadge from '../common/DayBadge';
 import MenuButton from '../common/MenuButton';
 import { useNavigate } from 'react-router-dom';
 import IconMenuButton from '../common/IconMenuButton';
-import { useDispatch } from 'react-redux';
 import { logout } from '../../Slice/userSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchProgress } from '../../Slice/progressSlice';
 
 const HeaderBar = () => {
-    // 날짜랑 set함수는 컨텍스트나 저장소에서 받아오고 이거 지우기
-    const [day, setDay] = useState(1);
-
+    const data = useSelector((state)=>state.progress.next_data)
     const dispatch = useDispatch();
-
     const navigate = useNavigate();
 
+    //day = data.day + 1;
+    const [day, setDay] = useState(1)
+    
     const onTradingClick = () => {
         alert("/components/layout/HeaderBar.jsx 코드 짜기\n게임 페이지 코드 다 되면 setDay랑 주석 지우기");
-        setDay(1);
 
         navigate('/trading');
     }
 
     const onNextDayClick = () => {
-        alert("/components/layout/HeaderBar.jsx 코드 짜기\n일차 변하는것도 불러와서 넣어주기")
+        dispatch(fetchProgress());
     }
 
     const onRankingClick = () => {
-        setDay(null);
         navigate('/ranking');
     }
 
     const onLogoutClick = async() => {
-        //setDay(null);
         await dispatch(logout());
         
         alert("로그아웃 되었습니다.");
         navigate('/login');
     }
-
+    console.log(data);
     return (
         <div>
             <header className="flex items-center justify-between border-b border-gray-200 bg-white px-6 py-3">
