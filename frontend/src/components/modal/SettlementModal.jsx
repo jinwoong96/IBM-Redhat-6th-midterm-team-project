@@ -1,4 +1,15 @@
+import { useEffect } from 'react';
+import{ useSelector, useDispatch } from 'react-redux';
+import { fetchProgress } from '../../Slice/progressSlice';
+
+
 const SettlementModal = ({ isOpen, onClose, day = 1 }) => {
+  const dispatch = useDispatch();
+  const data =useSelector((state)=>state.progress.next_data)
+
+  useEffect(()=>{
+    dispatch(fetchProgress());
+  },[dispatch])
   if (!isOpen) return null;
 
   const balances = [
