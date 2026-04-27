@@ -6,33 +6,17 @@ import { fetchMyBalance } from '../../Slice/balanceSlice';
 const Assets = () => {
     const dispatch = useDispatch();
 
-    const { login_id, money } = useSelector((state) => state.user);
-    const my_balance =  [  // 임시 테스트 데이터
-            {
-                login_id: "qwe",
-                item_code: "005930",
-                quantity: 5,
-                purchase_price: 300000,
-                val_price: 400000,
-                val_profit_and_loss: 100000,
-                rate_of_return: 33
-            }
-        ]
+    const { login_id, money, valuation } = useSelector((state) => state.user);
 
     useEffect(() => {
         dispatch(fetchUser());
         dispatch(fetchMyBalance());
     }, [dispatch]);
 
-    const filteredBalance = Array.isArray(my_balance) ? my_balance:[];
-    const totalStockValue = filteredBalance.reduce((acc, cur) => {
-        return acc + (cur.val_price || 0);
-    }, 0);
-
-    const totalAssets = (money || 0) + totalStockValue;
+    const totalAssets = (money || 0) + (valuation || 0);
 
     const cashPercent = totalAssets === 0 ? 0 : (money / totalAssets) * 100;
-    const stockPercent = totalAssets === 0 ? 0 : (totalStockValue / totalAssets) * 100;
+    const stockPercent = totalAssets === 0 ? 0 : (valuation / totalAssets) * 100;
 
     return (
         <div>
@@ -62,7 +46,7 @@ const Assets = () => {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <span className="h-3 w-3 rounded-full bg-blue-500" />
-                        현금
+                        현금 보유
                     </div>
                     <span className="text-gray-600">
                         {cashPercent.toFixed(1)}%
@@ -72,7 +56,7 @@ const Assets = () => {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <span className="h-3 w-3 rounded-full bg-emerald-500" />
-                        주식
+                        주식 보유
                     </div>
                     <span className="text-gray-600">
                         {stockPercent.toFixed(1)}%

@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { fetchUser, login } from '../../Slice/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { fetchChart_init } from '../../Slice/chartuserSlice';
+import { fetchProgress } from '../../Slice/progressSlice';
 
 const LoginForm = () => {
     const navigator = useNavigate();
@@ -33,6 +34,7 @@ const LoginForm = () => {
 
             dispatch(login({ ...user }));
             dispatch(fetchChart_init());
+            // dispatch(fetchProgress()); 내 진행일차를 어따보관하지 이거아닌거같은데
             alert("로그인 성공!, 트레이드 시작");
             navigator('/trading')
 
