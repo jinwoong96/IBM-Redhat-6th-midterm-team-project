@@ -7,8 +7,11 @@ import IconMenuButton from '../common/IconMenuButton';
 import { logout } from '../../Slice/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProgress } from '../../Slice/progressSlice';
+import SettlementModal from '../modal/SettlementModal';
 
 const HeaderBar = () => {
+    const [isSettlementOpen, setIsSettlementOpen] = useState(false);
+
     const data = useSelector((state) => state.progress.next_data);
     const hasDay = data?.day !== undefined && data?.day !== null && !isNaN(Number(data?.day))
     ? Number(data.day): 1; 
@@ -21,6 +24,7 @@ const HeaderBar = () => {
     }
 
     const onNextDayClick = async() => {
+        setIsSettlementOpen(true);
         await dispatch(fetchProgress());
     }
 
@@ -34,6 +38,7 @@ const HeaderBar = () => {
         alert("로그아웃 되었습니다.");
         navigate('/login');
     }
+
     return (
         <div>
             <header className="flex items-center justify-between border-b border-gray-200 bg-white px-6 py-3">
@@ -51,6 +56,11 @@ const HeaderBar = () => {
                     <MenuButton content={"로그아웃"} onClick={()=>onLogoutClick()} />
                 </div>
             </header>
+            <SettlementModal
+                isOpen={isSettlementOpen}
+                onClose={() => setIsSettlementOpen(false)}
+                day={hasDay}
+            />
         </div>
     );
 };
