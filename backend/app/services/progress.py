@@ -59,6 +59,7 @@ class ProgressService:
             })
 
         # 5. 자산 업데이트
+        user_cash = user.money
         user.valuation = total_valuation
         total_asset = float((user.money) + total_valuation)
         
@@ -88,7 +89,7 @@ class ProgressService:
 
         response = {
             "today_asset": total_asset,
-            "cash": float(user.money),
+            "cash": user_cash,
             "valuation": total_valuation,
             "profit": total_profit_val,
             "profit_rate": total_profit_rate,
