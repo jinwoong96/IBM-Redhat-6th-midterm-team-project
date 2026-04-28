@@ -70,7 +70,7 @@ class NewsuserService:
                 'flu_max':i.flu_max
             })
 
-        user_current_stock=await ChartuserCrud.get_item_list_crud(login_id,db) #가장최신날짜의 종목들을 다 가져와서
+        user_current_stock=await ChartuserCrud.get_item_list_crud(login_id=login_id,day_offset=0,db=db) #가장최신날짜의 종목들을 다 가져와서
         for stock in user_current_stock:# 그 안에있는 종목들을 가져와서
             apply_flu=None
             for i in category_effect:#카테고리별 영향을 반복해서 돌린후
@@ -105,6 +105,10 @@ class NewsuserService:
                     ),
                     db=db
                 )
+            
+        # 오래된 데이터 삭제
+        await ChartuserCrud.delete_old_data(login_id, last_day-31, db)
+
         await db.commit()
 
         return{"news_id": res_news_id,

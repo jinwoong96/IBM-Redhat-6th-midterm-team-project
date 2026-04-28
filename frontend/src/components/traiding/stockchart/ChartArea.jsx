@@ -101,7 +101,7 @@ const ChartArea = () => {
                 style={{ top: `${priceToY(price)}px` }}
               />
             ))}
-            <ChartList candleData={candleData} max_count={MAX_COUNT} priceToY={priceToY} />
+            <ChartList candleData={[...candleData].sort((a, b) => a.day - b.day)} max_count={MAX_COUNT} priceToY={priceToY} />
           </div>
 
           

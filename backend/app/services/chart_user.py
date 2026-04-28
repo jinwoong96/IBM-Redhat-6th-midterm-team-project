@@ -53,7 +53,7 @@ class ChartuserService:
 
     @staticmethod
     async def get_itemlist(login_id:str, db:AsyncSession):#현재 진행일차의 모든 종목 목록 조회
-        items=await ChartuserCrud.get_item_list_crud(login_id,db)
+        items=await ChartuserCrud.get_item_list_crud(login_id=login_id,day_offset=1,db=db)
         
         return items
         #조인 쿼리문 crud로 옮김

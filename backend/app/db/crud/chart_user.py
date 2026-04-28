@@ -2,8 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.db.scheme.chart_user import ChartuserCreate
 from app.db.models.chart_user import ChartUser
-from sqlalchemy import desc
-from sqlalchemy import func
+from sqlalchemy import desc, func, delete
 from fastapi import HTTPException
 from app.db.models.item import Item
 
@@ -12,7 +11,7 @@ class ChartuserCrud:
     @staticmethod
     async def get_by_id_code(user_id:str, item_code:str, limit:int, db:AsyncSession):#명세서 8번 인증된사용자의 특정종목 차트히스토리 조회 
         query=(
-            select(ChartUser).filter(ChartUser.login_id==user_id,ChartUser.item_code==item_code).order_by(desc(ChartUser.day)).limit(limit)
+            select(ChartUser).filter(ChartUser.login_id==user_id,ChartUser.item_code==item_code).order_by(desc(ChartUser.day)).offset(1).limit(limit)
         )
         result=await db.execute(query)
         return result.scalars().all()
@@ -37,12 +36,12 @@ class ChartuserCrud:
     
 
     @staticmethod
-    async def get_item_list_crud(login_id:str, db:AsyncSession):
+    async def get_item_list_crud(login_id:str, day_offset:int, db:AsyncSession):
         day_data=select(func.max(ChartUser.day)).filter(ChartUser.login_id==login_id)#인증된 사용자의 가장 최신날짜 선택
         day_result=await db.execute(day_data)
-        current_day= day_result.scalar()
+        next_day= day_result.scalar()
 
-        if current_day is None:
+        if next_day is None:
             return None
         
         query=(
@@ -53,7 +52,7 @@ class ChartuserCrud:
                 ChartUser.flu_range_percent,
                 ChartUser.end_price
             )
-            .join(Item,ChartUser.item_code==Item.item_code).filter(ChartUser.login_id==login_id,ChartUser.day==current_day-1)
+            .join(Item,ChartUser.item_code==Item.item_code).filter(ChartUser.login_id==login_id,ChartUser.day==next_day-day_offset)
         )
         result = await db.execute(query)
         return result.mappings().all()
@@ -75,3 +74,12 @@ class ChartuserCrud:
             .limit(1)
         )
         return result.scalar()
+    
+    @staticmethod
+    async def delete_old_data(login_id: str, max_day: int, db: AsyncSession):
+        stmt = delete(ChartUser).where(
+            ChartUser.login_id == login_id,
+            ChartUser.day <= max_day
+        )
+
+        await db.execute(stmt)
