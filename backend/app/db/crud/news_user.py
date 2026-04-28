@@ -13,7 +13,7 @@ class NewsuserCrud:
     async def get_by_login_id(login_id:str,limit:int,db:AsyncSession):
         # query=select(NewsUser).filter(NewsUser.login_id==login_id)
         result=await db.execute(
-            select(NewsUser).options(joinedload(NewsUser.news)).filter(NewsUser.login_id==login_id).order_by(desc(NewsUser.news_user_id)).limit(limit)#로그인 아이디로 지난 뉴스기록가져올때 테이블에 조인해서 제목/내용까지 가져오게
+            select(NewsUser).options(joinedload(NewsUser.news)).filter(NewsUser.login_id==login_id).order_by(desc(NewsUser.day)).limit(limit)#로그인 아이디로 지난 뉴스기록가져올때 테이블에 조인해서 제목/내용까지 가져오게
         )
         return result.scalars().all()
     

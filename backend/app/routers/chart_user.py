@@ -4,7 +4,6 @@ from typing import Annotated
 from app.db.database import get_db
 from app.services.chart_user import ChartuserService
 from app.core.auth import get_current_user
-from app.db.scheme.chart_user import ChartuserGet,ChartuserUpdate
 
 
 
