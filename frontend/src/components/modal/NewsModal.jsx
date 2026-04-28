@@ -20,7 +20,7 @@ const NewsModal = ({ isNewsOpen, isOpen, onClose }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
       <div className="w-full max-w-2xl overflow-hidden rounded-3xl bg-white shadow-2xl">
         {/* 상단 */}
-        <div className="bg-gradient-to-r from-indigo-500 to-blue-600 px-8 py-7 text-white">
+        <div className="bg-linear-to-r from-indigo-500 to-blue-600 px-8 py-7 text-white">
           <p className="text-sm text-white/80">NEW MARKET NEWS</p>
           <h2 className="mt-1 text-3xl font-bold">새로운 뉴스 도착</h2>
         </div>
