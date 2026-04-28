@@ -28,7 +28,7 @@ const SettlementModal = ({ success,isOpen, onClose, day = 1 }) => {
             <div>
               <p className="text-sm text-white/80">정산 완료</p>
               <h2 className="mt-1 text-3xl font-bold">
-                {data.day}일차 트레이딩 결과
+                {data.day-1}일차 트레이딩 결과
               </h2>
             </div>
 

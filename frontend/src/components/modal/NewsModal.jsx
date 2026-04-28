@@ -1,6 +1,21 @@
-const NewsModal = ({ isOpen, onClose }) => {
+import { useEffect } from 'react';
+import{ useSelector, useDispatch } from 'react-redux';
+import { fetchNews_last } from '../../Slice/newsuserSlice';
+
+const NewsModal = ({ isNewsOpen, isOpen, onClose }) => {
+  const news = useSelector((state)=>state.newsuser.last_news)
+  const dispatch = useDispatch();
+  useEffect(() => {
+      if (isNewsOpen === true) {
+          dispatch(fetchNews_last()); 
+      }
+  }, [isNewsOpen, dispatch]); 
+
   if (!isOpen) return null;
 
+  if (!news) {
+    return <div>뉴스 데이터 불러오는 중...</div>;
+  }
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
       <div className="w-full max-w-2xl overflow-hidden rounded-3xl bg-white shadow-2xl">
@@ -13,11 +28,11 @@ const NewsModal = ({ isOpen, onClose }) => {
         {/* 본문 */}
         <div className="px-8 py-7">
           <h3 className="text-2xl font-bold text-gray-900">
-            {news.title}
+            {news.news_title}
           </h3>
 
           <p className="mt-4 leading-7 text-gray-600">
-            {news.comments}
+            {news.news_comments}
           </p>
 
           <div className="mt-7 flex justify-end">

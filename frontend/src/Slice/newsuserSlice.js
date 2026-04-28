@@ -12,11 +12,16 @@ export const fetchNews_init = createAsyncThunk("newsuser/fetchNews_init",async()
     return res.data
 })
 
+export const fetchNews_last = createAsyncThunk("newsuser/fetchNews_last", async()=>{
+    const res = await api.get("/newsuser/latest")
+    return res.data
+})
 const newsuserSlice = createSlice({
     name : 'newsuser',
     initialState :{
         newslist : [],
-        today_news : null
+        today_news : null,
+        last_news : null
     },
     reducers:{
         add_news : (state,action) =>{
@@ -38,6 +43,9 @@ const newsuserSlice = createSlice({
         })
         .addCase(fetchNews_init.fulfilled,(state,action)=>{
             state.today_news = action.payload;
+        })
+        .addCase(fetchNews_last.fulfilled,(state,action)=>{
+            state.last_news = action.payload;
         })
     }
 

@@ -8,26 +8,33 @@ import { logout } from '../../Slice/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchNextTurn, fetchProgress, resetNextTurn } from '../../Slice/progressSlice';
 import SettlementModal from '../modal/SettlementModal';
+import { fetchMyBalance } from '../../Slice/balanceSlice';
 import NewsModal from '../modal/NewsModal';
-
+import { fetchNewsUser } from '../../Slice/newsuserSlice';
 const HeaderBar = () => {
     const [isSettlementOpen, setIsSettlementOpen] = useState(false);
     const [isNewsOpen, setIsNewsOpen] = useState(false);
-
     const data = useSelector((state) => state.progress.next_data);
     const success = useSelector((state)=>state.progress.next_turn);
     const hasDay = data?.day !== undefined && data?.day !== null && !isNaN(Number(data?.day))
     ? Number(data.day): 1; 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const onTradingClick = () => {
+        alert("/components/layout/HeaderBar.jsx 코드 짜기\n게임 페이지 코드 다 되면 setDay랑 주석 지우기");
 
-    const handleNewsClose = () => {
+        navigate('/trading');
+    }
+    const handleNewsClose = async() => {
+        await dispatch(fetchNewsUser()); // 뉴스 모달 확인 클릭시 뉴스 리스트 최신업데이트
         setIsNewsOpen(false);
     }
 
     const handleSettlementClose = async() => { 
         await dispatch(resetNextTurn());
+        await dispatch(fetchMyBalance()); // 날짜 넘기기 클릭시 내 잔고 업데이트
         setIsSettlementOpen(false);
+        setIsNewsOpen(true);
         
     };
 
@@ -36,7 +43,7 @@ const HeaderBar = () => {
     }
 
     const onNextDayClick = async() => {
-       await dispatch(fetchNextTurn());
+        await dispatch(fetchNextTurn());
         setIsSettlementOpen(true);
         
     }
@@ -52,11 +59,16 @@ const HeaderBar = () => {
         navigate('/login');
     }
 
+    useEffect(()=>{
+       dispatch(fetchProgress()); //새로고침하면 day 1일로 초기화되는거 계속 현재 날짜 가져와야함
+    },[])
+
     return (
         <div>
             <header className="flex items-center justify-between border-b border-gray-200 bg-white px-6 py-3">
                 <div className="flex items-center gap-4">
-                    <h1 className="text-xl font-bold">모의 주식 투자</h1>
+                    <h1 className="text-xl font-bold" onClick={()=>navigate('/trading')}>모의 주식 투자</h1>
+                    {/*모의 주식 투자 글씨 클릭시 트레이딩화면 가기 */}
                     {(hasDay)?<DayBadge content={`day ${(hasDay)}`} />:<></>}
                 </div>
 
@@ -78,7 +90,8 @@ const HeaderBar = () => {
             <NewsModal 
                 isOpen={isNewsOpen}
                 onClose={handleNewsClose}
-            />
+                isNewsOpen = {isNewsOpen}
+            />    
         </div>
     );
 };
