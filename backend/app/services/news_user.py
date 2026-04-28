@@ -16,7 +16,7 @@ class NewsuserService:
         history=await NewsuserCrud.get_by_login_id(login_id,limit,db)
 
         if not history: #예외 : 기록이 없을때 (1일차)
-            return []
+            return None
         
         history.sort(key=lambda x:x.day, reverse=True)
         

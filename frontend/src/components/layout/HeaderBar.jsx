@@ -4,13 +4,14 @@ import DayBadge from '../common/DayBadge';
 import MenuButton from '../common/MenuButton';
 import { useNavigate } from 'react-router-dom';
 import IconMenuButton from '../common/IconMenuButton';
-import { logout } from '../../Slice/userSlice';
+import { fetchUser, logout } from '../../Slice/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchNextTurn, fetchProgress, resetNextTurn } from '../../Slice/progressSlice';
 import SettlementModal from '../modal/SettlementModal';
 import { fetchMyBalance } from '../../Slice/balanceSlice';
 import NewsModal from '../modal/NewsModal';
-import { fetchNewsUser } from '../../Slice/newsuserSlice';
+import { fetchNewsUser, resetLastNews, resetAllNews } from '../../Slice/newsuserSlice';
+import { delChart_code } from '../../Slice/chartuserSlice';
 const HeaderBar = () => {
     const [isSettlementOpen, setIsSettlementOpen] = useState(false);
     const [isNewsOpen, setIsNewsOpen] = useState(false);
@@ -29,6 +30,8 @@ const HeaderBar = () => {
 
     const handleNewsClose = async() => {
         await dispatch(fetchNewsUser()); // 뉴스 모달 확인 클릭시 뉴스 리스트 최신업데이트
+        await dispatch(fetchUser());
+        await dispatch(resetAllNews());
         setIsNewsOpen(false);
     }
 
@@ -39,10 +42,6 @@ const HeaderBar = () => {
         setIsNewsOpen(true);
         
     };
-
-    const onTradingClick = () => {
-        navigate('/trading');
-    }
 
     const onNextDayClick = async() => {
         await dispatch(fetchNextTurn());
@@ -57,7 +56,8 @@ const HeaderBar = () => {
 
     const onLogoutClick = async() => {
         await dispatch(logout());
-        
+        await dispatch(resetAllNews());
+        await dispatch(delChart_code());
         alert("로그아웃 되었습니다.");
         navigate('/login');
     }
@@ -95,7 +95,7 @@ const HeaderBar = () => {
                 onClose={handleSettlementClose}
             />
             <NewsModal 
-                isOpen={isNewsOpen}
+                
                 onClose={handleNewsClose}
                 isNewsOpen = {isNewsOpen}
             />    

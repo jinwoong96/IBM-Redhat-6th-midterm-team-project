@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import{ useSelector, useDispatch } from 'react-redux';
 import { fetchNews_last } from '../../Slice/newsuserSlice';
 
-const NewsModal = ({ isNewsOpen, isOpen, onClose }) => {
+const NewsModal = ({ isNewsOpen, onClose }) => {
   const news = useSelector((state)=>state.newsuser.last_news)
   const dispatch = useDispatch();
   useEffect(() => {
@@ -11,7 +11,7 @@ const NewsModal = ({ isNewsOpen, isOpen, onClose }) => {
       }
   }, [isNewsOpen, dispatch]); 
 
-  if (!isOpen) return null;
+  if (!isNewsOpen) return null;
 
   if (!news) {
     return <div>뉴스 데이터 불러오는 중...</div>;
