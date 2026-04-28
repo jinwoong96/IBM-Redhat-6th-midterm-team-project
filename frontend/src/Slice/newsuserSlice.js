@@ -12,27 +12,33 @@ export const fetchNews_init = createAsyncThunk("newsuser/fetchNews_init",async()
     return res.data
 })
 
-export const fetchNews_last = createAsyncThunk("newsuser/fetchNews_last", async()=>{
-    const res = await api.get("/newsuser/latest")
-    return res.data
-})
+export const fetchNews_last = createAsyncThunk("newsuser/fetchNews_last", async () => {
+    try {
+        const res = await api.get("/newsuser/latest");
+        return res.data;
+    } catch (e) {
+        return null; 
+    }
+});
 const newsuserSlice = createSlice({
     name : 'newsuser',
     initialState :{
         newslist : [],
         today_news : null,
-        last_news : null
+        last_news : null,
+        news_checked : false
     },
     reducers:{
-        add_news : (state,action) =>{
-            const {news_user_id,day,login_id,news_id} = action.payload;
-            const new_news = {
-                news_user_id,
-                day,
-                login_id,
-                news_id
-            };
-            state.newslist.push(new_news);
+        resetLastNews: (state) => {
+        state.last_news = null;
+        
+        },
+        resetAllNews: (state) => {       
+            state.last_news = null;
+            state.news_checked = false;
+        },
+        setNewsChecked: (state) => {  
+            state.news_checked = true;
         }
     },
     extraReducers:(builder)=>{
@@ -45,12 +51,15 @@ const newsuserSlice = createSlice({
             state.today_news = action.payload;
         })
         .addCase(fetchNews_last.fulfilled,(state,action)=>{
-            state.last_news = action.payload;
+            state.last_news = action.payload ?? null;
+        })
+        .addCase(fetchNews_last.rejected, (state) => {
+            state.last_news = null; // 에러시 null
         })
     }
 
 
 })
 
-
+export const { add_news, resetLastNews, resetAllNews, setNewsChecked } = newsuserSlice.actions;
 export default newsuserSlice.reducer;

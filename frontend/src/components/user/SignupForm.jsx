@@ -8,6 +8,7 @@ import AuthFooter from '../common/form/AuthFooter';
 import api from '../../api/api';
 import { fetchChart_init } from '../../Slice/chartuserSlice';
 import { useDispatch } from 'react-redux';
+import { fetchNews_init } from '../../Slice/newsuserSlice';
 const SignupForm = () => {
     const navigate = useNavigate();
     const dispatch =useDispatch();

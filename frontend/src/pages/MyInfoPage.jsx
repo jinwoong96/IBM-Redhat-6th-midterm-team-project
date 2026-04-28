@@ -3,9 +3,21 @@ import { User, Mail, Calendar, PieChart, Activity } from "lucide-react";
 import MyInfo from '../components/myinfo/MyInfo';
 import Assets from '../components/myinfo/Assets';
 import Statistics from '../components/myinfo/Statistics';
-
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 const MyInfoPage = () => {
-
+    const user = useSelector((state)=>state.user.login_id)
+    const navigate = useNavigate();
+    useEffect(() => {
+        const check = async () => {
+            if (!user) { 
+            alert("로그인하세요!");
+            navigate("/");
+            }
+        };
+        check();
+    }, [user]);
     return (
         <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-purple-50 px-6 py-8">
             <div className="mx-auto max-w-5xl space-y-6">

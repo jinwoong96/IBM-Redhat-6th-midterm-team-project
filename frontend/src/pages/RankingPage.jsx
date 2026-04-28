@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import RankingTable from '../components/ranking/RankingTable';
 import RankingHeader from '../components/ranking/RankingHeader';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 const RankingPage = () => {
+    const user = useSelector((state)=>state.user.login_id)
+    const navigate = useNavigate();
+    useEffect(() => {
+        const check = async () => {
+            if (!user) { 
+            alert("로그인하세요!");
+            navigate("/");
+            }
+        };
+        check();
+    }, [user]);
 
     return (    
         <div className="min-h-screen bg-[#f8fafc] px-6 py-8">

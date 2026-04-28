@@ -48,6 +48,9 @@ const chartuserSlice = createSlice({
                     is_wish: wishCodes.includes(stock.item_code)
                 }));
             }
+        },
+        delChart_code:(state,action)=>{
+            state.chartuserlist_code = null;
         }
     },
     extraReducers: (builder) => {
@@ -81,5 +84,5 @@ const chartuserSlice = createSlice({
     }
 });
 
-export const { next_chart, toggleWish,syncWishlist } = chartuserSlice.actions;
+export const { next_chart, toggleWish,syncWishlist, delChart_code } = chartuserSlice.actions;
 export default chartuserSlice.reducer;

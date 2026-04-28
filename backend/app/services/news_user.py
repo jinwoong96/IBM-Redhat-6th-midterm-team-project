@@ -14,6 +14,9 @@ class NewsuserService:
     @staticmethod #사용자의 과거뉴스기록 조회
     async def my_newsuser(login_id:str,limit:int, db:AsyncSession): #해당유저의 전체기록조회
         history=await NewsuserCrud.get_by_login_id(login_id,limit,db)
+
+        if not history: #예외 : 기록이 없을때 (1일차)
+            return None
         
         history.sort(key=lambda x:x.day, reverse=True)
         
