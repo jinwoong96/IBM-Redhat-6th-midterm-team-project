@@ -14,10 +14,12 @@ import { fetchNewsUser } from '../../Slice/newsuserSlice';
 const HeaderBar = () => {
     const [isSettlementOpen, setIsSettlementOpen] = useState(false);
     const [isNewsOpen, setIsNewsOpen] = useState(false);
+    const [isBtnOn, setIsBtnOn] =useState(true);
     const data = useSelector((state) => state.progress.next_data);
     const success = useSelector((state)=>state.progress.next_turn);
     const hasDay = data?.day !== undefined && data?.day !== null && !isNaN(Number(data?.day))
-    ? Number(data.day): 1; 
+    ? Number(data.day): 0; 
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const onTradingClick = () => {
@@ -42,7 +44,8 @@ const HeaderBar = () => {
         
     }
 
-    const onRankingClick = () => {
+    const onRankingClick = async() => {
+        await setIsBtnOn(false);
         navigate('/ranking');
     }
 
@@ -51,6 +54,10 @@ const HeaderBar = () => {
         
         alert("로그아웃 되었습니다.");
         navigate('/login');
+    }
+    const onMyInfoClick = async() =>{
+        await setIsBtnOn(false);
+        navigate('/myinfo')
     }
 
     useEffect(()=>{
@@ -63,15 +70,15 @@ const HeaderBar = () => {
                 <div className="flex items-center gap-4">
                     <h1 className="text-xl font-bold" onClick={()=>navigate('/trading')}>모의 주식 투자</h1>
                     {/*모의 주식 투자 글씨 클릭시 트레이딩화면 가기 */}
-                    {(hasDay)?<DayBadge content={`day ${(hasDay)}`} />:<></>}
+                    {<DayBadge content={`day ${(hasDay)}`} />}
                 </div>
 
                 <div className="flex items-center gap-3">
-                    {(hasDay)?<MenuButton content={"날짜 넘기기"} onClick={()=>onNextDayClick()} />
+                    {(isBtnOn)?<MenuButton content={"날짜 넘기기"} onClick={()=>onNextDayClick()} />
                     :<MenuButton content={"트레이딩"} onClick={()=>onTradingClick()}/>}
                     
                     <MenuButton content={"랭킹"} onClick={()=>onRankingClick()} />
-                    <IconMenuButton content={<User size={16}/>} onClick={()=>navigate('/myinfo')}/>
+                    <IconMenuButton content={<User size={16}/>} onClick={()=>onMyInfoClick()}/>
                     <MenuButton content={"로그아웃"} onClick={()=>onLogoutClick()} />
                 </div>
             </header>
