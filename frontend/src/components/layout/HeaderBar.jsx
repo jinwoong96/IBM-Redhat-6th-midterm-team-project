@@ -22,7 +22,8 @@ const HeaderBar = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const onTradingClick = () => {
+    const onTradingClick = async() => {
+        await setIsBtnOn(true);
         navigate('/trading');
     }
 
