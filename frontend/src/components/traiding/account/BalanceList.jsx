@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMyBalance } from './../../../Slice/balanceSlice';
+import { fetchChart_code } from '../../../Slice/chartuserSlice';
 
 const BalanceList = () => {
     const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const BalanceList = () => {
 
                 <tbody>
                     {balances.map((item, index) => (
-                        <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
+                        <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer" onClick={()=>dispatch(fetchChart_code(item.item_code))}>
                             <td className="px-2 py-2 border-r border-gray-100">{item.item_name}</td>
                             <td className="px-2 py-2 text-right border-r border-gray-100">{item.quantity}</td>
                             <td className="px-2 py-2 text-right border-r border-gray-100">{item.purchase_price.toLocaleString()}</td>

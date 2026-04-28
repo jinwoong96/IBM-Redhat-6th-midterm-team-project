@@ -15,8 +15,8 @@ const TradePanel = () => {
     // 오름차순후 젤 마지막 값을 꺼내서 반환
     const latestData = [...chartData].sort((a, b) => a.day - b.day)[chartData.length - 1];
 
-
-    const [quantity, setQuantity] = useState(0);
+    
+    const [quantity, setQuantity] = useState('');
 
     const itemCode = latestData?.item_code || "종목 미선택";
     const unitPrice = latestData?.end_price || 0; 
@@ -24,6 +24,14 @@ const TradePanel = () => {
 
     const handleTrade = async(type) => {
 
+        if (!latestData){
+            alert("종목을 선택해주세요.");
+            return;
+        }
+        if (!quantity || Number(quantity) <= 0) {
+            alert("수량을 입력해주세요.");
+            return;
+        }
         const tradeData = {
             item_code: itemCode,
             buy_type: type,
@@ -51,7 +59,13 @@ const TradePanel = () => {
                 <input
                     type="number"
                     value={quantity}
-                    onChange={(e)=>{e.target.value>=0?setQuantity(e.target.value):0}}
+                    max={5000}
+                    onChange={(e) => {
+                        const val = e.target.value;
+                        if (val === '' || (Number(val) >= 0 && Number(val) <= 99999)) {
+                            setQuantity(val); // ✅ 빈 문자열도 허용
+                        }
+                    }}
                     className="w-full rounded-xl border border-blue-400 px-4 py-3 pr-10 outline-none focus:ring-2 focus:ring-blue-200"
                 />
                 </div>

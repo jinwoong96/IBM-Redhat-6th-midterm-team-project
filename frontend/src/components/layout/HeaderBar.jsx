@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { User } from "lucide-react";
 import DayBadge from '../common/DayBadge';
 import MenuButton from '../common/MenuButton';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import IconMenuButton from '../common/IconMenuButton';
 import { fetchUser, logout } from '../../Slice/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
@@ -13,6 +13,7 @@ import NewsModal from '../modal/NewsModal';
 import { fetchNewsUser, resetLastNews, resetAllNews } from '../../Slice/newsuserSlice';
 import { delChart_code } from '../../Slice/chartuserSlice';
 const HeaderBar = () => {
+    const location = useLocation();
     const [isSettlementOpen, setIsSettlementOpen] = useState(false);
     const [isNewsOpen, setIsNewsOpen] = useState(false);
     const [isBtnOn, setIsBtnOn] =useState(true);
@@ -30,7 +31,7 @@ const HeaderBar = () => {
 
     const handleNewsClose = async() => {
         await dispatch(fetchNewsUser()); // 뉴스 모달 확인 클릭시 뉴스 리스트 최신업데이트
-        await dispatch(fetchUser());
+        await dispatch(fetchUser());    
         await dispatch(resetAllNews());
         setIsNewsOpen(false);
     }
@@ -67,8 +68,13 @@ const HeaderBar = () => {
     }
 
     useEffect(()=>{
-       dispatch(fetchProgress()); //새로고침하면 day 1일로 초기화되는거 계속 현재 날짜 가져와야함
-    },[])
+        dispatch(fetchProgress()); //새로고침하면 day 1일로 초기화되는거 계속 현재 날짜 가져와야함
+        if (location.pathname === "/trading"){
+            setIsBtnOn(true);
+        }else {
+            setIsBtnOn(false);
+        }
+    },[location.pathname]);
 
     return (
         <div>

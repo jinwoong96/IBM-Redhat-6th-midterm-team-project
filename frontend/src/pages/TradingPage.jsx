@@ -11,21 +11,30 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchNews_last, fetchNewsUser, setNewsChecked } from '../Slice/newsuserSlice';
 import { resetLastNews } from '../Slice/newsuserSlice';
 import { useNavigate } from 'react-router-dom';
+import { fetchUser } from '../Slice/userSlice';
+import { fetchChartUser } from '../Slice/chartuserSlice';
 const TradingPage = () => {
     const [isNewsOpen, setIsNewsOpen] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const last_news = useSelector((state) => state.newsuser.last_news);    
     const news_checked = useSelector((state) => state.newsuser.news_checked); 
-    const user = useSelector((state)=>state.user.login_id)   
+    
+
+
     useEffect(() => {
         const loadNews = async () => {
-            await dispatch(fetchNews_last()); // 최신 뉴스 가져오기
-            if (!user) {
-                await alert("로그인하세요!!!!!!!!!!!!!!!!!!!")
-                navigate("/")
+            const userResult = await dispatch(fetchUser()); 
+            
+            if (!userResult.payload?.login_id) {
+                
+                navigate("/");
+                return;
             }
 
+            await dispatch(fetchNews_last());
+            //await dispatch(fetchChartUser());
+            
         };
         loadNews();
     }, []);
