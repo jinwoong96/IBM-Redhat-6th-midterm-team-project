@@ -11,7 +11,6 @@ router = APIRouter(prefix="/progress", tags=["progress"])
 async def settlement(current_user=Depends(get_current_user),
                      db: AsyncSession = Depends(get_db)):
     res=await ProgressService.get_settlement(login_id=current_user, db=db)
-    print(res)
     return res
 
 @router.put("/next_turn")
