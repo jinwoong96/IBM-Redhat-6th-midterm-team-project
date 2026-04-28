@@ -20,11 +20,7 @@ const HeaderBar = () => {
     ? Number(data.day): 1; 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const onTradingClick = () => {
-        alert("/components/layout/HeaderBar.jsx 코드 짜기\n게임 페이지 코드 다 되면 setDay랑 주석 지우기");
 
-        navigate('/trading');
-    }
     const handleNewsClose = async() => {
         await dispatch(fetchNewsUser()); // 뉴스 모달 확인 클릭시 뉴스 리스트 최신업데이트
         setIsNewsOpen(false);
