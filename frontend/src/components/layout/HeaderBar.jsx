@@ -54,8 +54,8 @@ const HeaderBar = () => {
     }
 
     useEffect(()=>{
-        dispatch(fetchProgress()); //새로고침하면 day 1일로 초기화되는거 계속 현재 날짜 가져와야함
-    })
+       dispatch(fetchProgress()); //새로고침하면 day 1일로 초기화되는거 계속 현재 날짜 가져와야함
+    },[])
 
     return (
         <div>

@@ -40,7 +40,7 @@ class ProgressService:
             "profit": total_profit_val,
             "profit_rate": total_profit_rate,
             "jongmok": balance_data,
-            "day" : next_day-1
+            "day" : next_day
         }
 
         return response
