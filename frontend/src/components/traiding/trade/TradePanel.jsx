@@ -29,9 +29,11 @@ const TradePanel = () => {
 
     // 현재 선택된 종목의 잔고 정보
     const currentBalance = balances.find((balance)=>balance.item_code==itemCode);
+    maxQuantity.current = Math.floor(money/unitPrice);
     if(currentBalance){
         remainQuantity.current = currentBalance.quantity;
-        maxQuantity.current = Math.floor(money/unitPrice);
+    }else{
+        remainQuantity.current = 0;
     }
 
     const onQuantityChange = (e) => {
