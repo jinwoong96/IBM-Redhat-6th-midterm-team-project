@@ -94,7 +94,7 @@ const StockList = ({filterName}) => {
             <div className="border-b border-gray-100 px-4 py-3 text-sm font-semibold text-gray-700">
                 종목 리스트 ({items.length})
             </div>
-            <div className="divide-y divide-gray-100 max-h-[70vh] overflow-y-auto cursor-pointer">
+            <div className="divide-y divide-gray-100 max-h-[65vh] overflow-y-auto cursor-pointer">
                 {filteredItems.map((item) => (<div key={item.item_code}>
                         <StockItem item={item} 
                             onClick={()=>dispatch(fetchChart_code(item.item_code))}

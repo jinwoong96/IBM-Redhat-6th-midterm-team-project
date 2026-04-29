@@ -28,7 +28,7 @@ const NewsArea = () => {
     };
 
     return (
-        <div className="mt-4 rounded-3xl border border-gray-200 bg-[#fafafa] p-4">
+        <div className="rounded-3xl border border-gray-200 bg-[#fafafa] p-4">
             <div className="flex items-center gap-4">
                 {/* 왼쪽 화살표 */}
                 <button

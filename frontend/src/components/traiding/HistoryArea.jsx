@@ -7,7 +7,7 @@ const HistoryArea = () => {
 
     return (
         <div className="flex flex-col flex-1 rounded-2xl border border-gray-200 bg-white p-4">
-            <div className="flex justify-end gap-2 mb-3">
+            <div className="flex justify-end gap-2 mb-3 overflow-y-auto">
                 <button 
                     onClick={() => setIsTradeHistory(false)}
                     className={`rounded-xl px-5 py-2 font-medium transition
