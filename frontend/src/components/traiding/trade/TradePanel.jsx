@@ -88,12 +88,12 @@ const TradePanel = () => {
                 <div className="mt-5 grid grid-cols-2 gap-3">
                 <button 
                     onClick={()=>handleTrade("buy")}
-                    className="rounded-xl bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700">
+                    className="rounded-xl bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700 cursor-pointer">
                     매수
                 </button>
                 <button 
                     onClick={()=>handleTrade("sell")}
-                    className="rounded-xl bg-rose-500 py-3 font-semibold text-white hover:bg-rose-600">
+                    className="rounded-xl bg-rose-500 py-3 font-semibold text-white hover:bg-rose-600 cursor-pointer">
                     매도
                 </button>
                 </div>

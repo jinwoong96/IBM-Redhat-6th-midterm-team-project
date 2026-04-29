@@ -108,10 +108,10 @@ const MyInfo = () => {
                 )}
                 
                 <p>계좌 생성일: {formatDate(created_at)}</p>
-                <button type="button" onClick={handleEditClick}>
+                <button type="button" onClick={handleEditClick} className='cursor-pointer'>
                     {isEdit ? "수정 완료" : "내 정보 수정"}
                 </button>
-                {isEdit && <button onClick={() => setIsEdit(false)}>취소</button>}
+                {isEdit && <button onClick={() => setIsEdit(false)} className='cursor-pointer'>취소</button>}
             </div>
             {/* /////////////////////////////////////////////////////// */}
 

@@ -31,7 +31,7 @@ const RankingRow = ({user}) => {
             <td className="px-6 py-4 text-right font-semibold text-emerald-500">
                 {profit>=0?"+":""}₩{profit.toLocaleString()}
             </td>
-            <td className="flex px-6 py-4 text-right font-semibold text-emerald-500">
+            <td className="flex justify-end px-6 py-4 font-semibold text-emerald-500">
                 {profit_rate>=0?(
                     <TrendingUp size={18} className="text-emerald-500" />
                     ) :

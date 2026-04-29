@@ -10,7 +10,7 @@ const HistoryArea = () => {
             <div className="flex justify-end gap-2 mb-3 overflow-y-auto">
                 <button 
                     onClick={() => setIsTradeHistory(false)}
-                    className={`rounded-xl px-5 py-2 font-medium transition
+                    className={`rounded-xl px-5 py-2 font-medium transition cursor-pointer
                         ${!isTradeHistory 
                         ? "bg-blue-600 text-white shadow-sm" 
                         : "text-gray-500 hover:text-gray-800"}
@@ -21,7 +21,7 @@ const HistoryArea = () => {
 
                 <button 
                     onClick={() => setIsTradeHistory(true)}
-                    className={`rounded-xl px-5 py-2 font-medium transition
+                    className={`rounded-xl px-5 py-2 font-medium transition cursor-pointer
                         ${isTradeHistory 
                         ? "bg-blue-600 text-white shadow-sm" 
                         : "text-gray-500 hover:text-gray-800"}

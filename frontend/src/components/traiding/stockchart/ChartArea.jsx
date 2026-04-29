@@ -16,8 +16,28 @@ const ChartArea = () => {
   const item_code = candleData[0]?.item_code || ""; // 그냥 다 item 코드 같으니 0번째에서 item_code뺌
 
   if (candleData.length === 0) {
-      return null;
-  }
+  return (
+    <div className="w-full rounded-xl bg-[#f7f7f7] p-4">
+      <div className="flex min-w-0 gap-3 p-3">
+        {/* Y축 자리 유지 */}
+        <div
+          className="relative w-14 shrink-0"
+          style={{ height: `${CHART_HEIGHT}px` }}
+        />
+
+        {/* 차트 영역 자리 유지 */}
+        <div className="relative w-full min-w-0 flex-1 overflow-hidden rounded-lg bg-[#eef1f5] p-3">
+          <div
+            className="flex items-center justify-center text-sm font-semibold text-gray-400"
+            style={{ height: `${CHART_HEIGHT + 15}px` }}
+          >
+            종목을 선택해주세요
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
   const getNiceStep = (rawStep) => {
     const exponent = Math.floor(Math.log10(rawStep));

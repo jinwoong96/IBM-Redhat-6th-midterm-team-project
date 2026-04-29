@@ -31,7 +31,7 @@ const NewsModal = ({ isNewsOpen, onClose }) => {
           <div className="mt-7 flex justify-end">
             <button
               onClick={onClose}
-              className="rounded-2xl bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700"
+              className="rounded-2xl bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 cursor-pointer"
             >
               뉴스 확인
             </button>

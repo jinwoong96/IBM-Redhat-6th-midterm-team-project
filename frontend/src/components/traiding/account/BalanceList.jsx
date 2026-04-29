@@ -36,7 +36,13 @@ const BalanceList = () => {
                             <td className="px-2 py-2 border-r border-gray-100 truncate">{item.item_name}</td>
                             <td className="px-2 py-2 text-right border-r border-gray-100">{item.quantity}</td>
                             <td className="px-2 py-2 text-right border-r border-gray-100">{item.purchase_price.toLocaleString()}</td>
-                            <td className="px-2 py-2 text-right border-r border-gray-100">{item.val_price.toLocaleString()}</td>
+                            <td className={`px-2 py-2 text-right font-medium border-r border-gray-100 ${
+                                    item.val_profit_and_loss > 0
+                                        ? "text-red-500"
+                                        : item.val_profit_and_loss < 0
+                                        ? "text-blue-500"
+                                        : "text-gray-500"
+                                }`}>{item.val_price.toLocaleString()}</td>
 
                             <td
                                 className={`px-2 py-2 text-right font-medium border-r border-gray-100 ${

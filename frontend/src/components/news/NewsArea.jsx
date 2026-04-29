@@ -34,7 +34,7 @@ const NewsArea = () => {
                 <button
                     type="button"
                     onClick={prevNews}
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-xl shadow-sm hover:bg-gray-100"
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-xl shadow-sm hover:bg-gray-100 cursor-pointer"
                 >
                 ‹
                 </button>
@@ -50,7 +50,7 @@ const NewsArea = () => {
                 <button
                     type="button"
                     onClick={nextNews}
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-xl shadow-sm hover:bg-gray-100"
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-xl shadow-sm hover:bg-gray-100 cursor-pointer"
                 >
                 ›
                 </button>

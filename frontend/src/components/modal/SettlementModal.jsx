@@ -34,7 +34,7 @@ const SettlementModal = ({ success,isOpen, onClose, day = 1 }) => {
 
             <button
               onClick={onClose}
-              className="rounded-full bg-white/20 px-4 py-2 text-sm hover:bg-white/30"
+              className="rounded-full bg-white/20 px-4 py-2 text-sm hover:bg-white/30 cursor-pointer"
             >
               닫기
             </button>
@@ -91,31 +91,25 @@ const SettlementModal = ({ success,isOpen, onClose, day = 1 }) => {
                     </td>
                     <td
                       className={`px-4 py-4 text-right font-semibold ${
-                        item.val_profit_and_loss
- > 0
+                        item.val_profit_and_loss > 0
                           ? "text-red-500"
-                          : item.val_profit_and_loss
- < 0
+                          : item.val_profit_and_loss < 0
                           ? "text-blue-500"
                           : "text-gray-500"
                       }`}
                     >
-                      {item.val_profit_and_loss
-.toLocaleString()}
+                      {item.val_profit_and_loss.toLocaleString()}
                     </td>
                     <td
                       className={`px-4 py-4 text-right font-semibold ${
-                        item.rate_of_return
- > 0
+                        item.rate_of_return > 0
                           ? "text-red-500"
-                          : item.rate_of_return
- < 0
+                          : item.rate_of_return < 0
                           ? "text-blue-500"
                           : "text-gray-500"
                       }`}
                     >
-                      {item.rate_of_return
-.toFixed(2)}%
+                      {item.rate_of_return.toFixed(2)}%
                     </td>
                   </tr>
                 ))}
@@ -127,7 +121,7 @@ const SettlementModal = ({ success,isOpen, onClose, day = 1 }) => {
           <div className="mt-6 flex justify-end">
             <button
               onClick={onClose}
-              className="rounded-2xl bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700"
+              className="rounded-2xl bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 cursor-pointer"
             >
               확인
             </button>

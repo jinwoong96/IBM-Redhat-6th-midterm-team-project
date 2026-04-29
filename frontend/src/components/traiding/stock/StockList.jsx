@@ -69,7 +69,7 @@ const StockList = ({filterName}) => {
 
     return (
         <div>
-            <div className="px-4 pb-4">
+            <div className="px-4">
                 <div className="relative">
                     <input
                         type="text"
@@ -92,7 +92,7 @@ const StockList = ({filterName}) => {
                 </div>
             </div>
             <div className="border-b border-gray-100 px-4 py-3 text-sm font-semibold text-gray-700">
-                종목 리스트 ({items.length})
+                종목 리스트 ({filteredItems.length})
             </div>
             <div className="divide-y divide-gray-100 max-h-[65vh] overflow-y-auto cursor-pointer">
                 {filteredItems.map((item) => (<div key={item.item_code}>
