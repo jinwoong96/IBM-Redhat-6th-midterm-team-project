@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const FilterButtonArea = ({selectedStockFilter, setSelectedStockFilter}) => {
-    const filterItems = ["전체", "관심종목", "카테고리", "등락폭별"];
+    const filterItems = ["전체", "가나다순", "관심종목", "카테고리순", "등락폭순"];
 
     return (
         <div className="flex flex-wrap gap-2 py-3">
