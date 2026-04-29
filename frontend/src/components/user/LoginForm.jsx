@@ -10,7 +10,8 @@ import { fetchUser, login } from '../../Slice/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { fetchChart_init } from '../../Slice/chartuserSlice';
 import { fetchProgress } from '../../Slice/progressSlice';
-import { fetchNews_init } from '../../Slice/newsuserSlice';
+import { fetchNews_init, fetchNews_last } from '../../Slice/newsuserSlice';
+import { resetAllNews } from '../../Slice/newsuserSlice';
 const LoginForm = () => {
     const navigator = useNavigate();
     const dispatch = useDispatch();
@@ -34,9 +35,15 @@ const LoginForm = () => {
 
             dispatch(login({ ...user }));
             await dispatch(fetchChart_init()); // 토큰이 없어서 회원가입에서 안됨
+            await dispatch(resetAllNews());
             //await dispatch(fetchNews_init()); 
             //await dispatch(fetchChart_init());
             // dispatch(fetchProgress()); 내 진행일차를 어따보관하지 이거아닌거같은데
+            const newsResult = await dispatch(fetchNews_last());
+            if (!newsResult.payload){
+                await dispatch(fetchNews_init());
+                await dispatch(fetchNews_last());
+            }
             alert("로그인 성공!, 트레이드 시작");
             navigator('/trading')
 

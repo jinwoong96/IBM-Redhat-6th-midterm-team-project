@@ -4,21 +4,8 @@ import { fetchNews_last } from '../../Slice/newsuserSlice';
 
 const NewsModal = ({ isNewsOpen, onClose }) => {
   const news = useSelector((state)=>state.newsuser.last_news)
-  const dispatch = useDispatch();
-  const [loading, setLoading] =useState(false);
-  useEffect(() => {
-    if (isNewsOpen === true) {
-      const load = async () => {
-        setLoading(true);
-        await dispatch(fetchNews_last());
-        setLoading(false);
-      };
-      load();
-    }
-  }, [isNewsOpen, dispatch]);
-
+  
   if (!isNewsOpen) return null;
-  if (loading) return null;
   if (!news) {
     return null;
   }

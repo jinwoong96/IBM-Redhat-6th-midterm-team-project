@@ -12,7 +12,7 @@ import { fetchNews_last, fetchNewsUser, setNewsChecked } from '../Slice/newsuser
 import { resetLastNews } from '../Slice/newsuserSlice';
 import { useNavigate } from 'react-router-dom';
 import { fetchUser } from '../Slice/userSlice';
-import { fetchChartUser } from '../Slice/chartuserSlice';
+import { fetchChart_code, fetchChartUser } from '../Slice/chartuserSlice';
 const TradingPage = () => {
     const [isNewsOpen, setIsNewsOpen] = useState(false);
     const dispatch = useDispatch();
@@ -34,7 +34,12 @@ const TradingPage = () => {
 
             await dispatch(fetchNews_last());
             //await dispatch(fetchChartUser());
-            
+            const chartResult = await dispatch(fetchChartUser());
+            const firstCode = chartResult.payload?.list?.[0]?.item_code;
+            if(firstCode){
+                await dispatch(fetchChart_code(firstCode));
+            }
+           
         };
         loadNews();
     }, []);

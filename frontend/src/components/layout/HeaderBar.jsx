@@ -10,8 +10,8 @@ import { fetchNextTurn, fetchProgress, resetNextTurn } from '../../Slice/progres
 import SettlementModal from '../modal/SettlementModal';
 import { fetchMyBalance } from '../../Slice/balanceSlice';
 import NewsModal from '../modal/NewsModal';
-import { fetchNewsUser, resetLastNews, resetAllNews } from '../../Slice/newsuserSlice';
-import { delChart_code, fetchChartUser } from '../../Slice/chartuserSlice';
+import { fetchNewsUser, resetLastNews, resetAllNews, fetchNews_last } from '../../Slice/newsuserSlice';
+import { delChart_code, fetchChart_code, fetchChartUser } from '../../Slice/chartuserSlice';
 const HeaderBar = () => {
     const location = useLocation();
     const [isSettlementOpen, setIsSettlementOpen] = useState(false);
@@ -19,6 +19,7 @@ const HeaderBar = () => {
     const [isBtnOn, setIsBtnOn] =useState(true);
     const data = useSelector((state) => state.progress.next_data);
     const success = useSelector((state)=>state.progress.next_turn);
+    const currentCode = useSelector((state) => state.chartuser.chartuserlist_code?.list?.[0]?.item_code); 
     const hasDay = data?.day !== undefined && data?.day !== null && !isNaN(Number(data?.day))
     ? Number(data.day): 0; 
 
@@ -30,19 +31,22 @@ const HeaderBar = () => {
     }
 
     const handleNewsClose = async() => {
-        await dispatch(fetchNewsUser()); // 뉴스 모달 확인 클릭시 뉴스 리스트 최신업데이트
-        await dispatch(fetchUser());    
-        await dispatch(resetAllNews());
-        await dispatch(fetchChartUser());
+        await dispatch(resetAllNews()); 
         setIsNewsOpen(false);
-    }
+    };
 
     const handleSettlementClose = async() => { 
         await dispatch(resetNextTurn());
-        await dispatch(fetchMyBalance()); // 날짜 넘기기 클릭시 내 잔고 업데이트
+        await dispatch(fetchMyBalance());
+        await dispatch(fetchChartUser());
+        if (currentCode) {
+            await dispatch(fetchChart_code(currentCode)); 
+        }
+        await dispatch(fetchNewsUser()); 
+        await dispatch(fetchUser()); 
+        await dispatch(fetchNews_last());
         setIsSettlementOpen(false);
         setIsNewsOpen(true);
-        
     };
 
     const onNextDayClick = async() => {
