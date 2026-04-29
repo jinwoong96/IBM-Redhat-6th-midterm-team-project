@@ -69,7 +69,7 @@ const ChartArea = () => {
   return (
     <div className="w-full rounded-xl bg-[#f7f7f7] p-4">
       <div className="mb-2 text-center text-sm font-semibold text-gray-600">
-        {item_name}({item_code}) 현재가: {candleData?candleData[candleData.length-1].end_price.toLocaleString():""}
+        {item_name}({item_code}) 현재가: {candleData?candleData[0].end_price.toLocaleString():""}
       </div>
 
       <div className="flex min-w-0 gap-3 p-3">
