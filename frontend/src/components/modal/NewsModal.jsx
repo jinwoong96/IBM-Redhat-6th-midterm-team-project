@@ -1,20 +1,26 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import{ useSelector, useDispatch } from 'react-redux';
 import { fetchNews_last } from '../../Slice/newsuserSlice';
 
 const NewsModal = ({ isNewsOpen, onClose }) => {
   const news = useSelector((state)=>state.newsuser.last_news)
   const dispatch = useDispatch();
+  const [loading, setLoading] =useState(false);
   useEffect(() => {
-      if (isNewsOpen === true) {
-          dispatch(fetchNews_last()); 
-      }
-  }, [isNewsOpen, dispatch]); 
+    if (isNewsOpen === true) {
+      const load = async () => {
+        setLoading(true);
+        await dispatch(fetchNews_last());
+        setLoading(false);
+      };
+      load();
+    }
+  }, [isNewsOpen, dispatch]);
 
   if (!isNewsOpen) return null;
-
+  if (loading) return null;
   if (!news) {
-    return <div>뉴스 데이터 불러오는 중...</div>;
+    return null;
   }
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">

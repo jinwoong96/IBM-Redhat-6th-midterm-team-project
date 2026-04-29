@@ -38,9 +38,10 @@ const StockList = ({filterName}) => {
     useEffect(() => { // useEffect는 async 가 불가해서 await 쓰기위해
                         // 함수 넣음
         const init = async () => {
-            if (items.length === 0) {
-                await dispatch(fetchChartUser());
-            }
+            // if (items.length === 0) {
+            //     await dispatch(fetchChartUser());
+            // }
+            await dispatch(fetchChartUser());
             const result = await dispatch(fetchWishlistAsync());
             const wishCodes = (result.payload || []).map(w => w.item_code);
             dispatch(syncWishlist(wishCodes));

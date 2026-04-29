@@ -63,7 +63,7 @@ const TradePanel = () => {
                     onChange={(e) => {
                         const val = e.target.value;
                         if (val === '' || (Number(val) >= 0 && Number(val) <= 99999)) {
-                            setQuantity(val); // ✅ 빈 문자열도 허용
+                            setQuantity(val); // 
                         }
                     }}
                     className="w-full rounded-xl border border-blue-400 px-4 py-3 pr-10 outline-none focus:ring-2 focus:ring-blue-200"

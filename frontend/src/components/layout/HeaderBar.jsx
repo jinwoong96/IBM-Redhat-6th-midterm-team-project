@@ -11,7 +11,7 @@ import SettlementModal from '../modal/SettlementModal';
 import { fetchMyBalance } from '../../Slice/balanceSlice';
 import NewsModal from '../modal/NewsModal';
 import { fetchNewsUser, resetLastNews, resetAllNews } from '../../Slice/newsuserSlice';
-import { delChart_code } from '../../Slice/chartuserSlice';
+import { delChart_code, fetchChartUser } from '../../Slice/chartuserSlice';
 const HeaderBar = () => {
     const location = useLocation();
     const [isSettlementOpen, setIsSettlementOpen] = useState(false);
@@ -33,6 +33,7 @@ const HeaderBar = () => {
         await dispatch(fetchNewsUser()); // 뉴스 모달 확인 클릭시 뉴스 리스트 최신업데이트
         await dispatch(fetchUser());    
         await dispatch(resetAllNews());
+        await dispatch(fetchChartUser());
         setIsNewsOpen(false);
     }
 

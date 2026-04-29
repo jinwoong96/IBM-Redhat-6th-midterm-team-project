@@ -34,7 +34,7 @@ const LoginForm = () => {
 
             dispatch(login({ ...user }));
             await dispatch(fetchChart_init()); // 토큰이 없어서 회원가입에서 안됨
-            await dispatch(fetchNews_init());
+            //await dispatch(fetchNews_init()); 
             //await dispatch(fetchChart_init());
             // dispatch(fetchProgress()); 내 진행일차를 어따보관하지 이거아닌거같은데
             alert("로그인 성공!, 트레이드 시작");

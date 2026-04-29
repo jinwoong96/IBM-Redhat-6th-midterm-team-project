@@ -16,7 +16,7 @@ const ChartArea = () => {
   const item_code = candleData[0]?.item_code || ""; // 그냥 다 item 코드 같으니 0번째에서 item_code뺌
 
   if (candleData.length === 0) {
-      return <div>종목을 클릭하여 차트를 불러오세요.</div>;
+      return null;
   }
 
   const getNiceStep = (rawStep) => {
