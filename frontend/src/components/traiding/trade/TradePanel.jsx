@@ -1,5 +1,5 @@
 import { ChevronDown } from 'lucide-react';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector,useDispatch } from 'react-redux';
 import { addTradeAsync } from './../../../Slice/tradeSlice';
 import { fetchMyBalance } from '../../../Slice/balanceSlice';
@@ -86,6 +86,11 @@ const TradePanel = () => {
         setQuantity(0); // 입력창 초기화
         setTargetPrice(0);
     };
+
+    useEffect(()=>{
+        setQuantity(0);
+        setTargetPrice(0);
+    }, [latestData]);
 
     return (
         <div>
