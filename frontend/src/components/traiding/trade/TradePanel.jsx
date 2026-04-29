@@ -1,9 +1,10 @@
 import { ChevronDown } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useSelector,useDispatch } from 'react-redux';
 import { addTradeAsync } from './../../../Slice/tradeSlice';
 import { fetchMyBalance } from '../../../Slice/balanceSlice';
 import { fetchUser } from '../../../Slice/userSlice';
+import RoundedButton from '../../common/RoundedButton';
 
 // 오른쪽 매수/매도 패널
 const TradePanel = () => {
@@ -16,16 +17,47 @@ const TradePanel = () => {
     const latestData = [...chartData].sort((a, b) => a.day - b.day)[chartData.length - 1];
 
     const money = useSelector((state)=>state.user.money);
-    const balance = useSelector((state)=>state.balance.my_balance);
+    const balances = useSelector((state)=>state.balance.my_balance);
 
-    console.log(money);
-    console.log(balance);
-
-    const [quantity, setQuantity] = useState('');
+    const [quantity, setQuantity] = useState(0);
+    const maxQuantity = useRef(0);    // 렌더링 안하고 계산에만 쓰려고 Ref로 사용
+    const remainQuantity = useRef(0);
+    const [targetPrice, setTargetPrice] = useState(0);
 
     const itemCode = latestData?.item_code || "종목 미선택";
     const unitPrice = latestData?.end_price || 0; 
-    // const totalPrice = unitPrice * quantity;
+
+    // 현재 선택된 종목의 잔고 정보
+    const currentBalance = balances.find((balance)=>balance.item_code==itemCode);
+    if(currentBalance){
+        remainQuantity.current = currentBalance.quantity;
+        maxQuantity.current = Math.floor(money/unitPrice);
+    }
+
+    const onQuantityChange = (e) => {
+        const val = parseInt(e.target.value);
+        if(isNaN(val) || val < 0){
+            setQuantity(0);
+        }else if(val > maxQuantity.current){
+            setQuantity(maxQuantity.current);
+        }else{
+            setQuantity(val);
+        }
+    }
+
+    const onTargetPriceChange = (e) => {
+        const val = parseInt(e.target.value);
+        if(isNaN(val) || val < 0){
+            setQuantity(0);
+            setTargetPrice(0);
+        }else if(val > money){
+            setQuantity(maxQuantity.current);
+            setTargetPrice(money);
+        }else{
+            setQuantity(Math.floor(val/unitPrice));
+            setTargetPrice(val);
+        }
+    }
 
     const handleTrade = async(type) => {
 
@@ -50,44 +82,55 @@ const TradePanel = () => {
         await dispatch(fetchMyBalance());
         await dispatch(fetchUser());
         setQuantity(0); // 입력창 초기화
+        setTargetPrice(0);
     };
 
     return (
         <div>
             <div className="rounded-2xl border border-gray-200 bg-white p-4">
-                <div className="mb-4 text-lg font-semibold">거래</div>
+                <div className="mb-2 text-lg font-semibold">거래</div>
+
+                <div className="flex flex-wrap gap-2 py-3">
+                    <RoundedButton content={"가능수량"} onClick={()=>setQuantity(maxQuantity.current)}/>
+                    <RoundedButton content={"보유수량"} onClick={()=>setQuantity(remainQuantity.current)}/>
+                </div>
 
                 <label className="mb-2 block text-sm font-medium text-gray-600">
-                수량
+                    수량
                 </label>
                 <div className="relative">
-                <input
-                    type="number"
-                    value={quantity}
-                    max={5000}
-                    onChange={(e) => {
-                        const val = e.target.value;
-                        if (val === '' || (Number(val) >= 0 && Number(val) <= 99999)) {
-                            setQuantity(val); // 
-                        }
-                    }}
-                    className="w-full rounded-xl border border-blue-400 px-4 py-3 pr-10 outline-none focus:ring-2 focus:ring-blue-200"
-                />
+                    <input
+                        type="number"
+                        value={quantity.toString()}
+                        onChange={(e) => onQuantityChange(e)}
+                        className="mb-2 w-full rounded-xl border border-blue-400 px-4 py-3 pr-10 outline-none focus:ring-2 focus:ring-blue-200"
+                    />
+                </div>
+                <label className="mb-2 block text-sm font-medium text-gray-600">
+                    희망가격
+                </label>
+                <div className="relative">
+                    <input
+                        type="number"
+                        value={targetPrice.toString()}
+                        onChange={(e) => onTargetPriceChange(e)}
+                        className="mb-2 w-full rounded-xl border border-blue-400 px-4 py-3 pr-10 outline-none focus:ring-2 focus:ring-blue-200"
+                    />
                 </div>
 
                 <div className="mt-4 space-y-2 text-sm text-gray-500">
-                <div className="flex justify-between">
-                    <span>수량</span>
-                    <span>{quantity>0?quantity:"-"}</span>
-                </div>
-                <div className="flex justify-between">
-                    <span>1주 가격</span>
-                    <span>{unitPrice?unitPrice.toLocaleString():"-"}</span>
-                </div>
-                <div className="flex justify-between">
-                    <span>총 금액</span>
-                    <span>{quantity>0?(unitPrice*quantity).toLocaleString():"-"}</span>
-                </div>
+                    <div className="flex justify-between">
+                        <span>수량</span>
+                        <span>{quantity>0?quantity:"-"}</span>
+                    </div>
+                    <div className="flex justify-between">
+                        <span>1주 가격</span>
+                        <span>{unitPrice?unitPrice.toLocaleString():"-"}</span>
+                    </div>
+                    <div className="flex justify-between">
+                        <span>총 금액</span>
+                        <span>{quantity>0?(unitPrice*quantity).toLocaleString():"-"}</span>
+                    </div>
                 </div>
 
                 <div className="mt-5 grid grid-cols-2 gap-3">
