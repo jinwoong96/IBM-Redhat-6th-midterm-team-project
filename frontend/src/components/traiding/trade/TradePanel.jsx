@@ -15,7 +15,12 @@ const TradePanel = () => {
     // 오름차순후 젤 마지막 값을 꺼내서 반환
     const latestData = [...chartData].sort((a, b) => a.day - b.day)[chartData.length - 1];
 
-    
+    const money = useSelector((state)=>state.user.money);
+    const balance = useSelector((state)=>state.balance.my_balance);
+
+    console.log(money);
+    console.log(balance);
+
     const [quantity, setQuantity] = useState('');
 
     const itemCode = latestData?.item_code || "종목 미선택";
