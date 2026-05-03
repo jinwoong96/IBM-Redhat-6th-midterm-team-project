@@ -14,8 +14,7 @@ class UserService:
     async def signup(user:UserCreate, db:AsyncSession):
         if await UserCrud.get_by_login_id(user.login_id, db):
             raise HTTPException(status_code=400,  detail="이미 사용중인 아이디")
-    
-        
+
         try:
             db_user=await UserCrud.create(user, db)
             await db.commit()
@@ -73,7 +72,6 @@ class UserService:
                 "user": {
                 "login_id": db_user.login_id,
                 "user_nickname": db_user.user_nickname,
-                "user_password": db_user.user_password,
                 "money": db_user.money,
                 "valuation": db_user.valuation,
                 "created_at": db_user.created_at

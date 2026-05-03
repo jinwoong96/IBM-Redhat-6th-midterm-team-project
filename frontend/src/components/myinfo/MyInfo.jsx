@@ -164,8 +164,8 @@ const MyInfo = () => {
                     <div className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-xl">
                         <h3 className="text-lg font-semibold text-gray-800">회원 탈퇴</h3>
                         <p className="mt-2 text-sm text-gray-500">
-                            탈퇴하면 모든 데이터가 삭제되며 복구할 수 없습니다.<br />
-                            비밀번호를 입력해 탈퇴를 확인해 주세요.
+                            모든 데이터가 삭제되며 복구할 수 없습니다.<br />
+                            정말 탈퇴하시려면 비밀번호를 입력해 주세요.
                         </p>
                         <input
                             type="password"
