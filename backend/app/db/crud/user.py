@@ -56,4 +56,4 @@ class UserCrud:
     async def delete(db_user: User, db: AsyncSession):
         await db.delete(db_user)
         await db.flush()
-        return ('성공적으로 탈퇴되었습니다. 다시 만나는 날까지, 안녕히-')
+        return True
