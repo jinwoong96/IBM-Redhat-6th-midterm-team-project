@@ -14,8 +14,7 @@ class UserService:
     async def signup(user:UserCreate, db:AsyncSession):
         if await UserCrud.get_by_login_id(user.login_id, db):
             raise HTTPException(status_code=400,  detail="이미 사용중인 아이디")
-
-        user.user_password = get_password_hash(user.user_password)        
+    
         
         try:
             db_user=await UserCrud.create(user, db)
