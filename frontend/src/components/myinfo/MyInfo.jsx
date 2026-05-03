@@ -1,14 +1,15 @@
 import { Calendar, Mail, TrendingDown, TrendingUp, User } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchUser } from '../../Slice/userSlice';
+import { useNavigate } from 'react-router-dom';
+import { fetchUser, updateUser, deleteUser } from '../../Slice/userSlice';
 import { fetchMyBalance } from '../../Slice/balanceSlice';
-import { updateUser } from '../../Slice/userSlice';
 import { CONSTANTS_CONFIG } from '@/config';
 
 const MyInfo = () => {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const { money, user_nickname, login_id, created_at } = useSelector((state) => state.user);
     const { my_balance } = useSelector((state) => state.balance);
@@ -16,6 +17,10 @@ const MyInfo = () => {
     const [isEdit, setIsEdit] = useState(false);
     const [editNickname, setEditNickname] = useState("");
     const [editPassword, setEditPassword] = useState("");
+
+    const [isDeleteMode, setIsDeleteMode] = useState(false);
+    const [deletePassword, setDeletePassword] = useState("");
+    const [deleteError, setDeleteError] = useState("");
     useEffect(() => {
         dispatch(fetchUser());
         dispatch(fetchMyBalance());
@@ -42,6 +47,16 @@ const MyInfo = () => {
         const dd = date.getDate();
         return `${yy}년 ${mm}월 ${dd}일`;
     };
+    const handleDelete = async () => {
+        try {
+            await dispatch(deleteUser(deletePassword)).unwrap();
+            navigate("/");
+        } catch (error) {
+            setDeleteError(error?.detail || "비밀번호가 올바르지 않습니다.");
+            setDeletePassword("");
+        }
+    };
+
     const handleEditClick = () => {
         if (isEdit) {
             
@@ -66,9 +81,14 @@ const MyInfo = () => {
                     <div className="flex items-center gap-3">
                         <h2 className="text-2xl font-semibold text-gray-800">{user_nickname}</h2>
                         <button
-                            onClick={()=>setIsEdit(true)} 
+                            onClick={()=>setIsEdit(true)}
                             className="text-xs font-medium text-blue-500 hover:underline hover:cursor-pointer">
                             내 정보 수정
+                        </button>
+                        <button
+                            onClick={() => { setIsDeleteMode(true); setDeleteError(""); setDeletePassword(""); }}
+                            className="text-xs font-medium text-red-400 hover:underline hover:cursor-pointer">
+                            회원 탈퇴
                         </button>
                     </div>
 
@@ -138,6 +158,41 @@ const MyInfo = () => {
                     </div>
                 </div>
             </div>
+
+            {isDeleteMode && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+                    <div className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-xl">
+                        <h3 className="text-lg font-semibold text-gray-800">회원 탈퇴</h3>
+                        <p className="mt-2 text-sm text-gray-500">
+                            탈퇴하면 모든 데이터가 삭제되며 복구할 수 없습니다.<br />
+                            비밀번호를 입력해 탈퇴를 확인해 주세요.
+                        </p>
+                        <input
+                            type="password"
+                            value={deletePassword}
+                            onChange={(e) => { setDeletePassword(e.target.value); setDeleteError(""); }}
+                            placeholder="비밀번호 입력"
+                            className="mt-5 w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-red-400 focus:outline-none"
+                        />
+                        {deleteError && (
+                            <p className="mt-2 text-xs text-red-500">{deleteError}</p>
+                        )}
+                        <div className="mt-5 flex gap-3">
+                            <button
+                                onClick={() => setIsDeleteMode(false)}
+                                className="flex-1 rounded-lg border border-gray-200 py-2 text-sm text-gray-600 hover:bg-gray-50 cursor-pointer">
+                                취소
+                            </button>
+                            <button
+                                onClick={handleDelete}
+                                disabled={!deletePassword}
+                                className="flex-1 rounded-lg bg-red-500 py-2 text-sm text-white hover:bg-red-600 disabled:opacity-40 cursor-pointer">
+                                탈퇴하기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 };

@@ -13,9 +13,14 @@ export const updateUser = createAsyncThunk("user/updateUser", async (updateData)
 });
 
 export const logout = createAsyncThunk("user/logout", async (_, thunkAPI) => {
-      const res = await api.post("/users/logout"); 
+      const res = await api.post("/users/logout");
       return res.data;
-  
+
+});
+
+export const deleteUser = createAsyncThunk("user/deleteUser", async (password) => {
+    const res = await api.delete("/users", { data: { password } });
+    return res.data;
 });
 const userSlice = createSlice({
   name: 'user',
@@ -62,7 +67,16 @@ const userSlice = createSlice({
         state.valuation = 0;
         state.created_at = null;
         state.refresh_token = null;
-        state.isLoggedIn = false;   
+        state.isLoggedIn = false;
+    })
+    .addCase(deleteUser.fulfilled, (state)=>{
+        state.login_id = null;
+        state.user_nickname = null;
+        state.money = 0;
+        state.valuation = 0;
+        state.created_at = null;
+        state.refresh_token = null;
+        state.isLoggedIn = false;
     })
   }
 });
