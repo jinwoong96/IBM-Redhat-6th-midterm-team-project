@@ -68,5 +68,37 @@ const userSlice = createSlice({
   }
 });
 
+// 중복 확인 Thunk
+export const checkDuplicate = createAsyncThunk(
+    "user/checkDuplicate",
+    async ({ login_id, nickname }, { rejectWithValue }) => {
+        try {
+            const params = login_id ? { login_id } : { nickname };
+            const res = await api.get("/users/check-duplicate", { params });
+            return res.data; // True 반환
+        } catch (err) {
+            return rejectWithValue(err.response.data.detail);
+        }
+    }
+);
+
+const userSlice = createSlice({
+    name: 'user',
+    initialState: {
+        // ... 기존 상태 ...
+        dupCheck: { id: false, nickname: false }, // 중복 확인 완료 여부
+        error: null
+    },
+    extraReducers: (builder) => {
+        builder
+            // ... 기존 케이스 ...
+            .addCase(checkDuplicate.fulfilled, (state, action) => {
+                state.error = null;
+            })
+            .addCase(checkDuplicate.rejected, (state, action) => {
+                state.error = action.payload;
+            });
+    }
+});
 export const { login} = userSlice.actions;
 export default userSlice.reducer;

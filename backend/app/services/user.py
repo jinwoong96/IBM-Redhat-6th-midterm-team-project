@@ -101,3 +101,13 @@ class UserService:
         await db.refresh(db_user)
         
         return db_user
+    
+    @staticmethod
+    async def check_duplicate(login_id: str = None, nickname: str = None, db: AsyncSession = None):
+        if login_id:
+            if await UserCrud.get_by_login_id(login_id, db):
+                raise HTTPException(status_code=409, detail="이미 사용 중인 아이디입니다.")
+        if nickname:
+            if await UserCrud.get_by_nickname(nickname, db):
+                raise HTTPException(status_code=409, detail="이미 사용 중인 닉네임입니다.")
+        return True
