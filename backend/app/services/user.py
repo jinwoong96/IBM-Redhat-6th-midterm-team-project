@@ -35,18 +35,7 @@ class UserService:
         if not db_user:
             print("❌ 유저 없음")
             raise HTTPException(status_code=401, detail="잘못된 아이디 또는 비번")
-        
-        #
-        print("입력 user 객체:", user)
-        print("입력 login_id:", repr(user.login_id))
-        print("입력 비번:", repr(user.user_password))
-        print("DB login_id:", db_user.login_id)
-        print("DB 해시:", db_user.user_password)
-
-        result = verify_password(user.user_password, db_user.user_password)
-        print("verify 결과:", result)
-        #
-
+    
         if not verify_password(user.user_password, db_user.user_password):
          raise HTTPException(status_code=401, detail="잘못된 아이디 또는 비번")
 
