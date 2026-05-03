@@ -14,8 +14,8 @@ class UserService:
     async def signup(user:UserCreate, db:AsyncSession):
         if await UserCrud.get_by_login_id(user.login_id, db):
             raise HTTPException(status_code=400,  detail="이미 사용중인 아이디")
-        
-        user.user_password = get_password_hash(user.user_password)
+
+        user.user_password = get_password_hash(user.user_password)        
         
         try:
             db_user=await UserCrud.create(user, db)
@@ -30,10 +30,25 @@ class UserService:
 
     @staticmethod
     async def login(user:UserLogin, response:Response, db:AsyncSession):
-        db_user=await UserCrud.get_by_login_id(user.login_id, db)
-
-        if not db_user or not verify_password(user.user_password, db_user.user_password):
+        db_user=await UserCrud.get_by_login_id(user.login_id.strip(), db)
+        
+        if not db_user:
+            print("❌ 유저 없음")
             raise HTTPException(status_code=401, detail="잘못된 아이디 또는 비번")
+        
+        #
+        print("입력 user 객체:", user)
+        print("입력 login_id:", repr(user.login_id))
+        print("입력 비번:", repr(user.user_password))
+        print("DB login_id:", db_user.login_id)
+        print("DB 해시:", db_user.user_password)
+
+        result = verify_password(user.user_password, db_user.user_password)
+        print("verify 결과:", result)
+        #
+
+        if not verify_password(user.user_password, db_user.user_password):
+         raise HTTPException(status_code=401, detail="잘못된 아이디 또는 비번")
 
         login_id=db_user.login_id
         access_token=create_access_token(login_id)
@@ -97,3 +112,17 @@ class UserService:
         await db.refresh(db_user)
         
         return db_user
+
+    @staticmethod
+    async def delete_user(login_id: str, password: str, db: AsyncSession):
+        db_user = await UserCrud.get_by_login_id(login_id, db)
+        if not db_user or not verify_password(password, db_user.user_password):
+            raise HTTPException(status_code=401, detail="비밀번호가 일치하지 않습니다.")
+        
+        try:
+            await UserCrud.delete(db_user, db)
+            await db.commit()
+            return True
+        except Exception as e:
+            await db.rollback()
+            raise HTTPException(status_code=500, detail=f"탈퇴 처리 중 오류 발생: {str(e)}")

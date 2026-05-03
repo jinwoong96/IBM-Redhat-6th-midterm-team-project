@@ -4,18 +4,20 @@ from app.core.settings import settings
 import uuid
 import jwt
 
-pw_crypt=CryptContext(schemes=['bcrypt'])
+pw_crypt=CryptContext(schemes=['bcrypt'], deprecated="auto")
 
 def get_password_hash(password:str):
     # 해쉬화 후 리턴
-    trunc_pw=password.encode('utf-8')[:72]
-    return pw_crypt.hash(trunc_pw)
+    # trunc_pw=password.encode('utf-8')[:72]
+    return pw_crypt.hash(password)
 
 
-def verify_password(plain_pw:str, hashed_pw:str):
-    # 비밀번호 검증
-    trunc_pw=plain_pw.encode('utf-8')[:72]
-    return pw_crypt.verify(trunc_pw, hashed_pw)
+def verify_password(plain_pw: str, hashed_pw: str):
+    try:
+        return pw_crypt.verify(plain_pw, hashed_pw)
+    except Exception as e:
+        print(f"검증 중 에러 발생: {e}")
+        return False
 
 
 def create_token(login_id:str, expires_seconds:int, **kwargs):

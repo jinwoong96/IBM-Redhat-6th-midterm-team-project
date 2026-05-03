@@ -46,12 +46,14 @@ class UserCrud:
             await db.flush()
             return db_user
         return None
+    
+    @staticmethod
+    async def get_user_by_login_id(login_id: str, db: AsyncSession):
+        result = await db.execute(select(User).filter(User.login_id == login_id))
+        return result.scalars().first()
 
-    # @staticmethod
-    # async def delete_by_id(db: AsyncSession, user_id: int) -> User | None:
-    #     db_user = await db.get(User, user_id)
-    #     if db_user:
-    #         await db.delete(db_user)
-    #         await db.flush()
-    #         return db_user
-    #     return None
+    @staticmethod
+    async def delete(db_user: User, db: AsyncSession):
+        await db.delete(db_user)
+        await db.flush()
+        return ('성공적으로 탈퇴되었습니다. 다시 만나는 날까지, 안녕히-')

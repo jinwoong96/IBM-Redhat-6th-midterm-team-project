@@ -3,12 +3,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import get_db
 from app.services.balance import BalanceService
 from app.core.auth import get_current_user
-
+from app.db.scheme.balance import BalanceResponse
+from typing import List
 router = APIRouter(prefix="/balance", tags=["balance"])
 
 
-@router.get("/",)
+@router.get("",response_model=List[BalanceResponse])
 async def my_balance(current_user= Depends(get_current_user),
                    db: AsyncSession = Depends(get_db)):
-    # BalanceService.my_balance 실행
-    pass
+    login_id = current_user
+    return await BalanceService.my_balance(login_id,db)
+    
