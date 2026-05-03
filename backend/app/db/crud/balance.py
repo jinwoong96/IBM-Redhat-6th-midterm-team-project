@@ -39,3 +39,18 @@ class BalanceCrud:
             .filter(Balance.login_id == login_id)
         )
         return result.all()
+    
+    @staticmethod
+    async def get_balance_by_user_and_item(login_id: str, item_code: str, db: AsyncSession):
+        result = await db.execute(select(Balance).filter_by(login_id=login_id, item_code=item_code))
+        return result.scalars().first()
+
+    @staticmethod
+    async def get_all_by_login_id(login_id: str, db: AsyncSession):
+        result = await db.execute(select(Balance).filter_by(login_id=login_id))
+        return result.scalars().all()
+
+    @staticmethod
+    async def delete(balance: Balance, db: AsyncSession):
+        await db.delete(balance)
+        await db.flush()

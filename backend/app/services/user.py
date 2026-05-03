@@ -111,3 +111,18 @@ class UserService:
             if await UserCrud.get_by_nickname(nickname, db):
                 raise HTTPException(status_code=409, detail="이미 사용 중인 닉네임입니다.")
         return True
+    
+    @staticmethod
+    async def update_user_valuation(login_id: str, db: AsyncSession):
+        # 기존에 있던 get_by_login_id 활용
+        user = await UserCrud.get_by_login_id(login_id, db)
+        if not user:
+            return None
+            
+        # BalanceCrud에서 해당 유저의 잔고를 가져옴
+        from app.db.crud.balance import BalanceCrud # 순환 참조 방지를 위해 함수 내 import 권장
+        all_balances = await BalanceCrud.get_all_by_login_id(login_id, db)
+        
+        user.valuation = sum(b.val_price for b in all_balances)
+        await db.flush()
+        return user
