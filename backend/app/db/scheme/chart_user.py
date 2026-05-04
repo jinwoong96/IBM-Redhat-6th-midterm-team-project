@@ -9,11 +9,11 @@ class ChartuserGet(BaseModel):
     item_code: str = Field(..., max_length=10)
 
 
-class ChartuserUpdate(ChartInitBase):
+class ChartuserCreate(ChartInitBase):
     # item_code,start_price, end_price, max_price, min_price, day, flu_range, flu_range_percent
     pass
 
-class ChartuserRead(ChartuserUpdate):#db에 왓다갓다거릴 전체필드
+class ChartuserRead(ChartuserCreate):#db에 왓다갓다거릴 전체필드
     chart_user_id: int
     login_id: str
 

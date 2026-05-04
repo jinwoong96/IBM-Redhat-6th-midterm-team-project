@@ -13,9 +13,3 @@ class NewsCrud:
     async def get_all_news(db:AsyncSession):
         result=await db.execute(select(News))
         return result.scalars().all()
-        
-
-
-
-
-   

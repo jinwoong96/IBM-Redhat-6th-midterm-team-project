@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.models.chart_user import ChartUser
 from app.db.crud.chart_init import ChartInitCrud
-from app.db.scheme.chart_user import ChartuserUpdate
+from app.db.scheme.chart_user import ChartuserCreate
 from sqlalchemy.future import select
 from app.db.crud.chart_user import ChartuserCrud
 from fastapi import HTTPException, status
@@ -20,13 +20,18 @@ class ChartuserService:
 
     @staticmethod
     async def init_chartuser(login_id:str,db:AsyncSession): #1일차때 원본db 사용자용으로 가져오는 부분
+        
+        existing = await ChartuserCrud.is_exist(login_id, db)
+        if existing:
+            return True # init 데이터 중복 확인
+        
         init_data=await ChartInitCrud.get_first_data(db)
         if not init_data:
             raise HTTPException(status_code=500,detail='초기 데이터 불러오기 오류')
         
         try:
             for i in init_data:
-                chart_data = ChartuserUpdate(
+                chart_data = ChartuserCreate(
                     item_code=i.item_code,
                     start_price=i.start_price,
                     end_price=i.end_price,
@@ -48,9 +53,8 @@ class ChartuserService:
 
     @staticmethod
     async def get_itemlist(login_id:str, db:AsyncSession):#현재 진행일차의 모든 종목 목록 조회
-        items=await ChartuserCrud.get_item_list_crud(login_id,db)
+        items=await ChartuserCrud.get_item_list_crud(login_id=login_id,day_offset=1,db=db)
         
-                
         return items
         #조인 쿼리문 crud로 옮김
     
@@ -62,4 +66,3 @@ class ChartuserService:
         item = await ChartuserCrud.get_name_by_code(item_code, db)
 
         return item      
-        

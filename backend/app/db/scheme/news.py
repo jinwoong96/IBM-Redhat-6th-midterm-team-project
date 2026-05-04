@@ -8,7 +8,3 @@ class NewsBase(BaseModel):
 class NewsRead(NewsBase):
     news_id: int
     model_config = ConfigDict(from_attributes=True)
-
-#나중에 뉴스 새로 생성할수도 있으니까
-# class NewsCreate(NewsBase):
-#     pass
