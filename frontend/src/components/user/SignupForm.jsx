@@ -6,12 +6,13 @@ import FormTextInput from '../common/form/FormTextInput';
 import FormButton from '../common/form/FormButton';
 import AuthFooter from '../common/form/AuthFooter';
 import api from '../../api/api';
-import { fetchChart_init } from '../../Slice/chartuserSlice';
 import { useDispatch } from 'react-redux';
-import { fetchNews_init } from '../../Slice/newsuserSlice';
+import { checkDuplicate } from '../../Slice/userSlice'; // userSlice에 checkDuplicate가 있다고 가정
+
 const SignupForm = () => {
     const navigate = useNavigate();
-    const dispatch =useDispatch();
+    const dispatch = useDispatch();
+    
     const [formData, setFormData] = useState({
         user_id: '',
         user_nickname: '',
@@ -20,22 +21,57 @@ const SignupForm = () => {
     });
 
     const [isSuccess, setIsSuccess] = useState(false);
+    
+    // 중복 확인 메시지 상태 관리
+    const [dupErrors, setDupErrors] = useState({ login_id: '', user_nickname: '' });
+    // 중복 확인 결과 색상 관리를 위한 상태 (에러면 빨간색, 성공이면 파란색)
+    const [isError, setIsError] = useState({ login_id: false, user_nickname: false });
 
     const handleChange = (e, field) => {
         setFormData({ ...formData, [field]: e.target.value });
+        // 값을 수정하면 기존 중복 확인 메시지 초기화
+        if (field === 'user_id') setDupErrors(prev => ({ ...prev, login_id: '' }));
+        if (field === 'user_nickname') setDupErrors(prev => ({ ...prev, user_nickname: '' }));
+    };
+
+    // 중복 확인 로직
+    const handleCheckDuplicate = async (field, value) => {
+        if (!value) return;
+        
+        // API 파라미터 키 이름 맞추기 (login_id 또는 nickname)
+        const checkField = field === 'user_id' ? 'login_id' : 'nickname';
+        const resultAction = await dispatch(checkDuplicate({ [checkField]: value }));
+        
+        const stateKey = field === 'user_id' ? 'login_id' : 'user_nickname';
+
+        if (checkDuplicate.rejected.match(resultAction)) {
+            setDupErrors(prev => ({ ...prev, [stateKey]: resultAction.payload || "이미 사용 중입니다." }));
+            setIsError(prev => ({ ...prev, [stateKey]: true }));
+        } else {
+            setDupErrors(prev => ({ ...prev, [stateKey]: `사용 가능한 ${field === 'user_id' ? '아이디' : '닉네임'}입니다.` }));
+            setIsError(prev => ({ ...prev, [stateKey]: false }));
+        }
     };
 
     const handleSignup = async (e) => {
         e.preventDefault();
+        
+        // 가입 전 최종 체크
+        if (isError.login_id || isError.user_nickname) {
+            alert("중복된 정보를 확인해주세요.");
+            return;
+        }
+
         if (formData.user_password !== formData.password_check) {
             alert("비밀번호가 일치하지 않습니다.");
             return;
         }
+
         try {
             const payload = {
-            login_id: formData.user_id,  
-            user_nickname: formData.user_nickname,
-            user_password: formData.user_password
+                login_id: formData.user_id,  
+                user_nickname: formData.user_nickname,
+                user_password: formData.user_password
             };
 
             const res = await api.post("/users", payload);
@@ -75,21 +111,38 @@ const SignupForm = () => {
                 content={"투자 여정을 시작하세요"} 
             />
             <form className='mt-8 space-y-4' onSubmit={handleSignup}>
-                <FormTextInput 
-                    type={"text"} label={"아이디"} 
-                    icon={<User className="mr-2 h-4 w-4 text-gray-400" />} 
-                    placeholder={"kosdaqlover"} 
-                    value={formData.login_id}
-                    onChange={(e) => handleChange(e, 'user_id')}
-                    
-                />
-                <FormTextInput 
-                    type={"text"} label={"닉네임"} 
-                    icon={<AtSign className="mr-2 h-4 w-4 text-gray-400"/>} 
-                    placeholder={"코스닥러버"} 
-                    value={formData.user_nickname}
-                    onChange={(e) => handleChange(e, 'user_nickname')}
-                />
+                <div>
+                    <FormTextInput 
+                        type={"text"} label={"아이디"} 
+                        icon={<User className="mr-2 h-4 w-4 text-gray-400" />} 
+                        placeholder={"kosdaqlover"} 
+                        value={formData.user_id}
+                        onChange={(e) => handleChange(e, 'user_id')}
+                        onBlur={() => handleCheckDuplicate('user_id', formData.user_id)}
+                    />
+                    {dupErrors.login_id && (
+                        <p className={`text-xs mt-1 ${isError.login_id ? 'text-red-500' : 'text-blue-500'}`}>
+                            {dupErrors.login_id}
+                        </p>
+                    )}
+                </div>
+
+                <div>
+                    <FormTextInput 
+                        type={"text"} label={"닉네임"} 
+                        icon={<AtSign className="mr-2 h-4 w-4 text-gray-400"/>} 
+                        placeholder={"코스닥러버"} 
+                        value={formData.user_nickname}
+                        onChange={(e) => handleChange(e, 'user_nickname')}
+                        onBlur={() => handleCheckDuplicate('user_nickname', formData.user_nickname)}
+                    />
+                    {dupErrors.user_nickname && (
+                        <p className={`text-xs mt-1 ${isError.user_nickname ? 'text-red-500' : 'text-blue-500'}`}>
+                            {dupErrors.user_nickname}
+                        </p>
+                    )}
+                </div>
+
                 <FormTextInput 
                     type={"password"} label={"비밀번호"} 
                     icon={<Lock className="mr-2 h-4 w-4 text-gray-400"/>} 
@@ -97,13 +150,16 @@ const SignupForm = () => {
                     value={formData.user_password}
                     onChange={(e) => handleChange(e, 'user_password')}
                 />
+                
                 <FormTextInput 
                     type={"password"} label={"비밀번호 확인"} 
                     icon={<Lock className="mr-2 h-4 w-4 text-gray-400"/>} 
                     placeholder={"••••••••"} 
                     value={formData.password_check}
                     onChange={(e) => handleChange(e, 'password_check')}
+                    onBlur={(e) => handleCheckDuplicate('user_nickname',e.target.value)}
                 />
+
                 <FormButton content={"가입하기"} type="submit" />
             </form>
             <AuthFooter type={"signup"} />

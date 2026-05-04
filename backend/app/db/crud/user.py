@@ -51,6 +51,11 @@ class UserCrud:
     async def get_user_by_login_id(login_id: str, db: AsyncSession):
         result = await db.execute(select(User).filter(User.login_id == login_id))
         return result.scalars().first()
+    
+    @staticmethod
+    async def get_by_nickname(nickname: str, db: AsyncSession):
+        result = await db.execute(select(User).filter(User.user_nickname == nickname))
+        return result.scalar_one_or_none()
 
     @staticmethod
     async def delete(db_user: User, db: AsyncSession):

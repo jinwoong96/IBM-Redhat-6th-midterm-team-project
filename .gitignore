@@ -48,6 +48,7 @@ Thumbs.db
 
 
 
+*/.vite/
 node_modules/
 
 # 빌드 결과

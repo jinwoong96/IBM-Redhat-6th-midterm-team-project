@@ -5,6 +5,7 @@ from app.db.scheme.user import UserCreate, UserLogin, UserUpdate, TokenResponse,
 from app.services.user import UserService
 from app.core.auth import get_current_user
 router = APIRouter(prefix="/users", tags=["users"])
+from typing import Optional
 
 # 회원가입
 @router.post("", response_model=UserCreate)
@@ -48,6 +49,15 @@ async def logout(response:Response):
     response.delete_cookie(key="access_token")
     response.delete_cookie(key="refresh_token")
     return True
+
+#중복 아이디/비밀번호
+@router.get("/check-duplicate")
+async def check_duplicate(
+    login_id: Optional[str] = None, 
+    nickname: Optional[str] = None, 
+    db: AsyncSession = Depends(get_db)
+):
+    return await UserService.check_duplicate(login_id, nickname, db)
 
 # 회원 탈퇴 (계정 삭제)
 @router.delete("", response_model=bool)
