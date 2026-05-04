@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import get_db
-from app.db.scheme.user import UserCreate, UserLogin, UserUpdate, TokenResponse, UserInfo, DeleteUser
+from app.db.scheme.user import UserCreate, UserLogin, UserUpdate, TokenResponse, UserInfo, UserDelete
 from app.services.user import UserService
 from app.core.auth import get_current_user
 router = APIRouter(prefix="/users", tags=["users"])
@@ -61,7 +61,7 @@ async def check_duplicate(
 
 # 회원 탈퇴 (계정 삭제)
 @router.delete("", response_model=bool)
-async def delete_user(delete_data:DeleteUser, response:Response,
+async def delete_user(delete_data:UserDelete, response:Response,
                       current_user=Depends(get_current_user), db:AsyncSession=Depends(get_db)):
     result = await UserService.delete_user(current_user, delete_data.password, db)
     response.delete_cookie(key="access_token")
