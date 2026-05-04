@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Response, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import get_db
 from app.db.scheme.user import UserCreate, UserLogin, UserUpdate, TokenResponse, UserInfo, UserDelete
 from app.services.user import UserService
 from app.core.auth import get_current_user
 router = APIRouter(prefix="/users", tags=["users"])
-from typing import Optional
+from typing import Optional, Annotated
 
 # 회원가입
 @router.post("", response_model=UserCreate)
@@ -50,14 +50,14 @@ async def logout(response:Response):
     response.delete_cookie(key="refresh_token")
     return True
 
-#중복 아이디/비밀번호
+# 아이디/닉네임 중복 체크
 @router.get("/check-duplicate")
 async def check_duplicate(
-    login_id: Optional[str] = None, 
-    nickname: Optional[str] = None, 
+    login_id: Annotated[str, Query(min_length=1)] = None, 
+    nickname: Annotated[str, Query(min_length=1)] = None, 
     db: AsyncSession = Depends(get_db)
 ):
-    return await UserService.check_duplicate(login_id, nickname, db)
+    return await UserService.check_duplicate(login_id=login_id, nickname=nickname, db=db)
 
 # 회원 탈퇴 (계정 삭제)
 @router.delete("", response_model=bool)
