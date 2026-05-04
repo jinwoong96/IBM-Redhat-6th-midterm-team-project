@@ -12,6 +12,10 @@ class UserService:
 
     @staticmethod
     async def signup(user:UserCreate, db:AsyncSession):
+        # 공백 검사 및 처리
+        if not user.login_id.strip() or not user.user_nickname.strip():
+            raise HTTPException(status_code=400, detail="아이디와 닉네임을 모두 입력해 주세요.")
+
         if await UserCrud.get_by_login_id(user.login_id, db):
             raise HTTPException(status_code=400,  detail="이미 사용중인 아이디")
 
@@ -105,10 +109,10 @@ class UserService:
     @staticmethod
     async def check_duplicate(login_id: str = None, nickname: str = None, db: AsyncSession = None):
         if login_id:
-            if await UserCrud.get_by_login_id(login_id, db):
+            if not login_id.strip() or await UserCrud.get_by_login_id(login_id.strip(), db):
                 raise HTTPException(status_code=409, detail="이미 사용 중인 아이디입니다.")
         if nickname:
-            if await UserCrud.get_by_nickname(nickname, db):
+            if not nickname.strip() or await UserCrud.get_by_nickname(nickname.strip(), db):
                 print(nickname)
                 raise HTTPException(status_code=409, detail="이미 사용 중인 닉네임입니다.")
         return True

@@ -56,9 +56,21 @@ const SignupForm = () => {
     const handleSignup = async (e) => {
         e.preventDefault();
         
+        // 모든 필드가 입력되었는지 확인 (공백 제외)
+        if (!formData.user_id.trim() || !formData.user_nickname.trim() || !formData.user_password.trim()) {
+            alert("가입 정보를 모두 입력해 주세요.");
+            return;
+        }
+
         // 가입 전 최종 체크
         if (isError.login_id || isError.user_nickname) {
-            alert("중복된 정보를 확인해주세요.");
+            alert("중복된 아이디 혹은 닉네임입니다.");
+            return;
+        }
+
+        // 비밀번호 길이 체크
+        if (formData.user_password.length < 8) {
+            alert("비밀번호는 8자 이상이어야 합니다.");
             return;
         }
 
@@ -81,6 +93,19 @@ const SignupForm = () => {
         } catch (error) {
             console.error("Signup Error:", error);
             alert(error.response?.data?.detail || "회원가입에 실패했습니다.");
+            
+            const detail = error.response?.data?.detail;
+            let errorMessage = "회원가입에 실패했습니다.";
+
+            if (Array.isArray(detail)) {
+                // Pydantic 에러(배열)일 경우 메시지들만 추출하여 합침
+                errorMessage = detail.map(err => err.msg).join("\n");
+            } else if (typeof detail === 'string') {
+                // 서비스 로직에서 직접 던진 에러(문자열)일 경우
+                errorMessage = detail;
+            }
+
+            alert(errorMessage);
         }
     };
 
@@ -93,12 +118,15 @@ const SignupForm = () => {
                     축하합니다! <br />
                     <span className="font-bold text-blue-600">시드머니 5,000만원</span>이 지급되었습니다.
                 </p>
+            <form onSubmit={(e) => { e.preventDefault(); navigate('/login'); }}>
                 <button 
-                    onClick={() => navigate('/login')}
+                    type="submit"
+                    autoFocus
                     className="w-full py-3 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 transition-colors"
                 >
                     로그인 하러가기
                 </button>
+            </form>
             </div>
         );
     }
@@ -146,7 +174,7 @@ const SignupForm = () => {
                 <FormTextInput 
                     type={"password"} label={"비밀번호"} 
                     icon={<Lock className="mr-2 h-4 w-4 text-gray-400"/>} 
-                    placeholder={"••••••••"} 
+                    placeholder={"8자 이상 입력해주세요."} 
                     value={formData.user_password}
                     onChange={(e) => handleChange(e, 'user_password')}
                 />
@@ -154,7 +182,7 @@ const SignupForm = () => {
                 <FormTextInput 
                     type={"password"} label={"비밀번호 확인"} 
                     icon={<Lock className="mr-2 h-4 w-4 text-gray-400"/>} 
-                    placeholder={"••••••••"} 
+                    placeholder={"한번 더 입력해주세요."} 
                     value={formData.password_check}
                     onChange={(e) => handleChange(e, 'password_check')}
                 />
