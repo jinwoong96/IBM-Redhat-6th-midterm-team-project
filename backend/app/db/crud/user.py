@@ -56,3 +56,9 @@ class UserCrud:
     async def get_by_nickname(nickname: str, db: AsyncSession):
         result = await db.execute(select(User).filter(User.user_nickname == nickname))
         return result.scalar_one_or_none()
+    
+    @staticmethod
+    async def update_valuation(user: User, new_valuation: int, db: AsyncSession) -> User:
+        user.valuation = new_valuation
+        await db.flush()
+        return user
