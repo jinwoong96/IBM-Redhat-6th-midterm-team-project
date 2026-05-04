@@ -6,7 +6,7 @@ from fastapi import HTTPException
 from app.core.jwt_handle import get_password_hash, verify_password, create_access_token, create_refresh_token
 from app.core.settings import settings
 from fastapi import Response
-
+from app.db.crud.balance import BalanceCrud
 
 class UserService:
 
@@ -114,15 +114,17 @@ class UserService:
     
     @staticmethod
     async def update_user_valuation(login_id: str, db: AsyncSession):
-        # 기존에 있던 get_by_login_id 활용
         user = await UserCrud.get_by_login_id(login_id, db)
         if not user:
             return None
             
-        # BalanceCrud에서 해당 유저의 잔고를 가져옴
-        from app.db.crud.balance import BalanceCrud # 순환 참조 방지를 위해 함수 내 import 권장
+        # 해당 유저의 모든 잔고 내역을 가져옴
         all_balances = await BalanceCrud.get_all_by_login_id(login_id, db)
         
-        user.valuation = sum(b.val_price for b in all_balances)
-        await db.flush()
-        return user
+        # 총 평가 금액(valuation) 계산 (비즈니스 로직)
+        total_valuation = sum(b.val_price for b in all_balances)
+        
+        # 계산된 결과를 UserCrud에 넘겨 DB 반영 및 flush 위임
+        updated_user = await UserCrud.update_valuation(user, total_valuation, db)
+        
+        return updated_user

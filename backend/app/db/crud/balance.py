@@ -54,3 +54,20 @@ class BalanceCrud:
     async def delete(balance: Balance, db: AsyncSession):
         await db.delete(balance)
         await db.flush()
+
+    @staticmethod
+    async def create(balance_data: dict, db: AsyncSession) -> Balance:
+        balance = Balance(**balance_data)
+        db.add(balance)
+        await db.flush()
+        return balance
+
+    @staticmethod
+    async def update(balance: Balance, update_data: dict, db: AsyncSession) -> Balance:
+        # Service에서 계산해 온 결과값(update_data)을 ORM 객체에 매핑
+        for key, value in update_data.items():
+            setattr(balance, key, value)
+        await db.flush()
+        return balance
+    
+    
