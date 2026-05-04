@@ -58,19 +58,22 @@ const MyInfo = () => {
     };
 
     const handleEditClick = () => {
-        if (isEdit) {
-            
-            dispatch(updateUser({ 
-                user_nickname: editNickname, 
-                user_password: editPassword 
-            }));
-            setIsEdit(false);
-            setEditPassword(""); 
-        } else {
-            setIsEdit(true);
+    if (isEdit) {
+        if (!editNickname.trim()) {
+            alert("닉네임을 입력해주세요.");
+            return;
         }
-    };
 
+        dispatch(updateUser({ 
+            user_nickname: editNickname,
+            new_password: editPassword || undefined
+        }));
+        setIsEdit(false);
+        setEditPassword(""); 
+    } else {
+        setIsEdit(true);
+    }
+};
     return (<>
             <div className="flex items-center gap-6">
                 <div className="flex h-20 w-20 items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-purple-600 text-white">

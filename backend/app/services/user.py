@@ -50,7 +50,7 @@ class UserService:
             key="access_token",
             value=access_token,
             max_age=int(settings.access_token_expire_seconds),
-            secure=True,
+            secure=False,
             httponly=True,
             samesite="Lax",
             )
@@ -59,7 +59,7 @@ class UserService:
             key="refresh_token",
             value=refresh_token,
             max_age=int(settings.refresh_token_expire_seconds),
-            secure=True,
+            secure=False,
             httponly=True,
             samesite="Lax",
             )
@@ -86,19 +86,22 @@ class UserService:
 
     @staticmethod
     async def update_user(login_id:str, userupdate:UserUpdate, db:AsyncSession):
-        if userupdate.new_password:
-            userupdate.new_password = get_password_hash(userupdate.new_password)
-
-        db_user=await UserCrud.update_by_id(login_id, userupdate, db)
-
+        db_user = await UserCrud.get_by_login_id(login_id, db)
         if not db_user:
             raise HTTPException(status_code=404, detail="사용자를 찾을 수 없음")
-        
+
+        # 닉네임이 있고 공백이 아닐 때만 업데이트
+        if userupdate.user_nickname and userupdate.user_nickname.strip():
+            db_user.user_nickname = userupdate.user_nickname.strip()
+
+        # 새 비밀번호가 있고 공백이 아닐 때만 업데이트
+        if userupdate.new_password and userupdate.new_password.strip():
+            db_user.user_password = get_password_hash(userupdate.new_password)
+
         await db.commit()
         await db.refresh(db_user)
-        
         return db_user
-    
+        
     @staticmethod
     async def check_duplicate(login_id: str = None, nickname: str = None, db: AsyncSession = None):
         if login_id:
