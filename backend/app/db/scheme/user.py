@@ -7,7 +7,7 @@ class UserCreate(BaseModel):
 # 사용자 생성 시 필요한 정보
     login_id:str=Field(...)
     user_nickname:str=Field(..., max_length=50)
-    user_password:Annotated[str,Field(..., max_length=255)]
+    user_password:Annotated[str,Field(..., min_length=8, max_length=255)]
 
 class UserInfo(BaseModel):
     login_id: str

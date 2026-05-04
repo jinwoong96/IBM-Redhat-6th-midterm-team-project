@@ -109,6 +109,7 @@ class UserService:
                 raise HTTPException(status_code=409, detail="이미 사용 중인 아이디입니다.")
         if nickname:
             if await UserCrud.get_by_nickname(nickname, db):
+                print(nickname)
                 raise HTTPException(status_code=409, detail="이미 사용 중인 닉네임입니다.")
         return True
     

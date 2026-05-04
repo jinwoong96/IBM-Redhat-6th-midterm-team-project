@@ -157,7 +157,6 @@ const SignupForm = () => {
                     placeholder={"••••••••"} 
                     value={formData.password_check}
                     onChange={(e) => handleChange(e, 'password_check')}
-                    onBlur={(e) => handleCheckDuplicate('user_nickname',e.target.value)}
                 />
 
                 <FormButton content={"가입하기"} type="submit" />
