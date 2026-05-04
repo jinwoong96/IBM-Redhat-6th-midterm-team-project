@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.db.models.user import User
-from app.db.scheme.user import UserCreate, UserUpdate
+from app.db.scheme.user import UserCreate, UserUpdate, UserDelete
 from app.core.jwt_handle import get_password_hash
 
 
@@ -62,3 +62,9 @@ class UserCrud:
         user.valuation = new_valuation
         await db.flush()
         return user
+
+    @staticmethod
+    async def delete(db_user: User, db: AsyncSession):
+        await db.delete(db_user)
+        await db.flush()
+        return True

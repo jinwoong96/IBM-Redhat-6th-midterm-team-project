@@ -14,8 +14,7 @@ class UserService:
     async def signup(user:UserCreate, db:AsyncSession):
         if await UserCrud.get_by_login_id(user.login_id, db):
             raise HTTPException(status_code=400,  detail="이미 사용중인 아이디")
-        
-        
+
         try:
             db_user=await UserCrud.create(user, db)
             await db.commit()
@@ -34,9 +33,8 @@ class UserService:
         if not db_user:
             print("❌ 유저 없음")
             raise HTTPException(status_code=401, detail="잘못된 아이디 또는 비번")
-        
-        pw_check = verify_password(user.user_password, db_user.user_password)
-        if not pw_check:
+    
+        if not verify_password(user.user_password, db_user.user_password):
          raise HTTPException(status_code=401, detail="잘못된 아이디 또는 비번")
 
         login_id=db_user.login_id
@@ -52,7 +50,7 @@ class UserService:
             key="access_token",
             value=access_token,
             max_age=int(settings.access_token_expire_seconds),
-            secure=True,
+            secure=False,
             httponly=True,
             samesite="Lax",
             )
@@ -61,7 +59,7 @@ class UserService:
             key="refresh_token",
             value=refresh_token,
             max_age=int(settings.refresh_token_expire_seconds),
-            secure=True,
+            secure=False,
             httponly=True,
             samesite="Lax",
             )
@@ -74,7 +72,6 @@ class UserService:
                 "user": {
                 "login_id": db_user.login_id,
                 "user_nickname": db_user.user_nickname,
-                "user_password": db_user.user_password,
                 "money": db_user.money,
                 "valuation": db_user.valuation,
                 "created_at": db_user.created_at
@@ -89,19 +86,22 @@ class UserService:
 
     @staticmethod
     async def update_user(login_id:str, userupdate:UserUpdate, db:AsyncSession):
-        if userupdate.new_password:
-            userupdate.new_password = get_password_hash(userupdate.new_password)
-
-        db_user=await UserCrud.update_by_id(login_id, userupdate, db)
-
+        db_user = await UserCrud.get_by_login_id(login_id, db)
         if not db_user:
             raise HTTPException(status_code=404, detail="사용자를 찾을 수 없음")
-        
+
+        # 닉네임이 있고 공백이 아닐 때만 업데이트
+        if userupdate.user_nickname and userupdate.user_nickname.strip():
+            db_user.user_nickname = userupdate.user_nickname.strip()
+
+        # 새 비밀번호가 있고 공백이 아닐 때만 업데이트
+        if userupdate.new_password and userupdate.new_password.strip():
+            db_user.user_password = get_password_hash(userupdate.new_password)
+
         await db.commit()
         await db.refresh(db_user)
-        
         return db_user
-    
+        
     @staticmethod
     async def check_duplicate(login_id: str = None, nickname: str = None, db: AsyncSession = None):
         if login_id:
@@ -128,3 +128,17 @@ class UserService:
         updated_user = await UserCrud.update_valuation(user, total_valuation, db)
         
         return updated_user
+
+    @staticmethod
+    async def delete_user(login_id: str, password: str, db: AsyncSession):
+        db_user = await UserCrud.get_by_login_id(login_id, db)
+        if not db_user or not verify_password(password, db_user.user_password):
+            raise HTTPException(status_code=401, detail="비밀번호가 일치하지 않습니다.")
+        
+        try:
+            await UserCrud.delete(db_user, db)
+            await db.commit()
+            return True
+        except Exception as e:
+            await db.rollback()
+            raise HTTPException(status_code=500, detail=f"탈퇴 처리 중 오류 발생: {str(e)}")

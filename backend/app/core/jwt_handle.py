@@ -4,7 +4,7 @@ from app.core.settings import settings
 import uuid
 import jwt
 
-pw_crypt=CryptContext(schemes=['bcrypt'])
+pw_crypt=CryptContext(schemes=['bcrypt'], deprecated="auto")
 
 def get_password_hash(password:str):
     # 해쉬화 후 리턴

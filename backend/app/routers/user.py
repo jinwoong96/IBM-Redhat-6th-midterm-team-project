@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import get_db
-from app.db.scheme.user import UserCreate, UserLogin, UserUpdate, TokenResponse, UserInfo
+from app.db.scheme.user import UserCreate, UserLogin, UserUpdate, TokenResponse, UserInfo, UserDelete
 from app.services.user import UserService
 from app.core.auth import get_current_user
 router = APIRouter(prefix="/users", tags=["users"])
@@ -16,7 +16,7 @@ async def create_user(user:UserCreate, db:AsyncSession=Depends(get_db)):
 
 # 로그인
 @router.post("/token", response_model=TokenResponse)
-async def login(user:UserLogin, response:Response, db: AsyncSession= Depends(get_db)):
+async def login(user:UserLogin, response:Response, db:AsyncSession=Depends(get_db)):
 # UserService.login 을 정보 다주고 시작
     result = await UserService.login(user, response, db)
     
@@ -39,11 +39,11 @@ async def me(current_user=Depends(get_current_user),
 # 로그인된 사용자 정보 수정
 @router.put("", response_model=UserUpdate)
 async def update_user(userupdate:UserUpdate, current_user=Depends(get_current_user),
-                      db: AsyncSession=Depends(get_db)):
+                      db:AsyncSession=Depends(get_db)):
     # UserService.update_user 로 업데이트 된 유저 바로 리턴
     return await UserService.update_user(current_user, userupdate, db)
 
-
+# 로그아웃
 @router.post("/logout", response_model=bool)
 async def logout(response:Response):
     response.delete_cookie(key="access_token")
@@ -58,3 +58,12 @@ async def check_duplicate(
     db: AsyncSession = Depends(get_db)
 ):
     return await UserService.check_duplicate(login_id, nickname, db)
+
+# 회원 탈퇴 (계정 삭제)
+@router.delete("", response_model=bool)
+async def delete_user(delete_data:UserDelete, response:Response,
+                      current_user=Depends(get_current_user), db:AsyncSession=Depends(get_db)):
+    result = await UserService.delete_user(current_user, delete_data.password, db)
+    response.delete_cookie(key="access_token")
+    response.delete_cookie(key="refresh_token")
+    return result

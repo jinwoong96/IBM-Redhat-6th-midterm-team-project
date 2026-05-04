@@ -30,6 +30,10 @@ export const logout = createAsyncThunk("user/logout", async () => {
     return res.data;
 });
 
+export const deleteUser = createAsyncThunk("user/deleteUser", async (password) => {
+    const res = await api.delete("/users", { data: { password } });
+    return res.data;
+});
 const userSlice = createSlice({
     name: 'user',
     initialState: {

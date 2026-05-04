@@ -36,3 +36,7 @@ class UserUpdate(BaseModel):
     
     old_password:Optional[str]=Field(None, min_length=8, max_length=255)
     new_password:Optional[str]=Field(None, min_length=8, max_length=255)
+
+class UserDelete(BaseModel):
+# 회원 탈퇴 시 비밀번호 확인용
+    password: str
