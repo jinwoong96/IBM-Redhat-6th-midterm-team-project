@@ -37,24 +37,30 @@ const TradePanel = () => {
     }
 
     const onQuantityChange = (e) => {
+        setTargetPrice(0);
         const val = parseInt(e.target.value);
-        if(isNaN(val) || val < 0){
+        const maximum_quantity = Math.max(maxQuantity.current, remainQuantity.current);
+        if(isNaN(val) || val < 0 || itemCode==="종목 미선택"){
             setQuantity(0);
-        }else if(val > maxQuantity.current){
-            setQuantity(maxQuantity.current);
+        }else if(val > maximum_quantity){
+            setQuantity(maximum_quantity);
         }else{
             setQuantity(val);
         }
     }
 
     const onTargetPriceChange = (e) => {
+        console.log(itemCode);
         const val = parseInt(e.target.value);
-        if(isNaN(val) || val < 0){
+        const maximum_quantity = Math.max(maxQuantity.current, remainQuantity.current);
+        const maximum_price = Math.max(money, remainQuantity.current * unitPrice);
+        console.log(maximum_quantity, maximum_price)
+        if(isNaN(val) || val < 0 || itemCode==="종목 미선택"){
             setQuantity(0);
             setTargetPrice(0);
-        }else if(val > money){
-            setQuantity(maxQuantity.current);
-            setTargetPrice(money);
+        }else if((val > money) && (val > maximum_price)){
+            setQuantity(maximum_quantity);
+            setTargetPrice(maximum_price);
         }else{
             setQuantity(Math.floor(val/unitPrice));
             setTargetPrice(val);
