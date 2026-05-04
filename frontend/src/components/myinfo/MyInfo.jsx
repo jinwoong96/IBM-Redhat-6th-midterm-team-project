@@ -59,17 +59,23 @@ const MyInfo = () => {
 
     const handleEditClick = () => {
     if (isEdit) {
-        if (!editNickname.trim()) {
-            alert("닉네임을 입력해주세요.");
+        // 닉네임이 빈칸이면 막기
+        if (!editNickname.trim() && !editPassword.trim()) {
+            alert("닉네임 또는 비밀번호를 입력해주세요.");
+            return;
+        }
+        if (editNickname !== "" && !editNickname.trim()) {
+            alert("닉네임은 공백으로 변경할 수 없습니다.");
             return;
         }
 
         dispatch(updateUser({ 
-            user_nickname: editNickname,
-            new_password: editPassword || undefined
+            user_nickname: editNickname.trim() || undefined,
+            new_password: editPassword.trim() || undefined
         }));
         setIsEdit(false);
         setEditPassword(""); 
+        setEditNickname("");
     } else {
         setIsEdit(true);
     }
