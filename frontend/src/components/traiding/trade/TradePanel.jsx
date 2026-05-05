@@ -52,11 +52,9 @@ const TradePanel = () => {
     }
 
     const onTargetPriceChange = (e) => {
-        console.log(itemCode);
         const val = parseInt(e.target.value);
         const maximum_quantity = Math.max(maxQuantity.current, remainQuantity.current);
         const maximum_price = Math.max(money, remainQuantity.current * unitPrice);
-        console.log(maximum_quantity, maximum_price)
         if(isNaN(val) || val < 0 || itemCode==="종목 미선택"){
             setQuantity(0);
             setTargetPrice(0);
@@ -69,27 +67,27 @@ const TradePanel = () => {
         }
     }
 
-    const openConfirmModal = (type) => { //추가한 부분 (윤호)        
-        if (itemCode === "종목 미선택") { //추가한 부분 (윤호)
-            alert("종목을 선택해주세요."); //추가한 부분 (윤호)
-            return; //추가한 부분 (윤호)
-        } //추가한 부분 (윤호)
-        if (!quantity || Number(quantity) <= 0) { //추가한 부분 (윤호)
-            alert("수량을 입력해주세요.");  //추가한 부분 (윤호)
-            return; //추가한 부분 (윤호)
+    const openConfirmModal = (type) => {    
+        if (itemCode === "종목 미선택") {
+            alert("종목을 선택해주세요.");
+            return;
         }
-        setTradeType(type); //추가한 부분 (윤호)
-        setIsModalOpen(true); //추가한 부분 (윤호)
+        if (!quantity || Number(quantity) <= 0) {
+            alert("수량을 입력해주세요.");
+            return;
+        }
+        if(type=="buy" && (quantity * unitPrice > money)){
+            alert("현금이 부족합니다.");
+            return;
+        }
+        if(type=="sell" && (quantity > remainQuantity.current)){
+            alert("보유수량이 부족합니다.");
+            return;
+        }
+        setTradeType(type);
+        setIsModalOpen(true);
     };
     const handleTrade = async(type) => {
-        // if (!latestData){   //수정한부분 (윤호)
-        //     alert("종목을 선택해주세요.");
-        //     return;
-        // }
-        // if (!quantity || Number(quantity) <= 0) {
-        //     alert("수량을 입력해주세요.");
-        //     return;
-        // }
         const tradeData = {
             item_code: itemCode,
             buy_type: type,
@@ -104,7 +102,7 @@ const TradePanel = () => {
         await dispatch(fetchUser());
         setQuantity(0); // 입력창 초기화
         setTargetPrice(0);
-        setIsModalOpen(false);//추가한 부분 (윤호)
+        setIsModalOpen(false);
     };
 
     useEffect(()=>{
@@ -186,6 +184,10 @@ const TradePanel = () => {
                                 <span className="font-semibold text-black">{itemCode}</span>
                             </div>
                             <div className="flex justify-between">
+                                <span>종목명</span>
+                                <span className="font-semibold text-black">{currentBalance.item_name}</span>
+                            </div>
+                            <div className="flex justify-between">
                                 <span>주당 가격</span>
                                 <span className="font-semibold text-black">{unitPrice.toLocaleString()} 원</span>
                             </div>
@@ -194,8 +196,8 @@ const TradePanel = () => {
                                 <span className="font-semibold text-black">{quantity.toLocaleString()} 주</span>
                             </div>
                             <div className="flex justify-between pt-2 border-t font-bold">
-                                <span>총 결제금액</span>
-                                <span className={tradeType === 'buy' ? 'text-blue-600' : 'text-rose-500'}>
+                                <span>총 금액</span>
+                                <span className={tradeType === 'buy' ? 'text-rose-500' : 'text-blue-600'}>
                                     {(unitPrice * quantity).toLocaleString()} 원
                                 </span>
                             </div>
@@ -210,7 +212,7 @@ const TradePanel = () => {
                             <button 
                                 onClick={() => handleTrade(tradeType)}
                                 className={`flex-1 rounded-xl py-3 font-semibold text-white ${
-                                    tradeType === 'buy' ? 'bg-blue-600' : 'bg-rose-500'
+                                    tradeType === 'buy' ? 'bg-rose-500': 'bg-blue-600'
                                 }`}>
                                 확인
                             </button>
