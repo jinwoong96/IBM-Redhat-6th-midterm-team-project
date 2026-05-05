@@ -11,6 +11,15 @@ class TradeService:
     @staticmethod
     async def my_trade_list(login_id: str, limit: int, offset: int, db: AsyncSession):        
         return await TradeCrud.get_list_by_login_id(login_id, limit, offset, db)
+    
+    @staticmethod
+    async def get_trade_count(login_id: str, db: AsyncSession):
+        buy_count = await TradeCrud.get_count_by_login_id_type(login_id, "buy", db)
+        sell_count = await TradeCrud.get_count_by_login_id_type(login_id, "sell", db)
+
+        response = {"buy_count":buy_count, "sell_count":sell_count}
+        return response
+
 
     @staticmethod
     async def new_trade(login_id: str, trade_data: TradeCreate, db: AsyncSession):

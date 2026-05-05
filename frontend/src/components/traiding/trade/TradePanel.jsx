@@ -202,13 +202,13 @@ const TradePanel = () => {
                         <div className="flex gap-3">
                             <button 
                                 onClick={() => setIsModalOpen(false)}
-                                className="flex-1 rounded-xl bg-gray-100 py-3 font-semibold text-gray-600 hover:bg-gray-200">
+                                className="flex-1 rounded-xl bg-gray-100 py-3 font-semibold text-gray-600 hover:bg-gray-200 cursor-pointer">
                                 취소
                             </button>
                             <button 
                                 onClick={() => handleTrade(tradeType)}
-                                className={`flex-1 rounded-xl py-3 font-semibold text-white ${
-                                    tradeType === 'buy' ? 'bg-rose-500': 'bg-blue-600'
+                                className={`flex-1 rounded-xl py-3 font-semibold text-white cursor-pointer ${
+                                    tradeType === 'buy' ? 'bg-rose-500 hover:bg-rose-600': 'bg-blue-600 hover:bg-blue-700'
                                 }`}>
                                 확인
                             </button>

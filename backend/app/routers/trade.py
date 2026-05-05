@@ -28,3 +28,10 @@ async def my_trade_list(
 ):
     login_id = current_user 
     return await TradeService.my_trade_list(login_id, limit, offset, db)
+
+@router.get("/count")
+async def my_trade_count(
+    current_user = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    return await TradeService.get_trade_count(current_user, db)

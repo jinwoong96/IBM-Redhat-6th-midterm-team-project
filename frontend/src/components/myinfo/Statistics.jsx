@@ -1,23 +1,23 @@
 import { Activity } from 'lucide-react';
 import React, {useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchTrade } from '../../Slice/tradeSlice';
+import { fetchTrade, fetchTradeCount } from '../../Slice/tradeSlice';
 import { fetchUser } from '../../Slice/userSlice';
 import StatCard from '../common/StatCard';
 
 const Statistics = () => {
 
     const dispatch = useDispatch();
-    const my_trade = useSelector((state)=> state.trade.trades) || [];
+    const my_trade_count = useSelector((state)=> state.trade.count);
     const {login_id,money,valuation} = useSelector((state)=>state.user);
 
     useEffect(()=>{
-        dispatch(fetchTrade());
+        dispatch(fetchTradeCount());
         dispatch(fetchUser());
     },[dispatch])
-    const totalTradeCount = my_trade.length; 
-    const buyCount = my_trade.filter(trade => trade.buy_type === 'buy').length; 
-    const sellCount = my_trade.filter(trade => trade.buy_type === 'sell').length;
+    const buyCount = my_trade_count.buy_count;
+    const sellCount = my_trade_count.sell_count;
+    const totalTradeCount = buyCount + sellCount
 
     return (
         <div>

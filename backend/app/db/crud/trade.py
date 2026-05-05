@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy import func
 from app.db.models.trade import Trade
 from app.db.models.item import Item
 from app.db.scheme.trade import TradeCreate
@@ -28,6 +29,13 @@ class TradeCrud:
         
         result = await db.execute(stmt)
         return result.mappings().all()
+    
+    @staticmethod
+    async def get_count_by_login_id_type(login_id: str, buy_type: str, db: AsyncSession):
+        stmt = select(func.count()).select_from(Trade).where(Trade.login_id == login_id, Trade.buy_type == buy_type)
+
+        result = await db.execute(stmt)
+        return result.scalar()
 
     @staticmethod
     async def create(login_id: str, trade_data: TradeCreate, db: AsyncSession):
