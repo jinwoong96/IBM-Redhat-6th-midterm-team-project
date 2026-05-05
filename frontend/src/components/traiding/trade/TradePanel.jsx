@@ -184,10 +184,6 @@ const TradePanel = () => {
                                 <span className="font-semibold text-black">{itemCode}</span>
                             </div>
                             <div className="flex justify-between">
-                                <span>종목명</span>
-                                <span className="font-semibold text-black">{currentBalance.item_name}</span>
-                            </div>
-                            <div className="flex justify-between">
                                 <span>주당 가격</span>
                                 <span className="font-semibold text-black">{unitPrice.toLocaleString()} 원</span>
                             </div>
